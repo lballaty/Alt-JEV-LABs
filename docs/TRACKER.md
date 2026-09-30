@@ -14,6 +14,7 @@ Plan documents:
 | `docs/DATASET_PLAN_V2.md` | `main` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
 | `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
+| `docs/MANAGER_IMPROVEMENTS.md` | `main` | Proposed llamaCPPManager API/CLI (M1–M10) and UI (U1–U5) changes to support testing |
 
 ## Decisions log
 
@@ -49,6 +50,7 @@ All open owner decisions are consolidated under **Open questions** at the end of
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | O3 | |
 | WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | — (WS2 draft available) | Modular, toggled in config |
 | WS8 | Manager boundary: `status --json` preflight + provenance, `generative_managed` adapter (prompt-JSON / grammar / logprob modes), encoder local-path manifest | Unassigned | — | Planned | Mac for final verification | Encoders are not served by the manager |
+| WS9 | llamaCPPManager improvements for testing: must-haves M1 manifest/provenance, M3 readiness, M4 physical-footprint memory, M5 offline, M6 test lock; UI U1–U5 | Unassigned (manager repo) | — | Planned | Mac inventory (Q1–Q3); push access to `arionrepo/llamacppmanager` | Harness fallbacks listed per item |
 
 ## Verified vs not verified
 
@@ -96,4 +98,4 @@ Steps on the Mac:
 | Q5 | Scorecard cost matrix and thresholds (placeholders in PRACTICAL_EVAL_V2 §5) | Ranking among candidates that pass the gates | WS4 |
 | Q6 | Who reviews the rubric (routes, precedence: sovereignty above outage?) before freeze? | The rubric must be frozen before the sealed test split | WS3 freeze |
 | Q7 | Real data: 200–300 de-identified events (S8) and chat threads (S9). Source, and who de-identifies? | Only real data supports a deployment conclusion | WS6, S8/S9 |
-
+| Q8 | Non-served checkpoints (Laya, ModernBERT heads, GLiClass, Von, SemIf): inventory in the manager (M2) or in this repo? | Single source of model provenance | WS8, WS9 |
