@@ -10,6 +10,8 @@ An **external model manager** installs model software and weights and exposes lo
 
 ## v2 decision contract
 
+> **Update 2026-09-30:** the label definitions below are superseded by rubric `2.1.0-draft` (`docs/RUBRIC_V2.md`). Choice is now the primary event type, Noul is page-now, and Score is priority P1–P4 as an ordinal. Owner, disposition and the reasons are recorded alongside.
+
 | Primitive | Question and target | Output | Important distinction |
 | --- | --- | --- | --- |
 | Choice | Primary routing category from `routine_audit`, `policy_exception`, `security_escalation`, `data_sovereignty_flag`, `telemetry_heartbeat`, `service_outage` (sixth route added 2026-09-30, see DATASET_PLAN_V2 §2) | Exactly one allowed enum; probabilities if intrinsically available | A fixed six-way trained head cannot handle arbitrary options up to 255 without retraining or candidate scoring. |

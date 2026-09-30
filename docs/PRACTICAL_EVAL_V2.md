@@ -10,9 +10,9 @@ That decision has three operational outputs. Each output maps to something an op
 
 | Primitive | Operational question (replaces abstract wording) | What consumes it | Primary metric |
 | --- | --- | --- | --- |
-| Choice | Which queue gets this event? | Router / ticket queue | Macro-F1 + per-route recall |
+| Choice | What type of event is this (security, service degradation, data protection, policy deviation, routine, telemetry)? Owner is recorded alongside | Router / owning team | Macro-F1 + per-type recall |
 | Noul | Page the on-call human now? | Paging policy (still behind a deterministic rule layer) | Recall of must-page at a fixed false-page budget per 1k events |
-| Score | Which priority (P1–P4) and SLA? | SLA timer, queue order | Priority-bucket accuracy (exact and ±1); MAE on 0–100 is secondary |
+| Score | Which priority (P1–P4)? Rubric 2.1: impact × urgency | Acknowledgement target, queue order | Priority accuracy (exact and ±1) as an ordinal. Any 0–100 output is binned by the harness (a measurement convention, not an answer key) |
 
 ## 2. Verification of current and proposed content
 
@@ -51,7 +51,7 @@ Each case is `{event, context, question}`. The `context` object stands in for th
 
 Formats to seed (each needs a pinned public schema or template source, recorded in the seed registry): Linux auth/syslog, OpenSSH, OpenStack, HDFS, BGL (Loghub templates); Kubernetes events; Prometheus Alertmanager webhook JSON; Falco alert JSON; auditd; cloud audit trail (CloudTrail-style); application error with stack trace. Formats not yet verified are planning items, not facts.
 
-The negation minimal pair is now: **the same event with a change window covering this host** (→ routine_audit, don't page), versus **a change window for a different host, or an expired window** (→ escalate). A model has to read the context, not keyword-match.
+The negation minimal pair is now: **the same event with a change window covering this host** (→ retained for correlation, don't page, **only if the change lists that signal as expected**; rubric 2.1), versus **a change window for a different host, or an expired window** (→ escalate). A model has to read the context, not keyword-match.
 
 ## 3a. Chat ingestion module (in scope, modular)
 
@@ -102,9 +102,16 @@ What makes the chat suite practical:
 | S6 Stream replay | 10k-event stream at configured prevalence (e.g. ~90% heartbeat/info, ≤1% must-page) | Alert fatigue and throughput in a real shift | Pages per 1k events, missed must-page, sustained events/sec, p95 |
 | S7 Label budget | Train/fit with 0 / 25 / 100 / 350 labeled examples | How much labeling does it cost us? | S1 metric vs label count (learning curve) |
 | S8 Own data (decisive) | 200–300 de-identified events from our environment, two independent labelers | Does it work on *our* traffic? | Same as S1–S3; labeler agreement as ceiling |
+| S10 Rare high-impact set | Explicitly identified serious cases (real where available, else synthetic, labeled as such). Real alert samples may contain too few serious incidents | Does it catch the few events that matter most? | Must-page recall and improper-suppression count, with n |
 | S9 Chat module (optional, toggle) | Incident-bridge / channel threads (§3a), synthetic + own de-identified threads | Can it triage human reports that never produced an alert? | Route macro-F1, page-now recall, P-bucket acc, spoof recall on chat B′; reported per source, never pooled with S1–S8 |
 
 Synthetic suites S1–S7 (and synthetic S9) are **gates and diagnostics**. S8 is the only suite that supports a deployment decision. Report it separately and never pool it with synthetic data.
+
+## 4a. Reporting requirements (from rubric review 1)
+
+- Report **consequential errors** first: missed pages and improper suppressions (an event retained by a change window or incident correlation that should have escalated), each with counts and the case ids.
+- Report per-class results (event type, disposition, priority) and the **human-review/deferral rate**. Never report only an overall accuracy figure, because it can hide exactly these failures.
+- Synthetic and real results are separate tables, always labeled.
 
 ## 5. Selection scorecard
 
@@ -128,6 +135,7 @@ hard_gates:            # fail any -> candidate not selectable
   # leaves 'normal' or swap grows during the timed window. Record baseline, pressure and swap in provenance.
 cost_matrix:           # relative cost of errors, drives cost-weighted error
   missed_must_page: 50
+  improper_suppression: 50        # rubric 2.1: retained/correlated when it should have escalated (R6/R7)
   false_page: 1
   wrong_queue: 3
   priority_off_by_one: 1
@@ -162,7 +170,7 @@ Output per candidate: one row with gate results (pass/fail and the measured valu
 | WS | Change |
 | --- | --- |
 | WS1 seed registry (running) | Unchanged. Follow-up: add Alertmanager/Falco/k8s/auditd format seeds once sources are pinned |
-| WS2 rubric | Define queues, page policy, P1–P4 anchors, `needs_human`, and the context-block schema; include `service_outage` |
+| WS2 rubric | Rubric 2.1.0-draft: type/owner/impact/urgency/disposition separated, P1–P4 matrix, expected-activity and correlation rules, human-review reasons, worked examples W1–W9 (see RUBRIC_V2.md) |
 | WS3 generator | Emit `{event, context}` cases; leak lint; leave-one-source-out splits; S6 stream builder; S7 subsets |
 | WS4 report | Scorecard output + cost-weighted metrics (still waits for the other agent's branch to merge) |
 | New WS6 | S8 real-data protocol: de-identification, labeling guide, two-labeler agreement |

@@ -36,6 +36,8 @@ Consequence for the proposal text: Loghub labels are *anomaly/normal*, so "direc
 
 ## 2. Contract alignment — **decided 2026-09-30: add `service_outage` as a sixth route**
 
+**Superseded by rubric 2.1.0-draft (2026-09-30, after review 1):** the six routes became six *event types* (security_event, service_degradation, data_protection, policy_deviation, routine_activity, telemetry), with owner, disposition and priority recorded separately. See `docs/RUBRIC_V2.md`. Original 2.0 text follows for history.
+
 v2 routes: `routine_audit`, `policy_exception`, `security_escalation`, `data_sovereignty_flag`, `telemetry_heartbeat`, `service_outage`. BLUEPRINT_V2 (other agent's branch) still lists five and must be updated by its owner. WS2 defines outage-vs-security precedence (e.g. an auth burst that also causes 5xx: primary route by rubric, secondary tag kept separately).
 
 Noul is a binary proposition ("requires immediate human review?"). Targets like `p ≥ 0.90` / `p = 0.50` in the proposal are **model-output expectations, not labels**; the label is `true`/`false`, plus an `adjudication` field for Cohort D.
