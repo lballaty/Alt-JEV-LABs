@@ -1,4 +1,4 @@
-"""Contract tests for the v2.2 labeling rubric (data/rubric.py).
+"""Contract tests for the v2.3 labeling rubric (data/rubric.py).
 
 The worked examples in configs/domains/v2_worked_examples.json are the
 reviewer-facing specification; every one must be reproduced exactly. Review 2
@@ -44,12 +44,14 @@ def test_worked_example(example):
     label = RUBRIC.label(evidence, event, ctx)
     exp = example["expected"]
     got = {k: getattr(label, k)
-           for k in ("event_type", "owner", "notification", "page_now", "priority", "handling", "provisional")}
+           for k in ("event_type", "owner", "notification", "page_now", "priority", "handling", "provisional",
+                     "page_target", "response", "ack_target", "fact_finding_deadline")}
     assert got == {k: exp[k] for k in got}
     assert [rule for rule, _ in label.applied_rules] == exp["rules"]
     if exp["provisional"]:
-        assert label.triage_deadline == exp["triage_deadline"] and label.triage_owner == exp["owner"]
-        assert label.missing_facts
+        assert label.triage_owner == exp["owner"] and label.missing_facts
+    if label.page_now:
+        assert label.immediate_action  # every page says what the responder does now
     # Leak lint: examples must not state their own answer (B-prime is exempt).
     assert RUBRIC.leak_violations(event["raw"], example.get("cohort", "A")) == []
 
@@ -65,7 +67,7 @@ def test_W7_attached_repeat_keeps_incident_priority():
 
 def test_W4_explanation_suppresses_notification_not_priority():
     event, ctx, _ = _resolve(BY_ID["W4"])
-    ev = Evidence("service_degradation", "replication_lag", "low", "immediate", actionable=True)
+    ev = Evidence("service_degradation", "replication_lag", "low", "immediate", actionable=True, immediate_action="x")
     label = RUBRIC.label(ev, event, ctx)
     assert label.handling == "explained_by_change" and not label.page_now
     assert label.priority == "P2"  # the condition's priority is kept, even though nobody is paged
@@ -83,10 +85,41 @@ def test_W6_security_during_outage_is_assessed_separately():
         assert label.applied_rules[0][0] == "related_incident_reassessed"
 
 
-def test_W9_uncertainty_is_time_bound_not_open_ended():
+def test_W9_uncertainty_is_time_bound_and_paged_to_24x7_verifier():
     label = RUBRIC.label(*_swap(BY_ID["W9"]))
-    assert label.provisional and label.triage_owner == "privacy_dpo" and label.triage_deadline
-    assert label.notification != "none" and "soc" in label.secondary_owners
+    assert label.provisional and label.triage_owner == "privacy_dpo"
+    assert (label.ack_target, label.fact_finding_deadline) == ("1 hour", "4 hours")  # two distinct clocks
+    assert label.page_now and label.page_target == "soc" and "soc" in label.secondary_owners
+
+
+def test_W9b_approved_transfer_is_a_scheduled_governance_check():
+    label = RUBRIC.label(*_swap(BY_ID["W9b"]))
+    assert (label.notification, label.priority, label.response, label.ack_target) == \
+        ("scheduled_review", "P4", "scheduled", "next business day")
+    assert label.page_target is None and "soc" not in label.secondary_owners
+
+
+def test_W4c_W4d_trend_decides_the_page():
+    rising, draining = RUBRIC.label(*_swap(BY_ID["W4c"])), RUBRIC.label(*_swap(BY_ID["W4d"]))
+    assert (rising.page_now, rising.priority) == (True, "P2")
+    assert (draining.page_now, draining.priority) == (False, "P3")
+
+
+def test_page_requires_immediate_action_and_24x7_target():
+    event, ctx, _ = _resolve(BY_ID["W1"])
+    with pytest.raises(RubricError):
+        RUBRIC.label(Evidence("service_degradation", "s", "high", "immediate", actionable=True), event, ctx)
+    label = RUBRIC.label(Evidence("policy_deviation", "s", "moderate", "immediate", actionable=True,
+                                  immediate_action="x"), event, ctx)
+    assert label.owner == "platform_compliance" and label.page_target == "sre"
+
+
+def test_p4_split_scheduled_vs_retained():
+    event, ctx, _ = _resolve(BY_ID["W1"])
+    retained = RUBRIC.label(Evidence("security_event", "s", "low", "none"), event, ctx)
+    scheduled = RUBRIC.label(Evidence("security_event", "s", "low", "deferred"), event, ctx)
+    assert (retained.response, retained.ack_target) == ("retained", None)
+    assert (scheduled.response, scheduled.ack_target) == ("scheduled", "next business day")
 
 
 def _swap(example):
@@ -98,7 +131,8 @@ def _swap(example):
 def test_priority_matrix_is_consistent_with_notification():
     event, ctx, _ = _resolve(BY_ID["W1"])
     for impact in ("low", "moderate", "high"):
-        label = RUBRIC.label(Evidence("service_degradation", "s", impact, "immediate", actionable=True), event, ctx)
+        label = RUBRIC.label(Evidence("service_degradation", "s", impact, "immediate", actionable=True,
+                                      immediate_action="x"), event, ctx)
         assert label.page_now and label.priority in ("P1", "P2")  # anything paged has a <= 1 h target
     for urgency, notification, priority in (("same_day", "urgent_review", "P3"), ("deferred", "scheduled_review", "P4")):
         label = RUBRIC.label(Evidence("service_degradation", "s", "high", urgency), event, ctx)
@@ -138,7 +172,7 @@ def test_owner_rules():
     with pytest.raises(RubricError):   # a response needs someone to own it
         RUBRIC.label(Evidence("routine_activity", "s", "low", "deferred"), event, ctx)
     label = RUBRIC.label(Evidence("data_protection", "s", "moderate", "immediate", actionable=True, owner="soc",
-                                  secondary_owners=("privacy_dpo",)), event, ctx)
+                                  secondary_owners=("privacy_dpo",), immediate_action="x"), event, ctx)
     assert label.owner == "soc" and label.secondary_owners == ("privacy_dpo",)
 
 
@@ -179,7 +213,8 @@ def test_bad_rubric_files_rejected():
     raw = json.loads(DEFAULT_RUBRIC.read_text())
     for mutate in (lambda r: r["priority_matrix"]["low"].pop("deferred"),
                    lambda r: r["default_owner_by_type"].__setitem__("telemetry", "nobody"),
-                   lambda r: r["provisional"]["triage_deadline_by_priority"].pop("P4")):
+                   lambda r: r["response_classes"]["P2"].pop("fact_finding"),
+                   lambda r: r["page_routing"]["verifier_for"].pop("privacy_dpo")):
         broken = copy.deepcopy(raw); mutate(broken)
         with pytest.raises(RubricError):
             Rubric.from_dict(broken)

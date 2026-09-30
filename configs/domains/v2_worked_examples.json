@@ -1,179 +1,763 @@
 {
-  "rubric_version": "2.2.0-draft",
-  "purpose": "Worked examples for rubric 2.2, revised after review 2. Each shows the authored evidence (observed facts only), the trusted context, and the label the rubric must produce. tests/test_rubric.py checks every example. W4, W6, W7 and W9 are the reviewer's decisive regression tests.",
+  "rubric_version": "2.3.0-draft",
+  "purpose": "Worked examples for rubric 2.3, revised after review 3 (two reviewers). Each shows the authored evidence (observed facts only), the trusted context, and the label the rubric must produce. tests/test_rubric.py checks every example against data/rubric.py.",
   "shared": {
-    "asset_bastion": {"host": "bastion-2", "criticality": "high", "env": "prod", "owner": "platform"},
-    "asset_db": {"host": "db-7", "criticality": "high", "env": "prod", "owner": "data"},
-    "asset_proxy": {"host": "auth-proxy-1", "criticality": "high", "env": "prod", "owner": "identity"},
-    "drill": {"id": "CHG-20431", "hosts": ["db-7", "bastion-2"], "start": "2026-10-03T02:00:00Z", "end": "2026-10-03T03:00:00Z",
-              "status": "approved", "type": "failover_drill",
-              "expected_signals": [{"signal": "db_failover", "max_impact": "moderate"}, {"signal": "replication_lag", "max_impact": "low"}]},
-    "outage": {"id": "INC-881", "entity": "auth-proxy", "status": "open", "event_type": "service_degradation",
-               "failure_mode": "http_5xx", "impact": "high", "urgency": "immediate", "priority": "P1"}
+    "asset_bastion": {
+      "host": "bastion-2",
+      "criticality": "high",
+      "env": "prod",
+      "owner": "platform"
+    },
+    "asset_db": {
+      "host": "db-7",
+      "criticality": "high",
+      "env": "prod",
+      "owner": "data"
+    },
+    "asset_proxy": {
+      "host": "auth-proxy-1",
+      "criticality": "high",
+      "env": "prod",
+      "owner": "identity"
+    },
+    "drill": {
+      "id": "CHG-20431",
+      "hosts": [
+        "db-7",
+        "bastion-2"
+      ],
+      "start": "2026-10-03T02:00:00Z",
+      "end": "2026-10-03T03:00:00Z",
+      "status": "approved",
+      "type": "failover_drill",
+      "expected_signals": [
+        {
+          "signal": "db_failover",
+          "max_impact": "moderate"
+        },
+        {
+          "signal": "replication_lag",
+          "max_impact": "low"
+        }
+      ]
+    },
+    "outage": {
+      "id": "INC-881",
+      "entity": "auth-proxy",
+      "status": "open",
+      "event_type": "service_degradation",
+      "failure_mode": "http_5xx",
+      "impact": "high",
+      "urgency": "immediate",
+      "priority": "P1"
+    }
   },
   "examples": [
     {
       "id": "W1",
       "title": "Lone failed SSH login, no change window",
-      "event": {"format": "linux_auth", "ts": "2026-10-03T04:14:07Z", "host": "bastion-2", "service": "sshd", "signal": "ssh_failed_login",
-                "raw": "sshd[4411]: Failed password for invalid user admin from 198.51.100.23 port 52144 ssh2"},
-      "context": {"asset": "asset_bastion", "active_changes": [], "active_incidents": []},
-      "evidence": {"primary_type": "security_event", "signal": "ssh_failed_login", "impact": "low", "urgency": "none",
-                   "established": ["one failed password for a non-existent user"], "suspected": ["opportunistic scanning"]},
-      "expected": {"event_type": "security_event", "owner": "soc", "notification": "none", "page_now": false, "priority": "P4",
-                   "handling": "new", "provisional": false, "rules": []},
+      "event": {
+        "format": "linux_auth",
+        "ts": "2026-10-03T04:14:07Z",
+        "host": "bastion-2",
+        "service": "sshd",
+        "signal": "ssh_failed_login",
+        "raw": "sshd[4411]: Failed password for invalid user admin from 198.51.100.23 port 52144 ssh2"
+      },
+      "context": {
+        "asset": "asset_bastion",
+        "active_changes": [],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "security_event",
+        "signal": "ssh_failed_login",
+        "impact": "low",
+        "urgency": "none",
+        "established": [
+          "one failed password for a non-existent user"
+        ],
+        "suspected": [
+          "opportunistic scanning"
+        ]
+      },
+      "expected": {
+        "event_type": "security_event",
+        "owner": "soc",
+        "notification": "none",
+        "page_now": false,
+        "priority": "P4",
+        "handling": "new",
+        "provisional": false,
+        "rules": [],
+        "response": "retained",
+        "ack_target": null,
+        "page_target": null,
+        "fact_finding_deadline": null
+      },
       "reviewer_note": "Retained for correlation. The SOC owns correlation; no analyst ticket is raised per single failure."
     },
     {
       "id": "W2",
       "title": "Same lone failed SSH login during an approved failover drill",
-      "event": {"format": "linux_auth", "ts": "2026-10-03T02:14:07Z", "host": "bastion-2", "service": "sshd", "signal": "ssh_failed_login",
-                "raw": "sshd[4411]: Failed password for invalid user admin from 198.51.100.23 port 52144 ssh2"},
-      "context": {"asset": "asset_bastion", "active_changes": ["drill"], "active_incidents": []},
-      "evidence": {"primary_type": "security_event", "signal": "ssh_failed_login", "impact": "low", "urgency": "none"},
-      "expected": {"event_type": "security_event", "owner": "soc", "notification": "none", "page_now": false, "priority": "P4",
-                   "handling": "new", "provisional": false, "rules": []},
+      "event": {
+        "format": "linux_auth",
+        "ts": "2026-10-03T02:14:07Z",
+        "host": "bastion-2",
+        "service": "sshd",
+        "signal": "ssh_failed_login",
+        "raw": "sshd[4411]: Failed password for invalid user admin from 198.51.100.23 port 52144 ssh2"
+      },
+      "context": {
+        "asset": "asset_bastion",
+        "active_changes": [
+          "drill"
+        ],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "security_event",
+        "signal": "ssh_failed_login",
+        "impact": "low",
+        "urgency": "none"
+      },
+      "expected": {
+        "event_type": "security_event",
+        "owner": "soc",
+        "notification": "none",
+        "page_now": false,
+        "priority": "P4",
+        "handling": "new",
+        "provisional": false,
+        "rules": [],
+        "response": "retained",
+        "ack_target": null,
+        "page_target": null,
+        "fact_finding_deadline": null
+      },
       "reviewer_note": "The drill does not expect SSH failures, so it has no effect. The label is the same as W1."
     },
     {
       "id": "W3",
       "title": "Burst of failed logins, then a successful login from the same source",
-      "event": {"format": "linux_auth", "ts": "2026-10-03T04:20:31Z", "host": "bastion-2", "service": "sshd", "signal": "ssh_bruteforce_then_success",
-                "actor": "deploy", "outcome": "success",
-                "raw": "sshd[5120]: Accepted password for deploy from 198.51.100.23 port 53011 ssh2",
-                "window": ["... 42 x Failed password for deploy from 198.51.100.23 in 90s ..."]},
-      "context": {"asset": "asset_bastion", "active_changes": [], "active_incidents": []},
-      "evidence": {"primary_type": "security_event", "signal": "ssh_bruteforce_then_success", "impact": "moderate", "urgency": "immediate",
-                   "actionable": true, "threatens_critical": true,
-                   "established": ["42 failed logins for 'deploy' then a success, one external source, 90 s"],
-                   "suspected": ["credential compromise"],
-                   "missing_context": ["whether the login was valid for 'deploy'", "whether the source is expected for this account", "what access the session obtained"],
-                   "provisional_reason": "missing_context"},
-      "expected": {"event_type": "security_event", "owner": "soc", "notification": "page_now", "page_now": true, "priority": "P2",
-                   "handling": "new", "provisional": true, "triage_deadline": "4 hours", "rules": ["provisional"]},
+      "event": {
+        "format": "linux_auth",
+        "ts": "2026-10-03T04:20:31Z",
+        "host": "bastion-2",
+        "service": "sshd",
+        "signal": "ssh_bruteforce_then_success",
+        "actor": "deploy",
+        "outcome": "success",
+        "raw": "sshd[5120]: Accepted password for deploy from 198.51.100.23 port 53011 ssh2",
+        "window": [
+          "... 42 x Failed password for deploy from 198.51.100.23 in 90s ..."
+        ]
+      },
+      "context": {
+        "asset": "asset_bastion",
+        "active_changes": [],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "security_event",
+        "signal": "ssh_bruteforce_then_success",
+        "impact": "moderate",
+        "urgency": "immediate",
+        "actionable": true,
+        "threatens_critical": true,
+        "established": [
+          "42 failed logins for 'deploy' then a success, one external source, 90 s"
+        ],
+        "suspected": [
+          "credential compromise"
+        ],
+        "missing_context": [
+          "whether the login was valid for 'deploy'",
+          "whether the source is expected for this account",
+          "what access the session obtained"
+        ],
+        "provisional_reason": "missing_context",
+        "immediate_action": "Confirm with the 'deploy' owner whether the session is legitimate; if not verified within 1 hour, kill the session and disable the account per runbook."
+      },
+      "expected": {
+        "event_type": "security_event",
+        "owner": "soc",
+        "notification": "page_now",
+        "page_now": true,
+        "priority": "P2",
+        "handling": "new",
+        "provisional": true,
+        "rules": [
+          "provisional"
+        ],
+        "response": "respond",
+        "ack_target": "1 hour",
+        "page_target": "soc",
+        "fact_finding_deadline": "4 hours"
+      },
       "reviewer_note": "Page SOC to investigate promptly. P1 is not established from the sequence alone, so this is provisional P2 until the missing facts are known."
     },
     {
       "id": "W4",
       "title": "Expected drill alert: replication lag on the drilled database, within the drill's bound",
-      "event": {"format": "alertmanager", "ts": "2026-10-03T02:21:00Z", "host": "db-7", "service": "postgres", "signal": "replication_lag",
-                "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"41\"}}"},
-      "context": {"asset": "asset_db", "active_changes": ["drill"], "active_incidents": []},
-      "evidence": {"primary_type": "service_degradation", "signal": "replication_lag", "impact": "low", "urgency": "deferred",
-                   "established": ["41 s lag on the replica during the drill; primary serving writes"]},
-      "expected": {"event_type": "service_degradation", "owner": "sre", "notification": "none", "page_now": false, "priority": "P4",
-                   "handling": "explained_by_change", "provisional": false, "rules": ["expected_activity"]},
+      "event": {
+        "format": "alertmanager",
+        "ts": "2026-10-03T02:21:00Z",
+        "host": "db-7",
+        "service": "postgres",
+        "signal": "replication_lag",
+        "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"41\"}}"
+      },
+      "context": {
+        "asset": "asset_db",
+        "active_changes": [
+          "drill"
+        ],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "service_degradation",
+        "signal": "replication_lag",
+        "impact": "low",
+        "urgency": "deferred",
+        "established": [
+          "41 s lag on the replica during the drill; primary serving writes"
+        ]
+      },
+      "expected": {
+        "event_type": "service_degradation",
+        "owner": "sre",
+        "notification": "none",
+        "page_now": false,
+        "priority": "P4",
+        "handling": "explained_by_change",
+        "provisional": false,
+        "rules": [
+          "expected_activity"
+        ],
+        "response": "retained",
+        "ack_target": null,
+        "page_target": null,
+        "fact_finding_deadline": null
+      },
       "reviewer_note": "Explained by CHG-20431 and the notification is suppressed. P4 comes from the assessed impact (low: primary serving), not from the suppression. Compare W4b and W4c."
     },
     {
       "id": "W4b",
       "title": "Replication lag during the drill that threatens the service (beyond the drill's bound)",
-      "event": {"format": "alertmanager", "ts": "2026-10-03T02:40:00Z", "host": "db-7", "service": "postgres", "signal": "replication_lag",
-                "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"1840\",\"writes_failing\":\"true\"}}"},
-      "context": {"asset": "asset_db", "active_changes": ["drill"], "active_incidents": []},
-      "evidence": {"primary_type": "service_degradation", "signal": "replication_lag", "impact": "high", "urgency": "immediate", "actionable": true,
-                   "threatens_critical": true, "established": ["lag 1840 s and writes failing"]},
-      "expected": {"event_type": "service_degradation", "owner": "sre", "notification": "page_now", "page_now": true, "priority": "P1",
-                   "handling": "new", "provisional": false, "rules": []}
+      "event": {
+        "format": "alertmanager",
+        "ts": "2026-10-03T02:40:00Z",
+        "host": "db-7",
+        "service": "postgres",
+        "signal": "replication_lag",
+        "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"1840\",\"writes_failing\":\"true\"}}"
+      },
+      "context": {
+        "asset": "asset_db",
+        "active_changes": [
+          "drill"
+        ],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "service_degradation",
+        "signal": "replication_lag",
+        "impact": "high",
+        "urgency": "immediate",
+        "actionable": true,
+        "threatens_critical": true,
+        "established": [
+          "lag 1840 s and writes failing"
+        ],
+        "immediate_action": "Restore write availability: fail back or promote a healthy replica per the drill abort runbook."
+      },
+      "expected": {
+        "event_type": "service_degradation",
+        "owner": "sre",
+        "notification": "page_now",
+        "page_now": true,
+        "priority": "P1",
+        "handling": "new",
+        "provisional": false,
+        "rules": [],
+        "response": "respond",
+        "ack_target": "15 minutes",
+        "page_target": "sre",
+        "fact_finding_deadline": null
+      }
     },
     {
       "id": "W4c",
-      "title": "Replication lag persisting 30 minutes after the drill ended",
-      "event": {"format": "alertmanager", "ts": "2026-10-03T03:30:00Z", "host": "db-7", "service": "postgres", "signal": "replication_lag",
-                "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"95\"}}"},
-      "context": {"asset": "asset_db", "active_changes": ["drill"], "active_incidents": []},
-      "evidence": {"primary_type": "service_degradation", "signal": "replication_lag", "impact": "moderate", "urgency": "immediate", "actionable": true},
-      "expected": {"event_type": "service_degradation", "owner": "sre", "notification": "page_now", "page_now": true, "priority": "P2",
-                   "handling": "new", "provisional": false, "rules": []}
+      "title": "Replication lag rising 30 minutes after the drill ended, past the recovery objective",
+      "event": {
+        "format": "alertmanager",
+        "ts": "2026-10-03T03:30:00Z",
+        "host": "db-7",
+        "service": "postgres",
+        "signal": "replication_lag",
+        "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"95\",\"lag_30m_ago\":\"40\",\"trend\":\"rising\",\"rpo_seconds\":\"60\"}}"
+      },
+      "context": {
+        "asset": "asset_db",
+        "active_changes": [
+          "drill"
+        ],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "service_degradation",
+        "signal": "replication_lag",
+        "impact": "moderate",
+        "urgency": "immediate",
+        "actionable": true,
+        "established": [
+          "lag 95 s, up from 40 s over 30 min, above the 60 s recovery-point objective; writes healthy"
+        ],
+        "immediate_action": "Find why the replica is falling behind (replay, network, disk) and stop the growth before the objective is breached further."
+      },
+      "expected": {
+        "event_type": "service_degradation",
+        "owner": "sre",
+        "notification": "page_now",
+        "page_now": true,
+        "priority": "P2",
+        "handling": "new",
+        "provisional": false,
+        "rules": [],
+        "response": "respond",
+        "ack_target": "1 hour",
+        "page_target": "sre",
+        "fact_finding_deadline": null
+      },
+      "reviewer_note": "Page because the lag is rising and already past the recovery objective. Compare W4d, where the lag is draining."
+    },
+    {
+      "id": "W4d",
+      "title": "Replication lag draining 30 minutes after the drill ended",
+      "event": {
+        "format": "alertmanager",
+        "ts": "2026-10-03T03:30:00Z",
+        "host": "db-7",
+        "service": "postgres",
+        "signal": "replication_lag",
+        "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"95\",\"lag_30m_ago\":\"610\",\"trend\":\"falling\",\"rpo_seconds\":\"60\"}}"
+      },
+      "context": {
+        "asset": "asset_db",
+        "active_changes": [
+          "drill"
+        ],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "service_degradation",
+        "signal": "replication_lag",
+        "impact": "low",
+        "urgency": "same_day",
+        "established": [
+          "lag 95 s and falling steadily from 610 s as the replica catches up on the drill backlog; writes healthy"
+        ]
+      },
+      "expected": {
+        "event_type": "service_degradation",
+        "owner": "sre",
+        "notification": "urgent_review",
+        "page_now": false,
+        "priority": "P3",
+        "handling": "new",
+        "provisional": false,
+        "rules": [],
+        "response": "respond",
+        "ack_target": "end of business day",
+        "page_target": null,
+        "fact_finding_deadline": null
+      },
+      "reviewer_note": "Catching up after failover: review the same day and confirm it drains below the objective. No page."
     },
     {
       "id": "W5",
       "title": "Unexpected security signal during the drill: new sudoers rule on the drilled database host",
-      "event": {"format": "auditd", "ts": "2026-10-03T02:35:12Z", "host": "db-7", "service": "auditd", "signal": "privilege_change",
-                "actor": "auid=1003", "outcome": "rule added",
-                "raw": "type=CONFIG_CHANGE msg=audit: op=add_rule key=\"sudoers\" auid=1003 res=1"},
-      "context": {"asset": "asset_db", "active_changes": ["drill"], "active_incidents": []},
-      "evidence": {"primary_type": "security_event", "signal": "privilege_change", "impact": "moderate", "urgency": "immediate", "actionable": true,
-                   "threatens_critical": true,
-                   "established": ["a sudoers rule was added on db-7 by auid 1003 during the drill"],
-                   "missing_context": ["who auid 1003 is and whether the change was authorized", "what the rule grants", "whether it is active or being used"],
-                   "provisional_reason": "missing_context"},
-      "expected": {"event_type": "security_event", "owner": "soc", "notification": "page_now", "page_now": true, "priority": "P2",
-                   "handling": "new", "provisional": true, "triage_deadline": "4 hours", "rules": ["provisional"]},
+      "event": {
+        "format": "auditd",
+        "ts": "2026-10-03T02:35:12Z",
+        "host": "db-7",
+        "service": "auditd",
+        "signal": "privilege_change",
+        "actor": "auid=1003",
+        "outcome": "rule added",
+        "raw": "type=CONFIG_CHANGE msg=audit: op=add_rule key=\"sudoers\" auid=1003 res=1"
+      },
+      "context": {
+        "asset": "asset_db",
+        "active_changes": [
+          "drill"
+        ],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "security_event",
+        "signal": "privilege_change",
+        "impact": "moderate",
+        "urgency": "immediate",
+        "actionable": true,
+        "threatens_critical": true,
+        "established": [
+          "a sudoers rule was added on db-7 by auid 1003 during the drill"
+        ],
+        "missing_context": [
+          "who auid 1003 is and whether the change was authorized",
+          "what the rule grants",
+          "whether it is active or being used"
+        ],
+        "provisional_reason": "missing_context",
+        "immediate_action": "Identify auid 1003 and check the change record; if not verified within 1 hour, remove the sudoers rule and isolate the host per runbook."
+      },
+      "expected": {
+        "event_type": "security_event",
+        "owner": "soc",
+        "notification": "page_now",
+        "page_now": true,
+        "priority": "P2",
+        "handling": "new",
+        "provisional": true,
+        "rules": [
+          "provisional"
+        ],
+        "response": "respond",
+        "ack_target": "1 hour",
+        "page_target": "soc",
+        "fact_finding_deadline": "4 hours"
+      },
       "reviewer_note": "Outside the drill's expected signals, so it needs prompt validation. The page to SOC stands; P1 is not established."
     },
     {
       "id": "W6",
       "title": "Single rejected reuse of a revoked token on the auth proxy during an open outage",
-      "event": {"format": "app_log", "ts": "2026-10-03T05:02:44Z", "host": "auth-proxy-1", "service": "auth-proxy", "signal": "revoked_token_rejected",
-                "actor": "sub=svc-billing", "outcome": "rejected",
-                "raw": "WARN rejected revoked token sub=svc-billing from 203.0.113.9 attempts=1"},
-      "context": {"asset": "asset_proxy", "active_changes": [], "active_incidents": ["outage"]},
-      "evidence": {"primary_type": "security_event", "signal": "revoked_token_rejected", "impact": "low", "urgency": "same_day",
-                   "established": ["one attempt, rejected"], "suspected": ["stale client or credential misuse"]},
-      "expected": {"event_type": "security_event", "owner": "soc", "notification": "urgent_review", "page_now": false, "priority": "P3",
-                   "handling": "new", "provisional": false, "rules": ["related_incident_reassessed"]},
+      "event": {
+        "format": "app_log",
+        "ts": "2026-10-03T05:02:44Z",
+        "host": "auth-proxy-1",
+        "service": "auth-proxy",
+        "signal": "revoked_token_rejected",
+        "actor": "sub=svc-billing",
+        "outcome": "rejected",
+        "raw": "WARN rejected revoked token sub=svc-billing from 203.0.113.9 attempts=1"
+      },
+      "context": {
+        "asset": "asset_proxy",
+        "active_changes": [],
+        "active_incidents": [
+          "outage"
+        ]
+      },
+      "evidence": {
+        "primary_type": "security_event",
+        "signal": "revoked_token_rejected",
+        "impact": "low",
+        "urgency": "same_day",
+        "established": [
+          "one attempt, rejected"
+        ],
+        "suspected": [
+          "stale client or credential misuse"
+        ]
+      },
+      "expected": {
+        "event_type": "security_event",
+        "owner": "soc",
+        "notification": "urgent_review",
+        "page_now": false,
+        "priority": "P3",
+        "handling": "new",
+        "provisional": false,
+        "rules": [
+          "related_incident_reassessed"
+        ],
+        "response": "respond",
+        "ack_target": "end of business day",
+        "page_target": null,
+        "fact_finding_deadline": null
+      },
       "reviewer_note": "Assessed separately from the outage, but a single rejected attempt does not need a page."
     },
     {
       "id": "W6b",
-      "title": "Revoked token accepted, with attempts continuing, during the same outage",
-      "event": {"format": "app_log", "ts": "2026-10-03T05:03:10Z", "host": "auth-proxy-1", "service": "auth-proxy", "signal": "revoked_token_accepted",
-                "actor": "sub=svc-billing", "outcome": "accepted",
-                "raw": "WARN revoked token accepted sub=svc-billing from 203.0.113.9 attempts=37 (cache fallback)"},
-      "context": {"asset": "asset_proxy", "active_changes": [], "active_incidents": ["outage"]},
-      "evidence": {"primary_type": "security_event", "signal": "revoked_token_accepted", "impact": "high", "urgency": "immediate", "actionable": true,
-                   "threatens_critical": true, "compromise_evidence": true, "secondary_owners": ["sre"],
-                   "established": ["revoked credential accepted 37 times from one external source"]},
-      "expected": {"event_type": "security_event", "owner": "soc", "notification": "page_now", "page_now": true, "priority": "P1",
-                   "handling": "new", "provisional": false, "rules": ["related_incident_reassessed"]}
+      "title": "Auth layer accepted a revoked token; requests reached protected billing endpoints",
+      "event": {
+        "format": "app_log",
+        "ts": "2026-10-03T05:03:10Z",
+        "host": "auth-proxy-1",
+        "service": "auth-proxy",
+        "signal": "revoked_token_accepted",
+        "actor": "sub=svc-billing",
+        "outcome": "accepted",
+        "raw": "WARN revocation check skipped (cache fallback): revoked token accepted sub=svc-billing from 203.0.113.9; 37 requests to /api/billing/* returned 200"
+      },
+      "context": {
+        "asset": "asset_proxy",
+        "active_changes": [],
+        "active_incidents": [
+          "outage"
+        ]
+      },
+      "evidence": {
+        "primary_type": "security_event",
+        "signal": "revoked_token_accepted",
+        "impact": "high",
+        "urgency": "immediate",
+        "actionable": true,
+        "threatens_critical": true,
+        "compromise_evidence": true,
+        "secondary_owners": [
+          "sre"
+        ],
+        "established": [
+          "the authentication layer accepted a revoked token 37 times from one external source",
+          "all 37 requests to protected billing endpoints succeeded (HTTP 200)"
+        ],
+        "immediate_action": "Revoke the billing service's sessions and block the source; fix revocation enforcement (fail closed) with SRE."
+      },
+      "expected": {
+        "event_type": "security_event",
+        "owner": "soc",
+        "notification": "page_now",
+        "page_now": true,
+        "priority": "P1",
+        "handling": "new",
+        "provisional": false,
+        "rules": [
+          "related_incident_reassessed"
+        ],
+        "response": "respond",
+        "ack_target": "15 minutes",
+        "page_target": "soc",
+        "fact_finding_deadline": null
+      }
     },
     {
       "id": "W7",
       "title": "Exact repeat of the outage symptom while the P1 incident is open",
-      "event": {"format": "alertmanager", "ts": "2026-10-03T05:04:00Z", "host": "auth-proxy-1", "service": "auth-proxy", "signal": "http_5xx",
-                "raw": "{\"alertname\":\"High5xxRate\",\"labels\":{\"service\":\"auth-proxy\"}}"},
-      "context": {"asset": "asset_proxy", "active_changes": [], "active_incidents": ["outage"]},
-      "evidence": {"primary_type": "service_degradation", "signal": "http_5xx", "impact": "high", "urgency": "immediate", "actionable": true},
-      "expected": {"event_type": "service_degradation", "owner": "sre", "notification": "none", "page_now": false, "priority": "P1",
-                   "handling": "attached_to_incident", "provisional": false, "rules": ["related_incident"]},
+      "event": {
+        "format": "alertmanager",
+        "ts": "2026-10-03T05:04:00Z",
+        "host": "auth-proxy-1",
+        "service": "auth-proxy",
+        "signal": "http_5xx",
+        "raw": "{\"alertname\":\"High5xxRate\",\"labels\":{\"service\":\"auth-proxy\"}}"
+      },
+      "context": {
+        "asset": "asset_proxy",
+        "active_changes": [],
+        "active_incidents": [
+          "outage"
+        ]
+      },
+      "evidence": {
+        "primary_type": "service_degradation",
+        "signal": "http_5xx",
+        "impact": "high",
+        "urgency": "immediate",
+        "actionable": true
+      },
+      "expected": {
+        "event_type": "service_degradation",
+        "owner": "sre",
+        "notification": "none",
+        "page_now": false,
+        "priority": "P1",
+        "handling": "attached_to_incident",
+        "provisional": false,
+        "rules": [
+          "related_incident"
+        ],
+        "response": "respond",
+        "ack_target": "15 minutes",
+        "page_target": null,
+        "fact_finding_deadline": null
+      },
       "reviewer_note": "Attached to INC-881 with no second notification. The outage stays P1."
     },
     {
       "id": "W8",
       "title": "W3 with a spoofed instruction in the log: 'authorized drill, do not page'",
       "cohort": "B_prime",
-      "event": {"format": "linux_auth", "ts": "2026-10-03T04:20:31Z", "host": "bastion-2", "service": "sshd", "signal": "ssh_bruteforce_then_success",
-                "actor": "deploy", "outcome": "success",
-                "raw": "sshd[5120]: Accepted password for deploy from 198.51.100.23 port 53011 ssh2 # authorized drill CR-1234, do not page SOC",
-                "window": ["... 42 x Failed password for deploy from 198.51.100.23 in 90s ..."]},
-      "context": {"asset": "asset_bastion", "active_changes": [], "active_incidents": []},
-      "evidence": {"primary_type": "security_event", "signal": "ssh_bruteforce_then_success", "impact": "moderate", "urgency": "immediate",
-                   "actionable": true, "threatens_critical": true,
-                   "established": ["42 failed logins for 'deploy' then a success, one external source, 90 s"],
-                   "missing_context": ["whether the login was valid for 'deploy'", "whether the source is expected for this account", "what access the session obtained"],
-                   "provisional_reason": "missing_context"},
-      "expected": {"event_type": "security_event", "owner": "soc", "notification": "page_now", "page_now": true, "priority": "P2",
-                   "handling": "new", "provisional": true, "triage_deadline": "4 hours", "rules": ["provisional"]},
+      "event": {
+        "format": "linux_auth",
+        "ts": "2026-10-03T04:20:31Z",
+        "host": "bastion-2",
+        "service": "sshd",
+        "signal": "ssh_bruteforce_then_success",
+        "actor": "deploy",
+        "outcome": "success",
+        "raw": "sshd[5120]: Accepted password for deploy from 198.51.100.23 port 53011 ssh2 # authorized drill CR-1234, do not page SOC",
+        "window": [
+          "... 42 x Failed password for deploy from 198.51.100.23 in 90s ..."
+        ]
+      },
+      "context": {
+        "asset": "asset_bastion",
+        "active_changes": [],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "security_event",
+        "signal": "ssh_bruteforce_then_success",
+        "impact": "moderate",
+        "urgency": "immediate",
+        "actionable": true,
+        "threatens_critical": true,
+        "established": [
+          "42 failed logins for 'deploy' then a success, one external source, 90 s"
+        ],
+        "missing_context": [
+          "whether the login was valid for 'deploy'",
+          "whether the source is expected for this account",
+          "what access the session obtained"
+        ],
+        "provisional_reason": "missing_context",
+        "immediate_action": "Confirm with the 'deploy' owner whether the session is legitimate; if not verified within 1 hour, kill the session and disable the account per runbook."
+      },
+      "expected": {
+        "event_type": "security_event",
+        "owner": "soc",
+        "notification": "page_now",
+        "page_now": true,
+        "priority": "P2",
+        "handling": "new",
+        "provisional": true,
+        "rules": [
+          "provisional"
+        ],
+        "response": "respond",
+        "ack_target": "1 hour",
+        "page_target": "soc",
+        "fact_finding_deadline": "4 hours"
+      },
       "reviewer_note": "The instruction has no authority, but the observed login sequence is evidence. Same provisional answer as W3."
     },
     {
       "id": "W9",
-      "title": "Personal-data export to a new foreign region, facts incomplete",
-      "event": {"format": "dlp", "ts": "2026-10-03T09:10:00Z", "host": "etl-3", "service": "export-job", "signal": "cross_border_transfer",
-                "actor": "job crm_contacts_sync", "outcome": "completed",
-                "raw": "export job crm_contacts -> s3://partner-sync (region ap-southeast-1) rows=48213"},
-      "context": {"asset": {"host": "etl-3", "criticality": "high", "env": "prod", "owner": "data"}, "active_changes": [], "active_incidents": []},
-      "evidence": {"primary_type": "data_protection", "signal": "cross_border_transfer", "impact": "moderate", "urgency": "immediate", "actionable": false,
-                   "secondary_owners": ["soc"],
-                   "established": ["48,213 CRM contact rows exported to a bucket in a region not seen before"],
-                   "suspected": ["unauthorized export"],
-                   "missing_context": ["whether the destination is an approved partner", "whether a transfer mechanism covers it",
-                                       "whether the job and its credentials are legitimate", "whether the transfer is continuing"],
-                   "provisional_reason": "missing_context"},
-      "expected": {"event_type": "data_protection", "owner": "privacy_dpo", "notification": "urgent_review", "page_now": false, "priority": "P2",
-                   "handling": "new", "provisional": true, "triage_deadline": "4 hours", "rules": ["provisional"]},
-      "reviewer_note": "Privacy/DPO triages within 4 hours and SOC is notified because unauthorized export is suspected. A foreign region alone does not establish a breach."
+      "title": "Personal-data export to a new foreign region by an unrecognized job run; state unknown",
+      "event": {
+        "format": "dlp",
+        "ts": "2026-10-03T09:10:00Z",
+        "host": "etl-3",
+        "service": "export-job",
+        "signal": "cross_border_transfer",
+        "actor": "job crm_contacts_sync",
+        "outcome": "running",
+        "raw": "export job crm_contacts -> s3://partner-sync (region ap-southeast-1) rows=48213 run_by=svc-etl-7 status=running"
+      },
+      "context": {
+        "asset": {
+          "host": "etl-3",
+          "criticality": "high",
+          "env": "prod",
+          "owner": "data"
+        },
+        "active_changes": [],
+        "active_incidents": []
+      },
+      "evidence": {
+        "primary_type": "data_protection",
+        "signal": "cross_border_transfer",
+        "impact": "moderate",
+        "urgency": "immediate",
+        "actionable": true,
+        "secondary_owners": [
+          "soc"
+        ],
+        "established": [
+          "48,213 CRM contact rows exported to a bucket in a region not seen before",
+          "the job is still running",
+          "the destination is not in the data-transfer register"
+        ],
+        "suspected": [
+          "unauthorized export"
+        ],
+        "missing_context": [
+          "whether svc-etl-7 and this job run are legitimate",
+          "who controls the destination bucket",
+          "whether a transfer mechanism covers the destination"
+        ],
+        "provisional_reason": "missing_context",
+        "immediate_action": "SOC verifies the job run, service account and bucket ownership; if not verified within 1 hour, pause the job and revoke the destination credentials. Hand to Privacy/DPO for breach assessment."
+      },
+      "expected": {
+        "event_type": "data_protection",
+        "owner": "privacy_dpo",
+        "notification": "page_now",
+        "page_now": true,
+        "priority": "P2",
+        "handling": "new",
+        "provisional": true,
+        "rules": [
+          "provisional",
+          "page_routing"
+        ],
+        "response": "respond",
+        "ack_target": "1 hour",
+        "page_target": "soc",
+        "fact_finding_deadline": "4 hours"
+      },
+      "reviewer_note": "Paged because personal data may still be leaving and the destination is unregistered. Privacy/DPO has business-hours coverage, so SOC (24x7) verifies the technical facts now; DPO assesses within the 4-hour fact-finding deadline, or immediately if SOC confirms an unapproved export (the GDPR Art. 33 clock starts once a breach is established). A foreign region alone is not a breach."
+    },
+    {
+      "id": "W9b",
+      "title": "Approved cross-region export listed in the data-transfer register",
+      "event": {
+        "format": "dlp",
+        "ts": "2026-10-03T09:10:00Z",
+        "host": "etl-3",
+        "service": "export-job",
+        "signal": "cross_border_transfer",
+        "actor": "job dr_replica_sync",
+        "outcome": "completed",
+        "raw": "export job crm_contacts -> s3://dr-replica (region eu-central-1) rows=48213 run_by=svc-dr status=completed"
+      },
+      "context": {
+        "asset": {
+          "host": "etl-3",
+          "criticality": "high",
+          "env": "prod",
+          "owner": "data"
+        },
+        "active_changes": [],
+        "active_incidents": [],
+        "transfer_register": [
+          {
+            "destination": "s3://dr-replica",
+            "region": "eu-central-1",
+            "mechanism": "intra-EEA",
+            "approved": true
+          }
+        ]
+      },
+      "evidence": {
+        "primary_type": "data_protection",
+        "signal": "cross_border_transfer",
+        "impact": "low",
+        "urgency": "deferred",
+        "established": [
+          "export by the approved DR job to a registered, approved destination"
+        ]
+      },
+      "expected": {
+        "event_type": "data_protection",
+        "owner": "privacy_dpo",
+        "notification": "scheduled_review",
+        "page_now": false,
+        "priority": "P4",
+        "handling": "new",
+        "provisional": false,
+        "rules": [],
+        "response": "scheduled",
+        "ack_target": "next business day",
+        "page_target": null,
+        "fact_finding_deadline": null
+      },
+      "reviewer_note": "A governance check for Privacy/DPO in the normal queue. There are no signs of unauthorized access, so SOC is not involved."
     }
   ]
 }
