@@ -10,7 +10,7 @@ Plan documents:
 
 | Doc | Branch | Purpose |
 | --- | --- | --- |
-| `docs/BLUEPRINT_V2.md` | `feat/finite-json-calibration` | v2 protocol, candidate matrix, training/calibration, timing |
+| `docs/BLUEPRINT_V2.md` | `main` (PR #1) | v2 protocol, candidate matrix, training/calibration, timing |
 | `docs/DATASET_PLAN_V2.md` | `plan/v2-datasets-test-structure` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `plan/v2-datasets-test-structure` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
 
@@ -38,12 +38,12 @@ Plan documents:
 
 | WS | Scope | Owner | Branch | Status | Blocked by | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| — | Finite JSON decoding, validation calibration, v2 blueprint | Other agent | `feat/finite-json-calibration` | In progress (not merged) | — | Blueprint still lists 5 routes; needs D2 applied |
-| — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | No PR yet. README license section deferred to avoid conflicting with the other agent's README edits |
-| WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` | In progress | — | Started before the license review: must ship `data/seeds/LOGHUB_LICENSE` (verbatim notice) + citation before merge (D8) |
+| — | Finite JSON decoding, validation calibration, v2 blueprint | Other agent | `feat/finite-json-calibration` | Merged (PR #1) | — | Six routes applied to BLUEPRINT_V2 on the plan branch |
+| — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | main merged in; README license + Loghub credits added |
+| WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` | In progress | — | `data/seeds/LOGHUB_LICENSE` now exists on the plan branch; WS1 must keep it and not overwrite it with different text |
 | WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | Unassigned | — | Planned | — | Unblocked by D2 |
 | WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1, WS2 | New files only; target 560 cases (D7) |
-| WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Blocked | Merge of `feat/finite-json-calibration`, O4 | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
+| WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Planned | O4 (thresholds); other branch merged | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | O3 | |
 | WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | WS2 | Modular, toggled in config |
