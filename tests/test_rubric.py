@@ -233,3 +233,83 @@ def test_review4_containment_is_a_recorded_decision_not_automatic():
 def test_review4_W4d_states_why_same_day_is_safe():
     facts = " ".join(BY_ID["W4d"]["evidence"]["established"])
     assert "alternate replica" in facts and "projected below" in facts
+
+
+# --- error paths (every RubricError branch is exercised) ---------------------
+@pytest.mark.parametrize("mutate", [
+    lambda r: r.pop("leak_lint"),                                            # missing required key
+    lambda r: r["owners"]["soc"].__setitem__("coverage", "sometimes"),       # bad coverage value
+    lambda r: r["priority_matrix"]["low"].__setitem__("deferred", "P9"),     # bad priority value
+    lambda r: r["notification_rule"].pop("same_day"),                        # urgency not covered
+    lambda r: r["leak_lint"]["forbidden_patterns"].append("(unclosed"),      # invalid regex
+    lambda r: r["response_classes"].pop("P3"),                               # class missing
+    lambda r: r["default_owner_by_type"].pop("telemetry"),                   # type without owner entry
+])
+def test_invalid_rubric_structures_rejected(mutate):
+    broken = json.loads(DEFAULT_RUBRIC.read_text())
+    mutate(broken)
+    with pytest.raises(RubricError):
+        Rubric.from_dict(broken)
+
+
+def test_load_reports_missing_and_malformed_files(tmp_path):
+    with pytest.raises(RubricError, match="not found"):
+        Rubric.load(tmp_path / "absent.json")
+    bad = tmp_path / "bad.json"
+    bad.write_text("{not json")
+    with pytest.raises(RubricError, match="not valid JSON"):
+        Rubric.load(bad)
+
+
+def test_invalid_evidence_rejected():
+    event, ctx, ev = _resolve(BY_ID["W3"])
+    cases = [
+        {"owner": "helpdesk"},                                   # unknown owner
+        {"secondary_owners": ("helpdesk",)},                     # unknown secondary owner
+        {"secondary_types": ("outage",)},                        # unknown secondary type
+        {"signal": "   "},                                       # blank signal
+        {"urgency": "whenever"},                                 # unknown urgency
+    ]
+    for override in cases:
+        with pytest.raises(RubricError):
+            RUBRIC.label(Evidence(**{**ev.__dict__, **override}), event, ctx)
+    # A provisional case with no possible owner (routine activity) is rejected.
+    with pytest.raises(RubricError, match="triage owner"):
+        RUBRIC.label(Evidence("routine_activity", "s", "none", "none", provisional_reason="out_of_taxonomy"),
+                     event, ctx)
+
+
+@pytest.mark.parametrize("key", ["asset", "active_changes", "active_incidents"])
+def test_missing_context_key_rejected(key):
+    event, ctx, ev = _resolve(BY_ID["W1"])
+    del ctx[key]
+    with pytest.raises(RubricError, match=key):
+        RUBRIC.label(ev, event, ctx)
+
+
+@pytest.mark.parametrize("ts", ["not-a-time", "2026-13-40T00:00:00Z"])
+def test_malformed_timestamps_rejected(ts):
+    event, ctx, ev = _resolve(BY_ID["W1"])
+    with pytest.raises(RubricError, match="ISO-8601"):
+        RUBRIC.label(ev, dict(event, ts=ts), ctx)
+
+
+@pytest.mark.parametrize("change_update, message", [
+    ({"expected_signals": None}, "missing"),                                   # key removed below
+    ({"start": "2026-10-03T04:00:00Z", "end": "2026-10-03T03:00:00Z"}, "ends before it starts"),
+    ({"expected_signals": ["replication_lag"]}, "signal and max_impact"),      # 2.1-style bare string
+])
+def test_malformed_change_records_rejected(change_update, message):
+    event, ctx, ev = _resolve(BY_ID["W4"])
+    change = ctx["active_changes"][0]
+    change.update(change_update)
+    if change.get("expected_signals") is None:
+        del change["expected_signals"]
+    with pytest.raises(RubricError, match=message):
+        RUBRIC.label(ev, event, ctx)
+
+
+def test_change_window_on_other_host_is_skipped_without_error():
+    event, ctx, ev = _resolve(BY_ID["W4"])
+    ctx["active_changes"][0]["hosts"] = ["other-host"]
+    assert RUBRIC.label(ev, event, ctx).handling == "new"

@@ -1,5 +1,5 @@
 {
-  "rubric_version": "2.4.0-draft",
+  "rubric_version": "2.4.0",
   "purpose": "Worked examples for rubric 2.4, revised after review 4. Each shows the authored evidence (observed facts only), the trusted context, and the label the rubric must produce. tests/test_rubric.py checks every example against data/rubric.py.",
   "shared": {
     "asset_bastion": {

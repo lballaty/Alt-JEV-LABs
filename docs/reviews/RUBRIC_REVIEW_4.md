@@ -20,3 +20,7 @@ Agreed: F1, F4, F5 (P4 split), F6 (W4c), F7. W6b is a credible P1. Four targeted
 | Sign-off and verification not evidenced: blank settings, no code revision or test command, one person in three roles | Business hours filled from reviewer B's proposal. Timezone and holiday calendar still need one answer. The final approval record will include the code revision, the command (`uv run pytest -q`), the result, and the named approver per role |
 
 Reviewer A's closing point is recorded as a validity limit: passing case tests shows the code matches the chosen answers; it does not show the answers reflect operational practice. That comes from the named owners' approval, and later from real, independently labeled data (WS6).
+
+## Outcome
+
+2026-09-30: all four of reviewer A's changes applied in 2.4.0-draft. Test coverage of `data/rubric.py` was brought to 100% of lines and branches. The project owner then closed the review, and the rubric was **frozen as 2.4.0**. Reviewer A did not re-confirm 2.4; this, and the single-person role sign-off, are recorded as validity limits in `docs/RUBRIC_V2.md`.
