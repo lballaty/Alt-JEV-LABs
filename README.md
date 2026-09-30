@@ -49,3 +49,20 @@ The generative adapter has two separate modes. `generative` uses a JSON-only pro
 ## Status
 
 The code and lockfile were checked on a Linux host for syntax and contract behavior. MLX/MPS installation and integration, model downloads, and Apple Silicon benchmark results require a run on the target Mac. No Apple Silicon measurements are included in this scaffold.
+
+## License and credits
+
+Original author: **Libor Ballaty** — original repository: https://github.com/lballaty/Alt-JEV-LABs
+
+- Code: [Apache License 2.0](LICENSE). Redistributions must keep the [NOTICE](NOTICE) file, which names the original author and repository.
+- Documentation, reports and published results: [CC BY 4.0](LICENSE-DOCS). Credit as "Libor Ballaty, Alt-JEV-LABs, https://github.com/lballaty/Alt-JEV-LABs".
+- Third-party data keeps its own terms (see [NOTICE](NOTICE)).
+
+### Data credits
+
+v2 log templates are derived from **Loghub** (https://github.com/logpai/loghub). They are used for non-commercial research under the terms in [data/seeds/LOGHUB_LICENSE](data/seeds/LOGHUB_LICENSE). Only templates are stored, never raw log lines. Please cite:
+
+- Jieming Zhu, Shilin He, Pinjia He, Jinyang Liu, Michael R. Lyu. *Loghub: A Large Collection of System Log Datasets for AI-driven Log Analytics.* IEEE ISSRE, 2023.
+- Zhihan Jiang, Jinyang Liu, Junjie Huang, Yichen Li, Yintong Huo, Jiazhen Gu, Zhuangbin Chen, Jieming Zhu, Michael R. Lyu. *A Large-scale Evaluation for Log Parsing Techniques: How Far are We?* ACM ISSTA, 2024.
+
+Atomic Red Team-derived seeds (when present) are MIT-licensed: https://github.com/redcanaryco/atomic-red-team

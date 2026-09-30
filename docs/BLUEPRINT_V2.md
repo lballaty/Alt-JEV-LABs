@@ -12,7 +12,7 @@ An **external model manager** installs model software and weights and exposes lo
 
 | Primitive | Question and target | Output | Important distinction |
 | --- | --- | --- | --- |
-| Choice | Primary routing category from `routine_audit`, `policy_exception`, `security_escalation`, `data_sovereignty_flag`, `telemetry_heartbeat` | Exactly one allowed enum; probabilities if intrinsically available | A fixed five-way trained head cannot handle arbitrary options up to 255 without retraining or candidate scoring. |
+| Choice | Primary routing category from `routine_audit`, `policy_exception`, `security_escalation`, `data_sovereignty_flag`, `telemetry_heartbeat`, `service_outage` (sixth route added 2026-09-30, see DATASET_PLAN_V2 §2) | Exactly one allowed enum; probabilities if intrinsically available | A fixed six-way trained head cannot handle arbitrary options up to 255 without retraining or candidate scoring. |
 | Noul | “Does this payload require immediate human review?” | Probability of `true` in [0, 1] | Quarantine is a separate action/proposition. Do not join “quarantine or manual review” into one ambiguous target. |
 | Score | “How urgent is this payload under the versioned risk rubric?” | Number in [0, 100] | An ordinal expected level mapped to 0–100 is identified as such; compare both MAE and ordinal agreement. |
 

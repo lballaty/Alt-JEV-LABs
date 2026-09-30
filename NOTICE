@@ -1,0 +1,31 @@
+Alt-JEV-LABs
+Copyright 2026 Libor Ballaty
+
+Original author: Libor Ballaty
+Original repository: https://github.com/lballaty/Alt-JEV-LABs
+
+This product includes software and documentation developed by Libor Ballaty.
+Any redistribution or derivative work of this code, documentation, or
+published results must retain this NOTICE, credit Libor Ballaty as the
+original author, and reference the original repository URL above.
+
+Licensing
+---------
+- Source code: Apache License 2.0 (see LICENSE). Section 4(d) requires
+  derivative works to carry the attribution notices in this NOTICE file.
+- Documentation, reports and published benchmark results (docs/, *.md
+  reports, result files): Creative Commons Attribution 4.0 International
+  (see LICENSE-DOCS). Attribution: "Libor Ballaty, Alt-JEV-LABs,
+  https://github.com/lballaty/Alt-JEV-LABs".
+
+Third-party material (not relicensed by the above)
+--------------------------------------------------
+- Loghub-derived log templates (data/seeds/, when present) remain under the
+  Loghub license: free for research or academic work; see
+  data/seeds/LOGHUB_LICENSE. Source: https://github.com/logpai/loghub
+  Cite: J. Zhu, S. He, P. He, J. Liu, M. R. Lyu. "Loghub: A Large Collection
+  of System Log Datasets for AI-driven Log Analytics." ISSRE 2023.
+  Z. Jiang et al. "A Large-scale Evaluation for Log Parsing Techniques:
+  How Far are We?" ISSTA 2024.
+- Atomic Red Team-derived seeds (when present): MIT License,
+  https://github.com/redcanaryco/atomic-red-team
