@@ -5,6 +5,7 @@ warmup: 10
 laya_checkpoint: aac6fef/laya-mlx
 mps_backbone: answerdotai/ModernBERT-base
 mps_checkpoint: artifacts/mps-heads.pt
+mps_calibration: artifacts/mps-calibration.json
 generative_checkpoint: mlx-community/Mistral-7B-Instruct-v0.3-4bit
 max_length: 512
 score_levels: ["benign", "low", "moderate", "high", "critical"]

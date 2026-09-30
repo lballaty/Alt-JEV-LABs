@@ -1,11 +1,11 @@
 # Agent instructions
 
-Read `README.md` and `docs/EVALUATION.md` before changing model or benchmark behavior. The purpose is comparative evidence, not a favorable demonstration for any one model.
+Read `README.md`, `docs/EVALUATION.md`, and `docs/BLUEPRINT_V2.md` before changing model or benchmark behavior. The purpose is comparative evidence, not a favorable demonstration for any one model. The v2 blueprint is a proposal; do not silently switch the v1 dataset or imply it was measured.
 
 1. Do not fabricate benchmark numbers, model outputs, versions, API behavior, or test results. Distinguish verified upstream interfaces from code paths tested on this host.
 2. Implement complete error handling and comments that explain the reasoning for junior contributors. No placeholder classes or silent fallbacks in a measured path.
 3. Treat synthetic data as a harness fixture. Keep paired examples in one split, never train or calibrate on test, and label generated versus real datasets in every report.
-4. Keep model calls local after explicit dependency/checkpoint downloads. Never commit weights, secrets, personal telemetry, or identifiable traces.
+4. Keep model calls local. A separate model manager installs and exposes model software and weights; the benchmark consumes already provisioned local checkpoints and must not download or manage them during a run. Never commit weights, secrets, personal telemetry, or identifiable traces.
 5. Do not enable agents or enforcement actions based on classifier output. A separate deterministic authorization and audit boundary is required for production use.
 6. Work on a branch for follow-on changes, run focused tests, document hardware-dependent checks that were not run, and seek review before merging to main.
 7. Preserve raw result provenance, including model ID, revision, software versions, hardware, seed, precision, prompt/template, scoring rubric and timing method.
