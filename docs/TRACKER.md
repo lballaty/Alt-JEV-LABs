@@ -13,6 +13,7 @@ Plan documents:
 | `docs/BLUEPRINT_V2.md` | `main` (PR #1) | v2 protocol, candidate matrix, training/calibration, timing |
 | `docs/DATASET_PLAN_V2.md` | `plan/v2-datasets-test-structure` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `plan/v2-datasets-test-structure` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
+| `docs/MODEL_MANAGER_INTEGRATION.md` | `plan/v2-datasets-test-structure` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
 
 ## Decisions log
 
@@ -47,6 +48,7 @@ Plan documents:
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | O3 | |
 | WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | — (WS2 draft available) | Modular, toggled in config |
+| WS8 | Manager boundary: `status --json` preflight + provenance, `generative_managed` adapter (prompt-JSON / grammar / logprob modes), encoder local-path manifest | Unassigned | — | Planned | Mac for final verification | Encoders are not served by the manager |
 
 ## Verified vs not verified
 
@@ -66,4 +68,5 @@ Plan documents:
 | Synthetic content leaks the answer (v1 BM25 = 1.000) | Leak lint in WS3; held-out wrapper/template families |
 | Payload-text authorization teaches a prompt-injection bypass | B′ suite as hard gate; authorization only via context |
 | Pilot test split too small for stable rankings | Report n and CIs; S8 real data before any deployment claim |
+| MLX servers can download on HF cache miss; manager query defaults to temperature 0.7 | `HF_HUB_OFFLINE=1` on benchmark models; benchmark sets temperature/seed explicitly (WS8) |
 | Parallel agents editing the same files | WS1–WS3, WS7 add new files only; WS4 waits for the other branch to merge |
