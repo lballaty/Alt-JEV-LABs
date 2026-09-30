@@ -1,6 +1,6 @@
 # Alt-JEV-LABs
 
-Alt-JEV-LABs is a local-first framework for testing whether a decision model and its surrounding controls can support a specific operational use case. A use case defines its questions, rubric, data, baselines, failure costs, constraints, and acceptance criteria. The lab compares candidate approaches and records where they work and fail; it is intended to be adapted to other domains.
+Alt-JEV-LABs is a local-first framework for comparing how different solutions perform for a specific operational use case, so a team can choose the approach that best meets its requirements. A use case defines its questions, rubric, data, candidate approaches, failure costs, constraints, and acceptance criteria. A use-case evaluation should measure accuracy and consequential failures alongside latency, resource use, operating cost, and control behavior, then record trade-offs and uncertainty. The framework is intended to be adapted to other domains.
 
 **First reference use case:** first-line triage of security and operational alerts. The proposed Intent-Governed Triage Gateway would assemble trusted context, ask a local model for a structured triage proposal, and pass that proposal through a separate deterministic policy boundary before dispatch. The gateway is a proposed runtime product, not an implemented component of this repository. See [project intent and adaptation](docs/PROJECT_INTENT.md).
 
