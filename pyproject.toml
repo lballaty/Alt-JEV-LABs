@@ -1,0 +1,18 @@
+[project]
+name = "alt-jev-labs"
+version = "0.1.0"
+description = "Local-first typed decision model evaluation on Apple Silicon"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = ["pyyaml>=6,<7", "rank-bm25>=0.2.2,<1"]
+
+[project.optional-dependencies]
+apple = ["mlx>=0.30,<1", "mlx-lm>=0.27,<1", "laya-mlx>=0.2,<1", "torch>=2.5,<3", "transformers>=4.48,<6", "safetensors>=0.4,<1"]
+test = ["pytest>=8,<10"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

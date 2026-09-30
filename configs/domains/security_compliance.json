@@ -1,0 +1,7 @@
+{
+  "name": "security_compliance",
+  "noul_question": "Does this event require immediate containment?",
+  "score_question": "How severe is this operational event on a scale from 0 to 100?",
+  "severity_levels": ["benign", "low", "moderate", "high", "critical"],
+  "note": "Synthetic targets illustrate labels; they do not define a production containment policy."
+}

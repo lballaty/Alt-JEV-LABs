@@ -1,0 +1,6 @@
+{
+  "name": "agent_routing",
+  "choice_question": "Which operational category best matches this record?",
+  "options": ["security_alert", "schema_mismatch", "telemetry_heartbeat", "audit_log"],
+  "note": "Escalation and authorization require deterministic policy outside the model."
+}
