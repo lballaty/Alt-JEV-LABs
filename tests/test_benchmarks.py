@@ -2,8 +2,10 @@
 
 from pathlib import Path
 
-from data.synthetic_generator import generate
-from evaluation.benchmark_runner import assess
+import pytest
+
+from data.synthetic_generator import generate, write_splits
+from evaluation.benchmark_runner import assess, run
 from evaluation.reporter import write_report
 from models.base import BaseDecisionModel, DecisionResult, SchemaFailure
 
@@ -40,3 +42,14 @@ def test_report_shows_unavailable_instead_of_zero(tmp_path: Path):
     write_report(result, report, tmp_path / "raw.json")
     assert "unavailable" in report.read_text()
     assert "N/A" in report.read_text()
+
+
+def test_runner_rejects_mutated_split(tmp_path: Path):
+    data_dir = tmp_path / "splits"
+    write_splits(data_dir, 60, 42)
+    with (data_dir / "test.jsonl").open("a", encoding="utf-8") as stream:
+        stream.write("\n")
+    config = tmp_path / "config.yaml"
+    config.write_text("count: 60\nseed: 42\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="differs from the dataset manifest"):
+        run(config, data_dir, ["lexical"], 1, 0, tmp_path / "out.md", tmp_path / "out.json")

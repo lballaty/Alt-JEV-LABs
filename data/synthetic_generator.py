@@ -7,6 +7,7 @@ independently labeled dataset.
 """
 
 import argparse
+import hashlib
 import json
 import random
 from pathlib import Path
@@ -66,9 +67,9 @@ TEST_PAIRS = {
 
 
 def generate(count: int = 1000, seed: int = 42) -> dict[str, list[DecisionCase]]:
-    """Create exactly count cases, provided count is even and at least ten."""
-    if count < 10 or count % 2:
-        raise ValueError("count must be an even integer of at least 10")
+    """Create exactly count cases, with enough pairs for all three tasks."""
+    if count < 60 or count % 2:
+        raise ValueError("count must be an even integer of at least 60")
     rng = random.Random(seed)
     groups: dict[str, list[list[DecisionCase]]] = {"train": [], "val": [], "test": []}
     kinds = ("choice", "noul", "score")
@@ -99,12 +100,16 @@ def generate(count: int = 1000, seed: int = 42) -> dict[str, list[DecisionCase]]
 def write_splits(output: Path, count: int = 1000, seed: int = 42) -> dict[str, int]:
     output.mkdir(parents=True, exist_ok=True)
     splits = generate(count, seed)
+    hashes = {}
     for name, cases in splits.items():
-        with (output / f"{name}.jsonl").open("w", encoding="utf-8") as stream:
+        path = output / f"{name}.jsonl"
+        with path.open("w", encoding="utf-8") as stream:
             for case in cases:
                 stream.write(json.dumps(vars(case), ensure_ascii=False) + "\n")
+        hashes[name] = hashlib.sha256(path.read_bytes()).hexdigest()
     (output / "manifest.json").write_text(
-        json.dumps({"kind": "synthetic", "seed": seed, "count": count,
+        json.dumps({"kind": "synthetic", "generator_version": 2, "seed": seed,
+                    "count": count, "split_sha256": hashes,
                     "splits": {key: len(value) for key, value in splits.items()}}, indent=2) + "\n",
         encoding="utf-8",
     )
