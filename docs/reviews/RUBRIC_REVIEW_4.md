@@ -23,4 +23,4 @@ Reviewer A's closing point is recorded as a validity limit: passing case tests s
 
 ## Outcome
 
-2026-09-30: all four of reviewer A's changes applied in 2.4.0-draft. Test coverage of `data/rubric.py` was brought to 100% of lines and branches. The project owner then closed the review, and the rubric was **frozen as 2.4.0**. Reviewer A did not re-confirm 2.4; this, and the single-person role sign-off, are recorded as validity limits in `docs/RUBRIC_V2.md`.
+2026-09-30: all four of reviewer A's changes applied in 2.4.0-draft. Test coverage of `data/rubric.py` was brought to 100% of lines and branches. The project owner then closed the review, and the rubric was **frozen as 2.4.0**. Reviewer A then checked 2.4 and had no comments, so both reviewers approve. The single-person role sign-off remains recorded as a validity limit in `docs/RUBRIC_V2.md`.
