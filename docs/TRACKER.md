@@ -32,7 +32,6 @@ Plan documents:
 | # | Question | Options | Blocks |
 | --- | --- | --- | --- |
 | O3 | Own real data for S8 (200–300 events) and S9 (chat threads) | Source, de-identification owner | Deployment-grade conclusion |
-| O5 | Repo license for public release (no LICENSE file today). Loghub-derived files stay under Loghub terms regardless | MIT / Apache-2.0 / other for code; data carve-out | Public publication |
 | O4 | Scorecard thresholds, cost matrix, latency/memory budgets | Placeholder values in PRACTICAL_EVAL_V2 §5 | WS4 scorecard |
 
 ## Workstreams
@@ -40,7 +39,7 @@ Plan documents:
 | WS | Scope | Owner | Branch | Status | Blocked by | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | — | Finite JSON decoding, validation calibration, v2 blueprint | Other agent | `feat/finite-json-calibration` | In progress (not merged) | — | Blueprint still lists 5 routes; needs D2 applied |
-| — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | No PR yet |
+| — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | No PR yet. README license section deferred to avoid conflicting with the other agent's README edits |
 | WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` | In progress | — | Started before the license review: must ship `data/seeds/LOGHUB_LICENSE` (verbatim notice) + citation before merge (D8) |
 | WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | Unassigned | — | Planned | — | Unblocked by D2 |
 | WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1, WS2 | New files only; target 560 cases (D7) |
