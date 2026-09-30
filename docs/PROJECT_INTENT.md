@@ -12,6 +12,8 @@ For each use case, distinguish three questions:
 
 A favorable synthetic score demonstrates behavior on those constructed cases. It does not prove future accuracy or operational readiness. Real, independently labeled cases from the intended environment and a monitored pilot are needed to support a deployment decision. Reports should show each feasible candidate against use-case requirements, including missed consequential events, false actions, coverage, latency, resource and labeling needs, uncertainty, provenance and the conditions under which the result applies. State which candidates fail hard requirements, then explain any recommended choice and the trade-offs among the remaining options. If evidence is insufficient or no candidate qualifies, report that explicitly. A recommendation estimates likely performance under the tested conditions; it is not a guarantee.
 
+The suite may report that a candidate passes predefined test thresholds, but it cannot certify general safety or approve deployment. A named human decision owner decides whether the tests, observed results, system controls and remaining risks are sufficient for a specified use case, version and environment. Record the decision, its rationale, evidence versions, conditions and reassessment triggers. A failing or incomplete evaluation remains visible even if a human accepts a limited pilot.
+
 ## First reference use case: operational alert triage
 
 The first evaluation concerns a proposed **Intent-Governed Triage Gateway**. Its runtime architecture is a separate product concept:
