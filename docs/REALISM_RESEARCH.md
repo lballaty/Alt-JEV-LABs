@@ -1,6 +1,6 @@
 # Realism research for synthetic tests (WS10)
 
-Status: **In progress — first pass, 2026-09-30.** No internal or customer data exists (tracker Q9), so realism rests on public evidence only.
+Status: **In progress: first pass 2026-09-30; more research needed** (see Next steps). No internal or customer data exists (tracker Q9), so realism rests on public evidence only.
 
 ## Method and evidence levels
 
@@ -101,6 +101,7 @@ The claim "2,992 alerts per day, 63% unaddressed" appeared in search results wit
 
 ## Next steps
 
+0. **Unblock research access.** This environment's proxy refuses every host except GitHub (HTTP 403 on CONNECT, rechecked 2026-09-30 for huggingface.co, arxiv.org, usenix.org, zenodo.org, kaggle.com, api.crossref.org, api.openalex.org and semanticscholar.org). Widen the environment's network access, or continue on the Mac. Then survey public datasets on Hugging Face, Kaggle, Zenodo and academic repositories: labeled SOC alerts, IDS/EDR telemetry, cloud audit logs, AIOps incident and alert datasets, and incident postmortem corpora.
 1. Allow the blocked hosts, or run on the Mac, and read each lead's primary source. Promote verified figures to parameters and correct or drop the rest.
 2. Add Windows and cloud audit seeds to the registry, with pinned commits and license terms (candidates to evaluate: OTRF Security-Datasets, Splunk attack_data).
 3. Realism check once the generator exists: compare generated distributions against the verified figures above, and have a practitioner blind-rate a mix of generated and real public samples.
