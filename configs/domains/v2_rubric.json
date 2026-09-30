@@ -1,6 +1,6 @@
 {
-  "rubric_version": "2.4.0-draft",
-  "status": "Draft - not frozen. Revised after review 4 (docs/reviews/RUBRIC_REVIEW_4.md). Freeze after the named SOC, SRE and privacy owners approve, the business-hours settings are filled, and the tests pass on the frozen revision.",
+  "rubric_version": "2.4.0",
+  "status": "frozen",
   "supersedes": "2.3.0-draft",
   "note": "Answer-key rubric for a synthetic benchmark. It is not a live paging policy; model output never pages or blocks anything (AGENTS.md rule 5). Priority is set from current evidence and reassessed when evidence or impact changes. A change window or a duplicate alert does not, by itself, lower priority. Notification is a separate decision.",
   "event_types": {
@@ -231,10 +231,10 @@
     "owner_review_target": "4 business hours"
   },
   "business_hours": {
-    "timezone": "TO BE SET BY OWNERS",
-    "hours": "08:00-18:00 Mon-Fri (proposed by reviewer B, pass 4)",
-    "holidays": "TO BE SET BY OWNERS (statutory calendar of the operating entity)",
-    "note": "Timezone and holiday calendar are set at freeze."
+    "hours": "08:00-18:00 Mon-Fri",
+    "timezone": "deployment setting (Europe/Prague or Europe/Lisbon, per operating entity)",
+    "holidays": "statutory calendar of the operating entity",
+    "note": "Business hours define the P3/P4 and owner-review clocks as labels. Timezone and holidays do not change any answer key; they are set when clocks are measured in a live deployment."
   },
   "provisional": {
     "reasons": [
@@ -251,5 +251,43 @@
     "A condition that exceeds a stated objective (e.g. a recovery-point objective) gets same-day review instead of an immediate assessment only if the case states why that is safe: an alternate that meets the objective, or a projection below the objective within a defined short period (at most 15 minutes).",
     "Immediate actions for provisional pages are decision points with options, not automatic actions: an unanswered verification request is not proof of compromise.",
     "A containment step that can affect availability during an open incident is coordinated with that incident's lead."
-  ]
+  ],
+  "freeze_record": {
+    "date": "2026-09-30",
+    "frozen_from": "2.4.0-draft at main 78ea8a6",
+    "closed_by": "Libor Ballaty (project owner)",
+    "approvals": [
+      {
+        "reviewer": "B",
+        "roles": [
+          "SOC",
+          "SRE",
+          "Privacy/DPO"
+        ],
+        "name": "Libor Ballaty",
+        "decision": "Approve",
+        "on": "2.3.0-draft; 2.4 changes are targeted corrections requested by reviewer A"
+      },
+      {
+        "reviewer": "A",
+        "roles": [
+          "independent review"
+        ],
+        "name": "not recorded",
+        "decision": "Approve with changes (pass 4)",
+        "on": "2.3.0-draft; all four changes applied in 2.4.0; not re-confirmed by reviewer A"
+      }
+    ],
+    "validity_limits": [
+      "All three domain roles were signed by one person, not by independent named SOC, SRE and privacy owners.",
+      "Reviewer A has not re-confirmed the 2.4 corrections; the project owner closed the review.",
+      "Tests show the code reproduces the chosen answers; they do not show the answers reflect operational practice. Real, independently labeled data (WS6) is the check for that."
+    ],
+    "verification": {
+      "command": "uv run pytest -q",
+      "result": "75 passed (Linux, Python 3.12.3)",
+      "coverage_command": "uv run --with coverage coverage run --branch -m pytest -q tests/test_rubric.py && uv run --with coverage coverage report --include=data/rubric.py --fail-under=100",
+      "coverage_result": "data/rubric.py 100% line and branch (230 statements, 98 branches); 60 rubric tests; all 14 worked examples"
+    }
+  }
 }

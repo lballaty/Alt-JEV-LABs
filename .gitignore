@@ -9,3 +9,4 @@ data/splits/*.jsonl
 data/raw/*
 !data/raw/.gitkeep
 .DS_Store
+.coverage
