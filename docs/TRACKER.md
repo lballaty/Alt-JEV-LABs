@@ -27,13 +27,13 @@ Plan documents:
 | D6 | 2026-09-30 | OpenEnv SRE triage source excluded until verified | DATASET_PLAN_V2 §1 |
 | D7 | 2026-09-30 | Grow pilot to 560: add 60 B′ spoofed-authorization cases on top of the 500 | DATASET_PLAN_V2 §3 |
 | D8 | 2026-09-30 | Loghub used non-commercially (research); preliminary results published publicly in this repo. Obligations: ship Loghub license notice with derived templates, reference repo URL, cite ISSRE 2023 + ISSTA 2024 in README and every report using Loghub-derived data. Revisit before any commercial use | DATASET_PLAN_V2 §1a |
+| D9 | 2026-09-30 | Repo licensing: code Apache-2.0, docs/results CC BY 4.0; NOTICE names Libor Ballaty as original author and requires the original repo URL in redistributions; third-party data keeps its own terms | `LICENSE`, `LICENSE-DOCS`, `NOTICE` |
+| D10 | 2026-09-30 | Models on the M4 are managed by llamaCPPManager; the benchmark consumes served endpoints and never loads/downloads generative weights itself | MODEL_MANAGER_INTEGRATION |
+| D11 | 2026-09-30 | M4 memory budget for testing ≈ 80 GB including the model: peak unified-memory footprint of the model server/process plus harness during the timed run. A candidate above it fails the hard gate. The measurement method is to be fixed in WS8/WS4 on the Mac | PRACTICAL_EVAL_V2 §5 |
 
-## Open decisions (owner: Libor)
+## Open decisions
 
-| # | Question | Options | Blocks |
-| --- | --- | --- | --- |
-| O3 | Own real data for S8 (200–300 events) and S9 (chat threads) | Source, de-identification owner | Deployment-grade conclusion |
-| O4 | Scorecard thresholds, cost matrix, latency/memory budgets | Placeholder values in PRACTICAL_EVAL_V2 §5 | WS4 scorecard |
+All open owner decisions are consolidated under **Open questions** at the end of this file (Q1–Q7). The former O3 is now Q7 and O4 is now Q4/Q5.
 
 ## Workstreams
 
@@ -92,7 +92,7 @@ Steps on the Mac:
 | Q1 | Which llamaCPPManager model names/ports are the generative candidates? | Defines the served generative arms | WS8 |
 | Q2 | `HF_HUB_OFFLINE=1` permanently on the MLX entries, or a benchmark-only group/profile? | Prevents downloads during runs | WS8 |
 | Q3 | Which encoder/classifier candidates to include (Laya English 421M vs multilingual 322M, Von, GLiClass, SemIf, ModernBERT heads, Gemma LoRA)? Where are they stored locally? | The manager does not serve these; they need a local-path manifest | WS8, candidate matrix |
-| Q4 | Exact M4 spec (unified memory) and latency/memory budgets | Sets scorecard hard gates | WS4 |
+| Q4 | p95 latency budget (memory budget answered, D11) | Sets the remaining scorecard hard gate | WS4 |
 | Q5 | Scorecard cost matrix and thresholds (placeholders in PRACTICAL_EVAL_V2 §5) | Ranking among candidates that pass the gates | WS4 |
 | Q6 | Who reviews the rubric (routes, precedence: sovereignty above outage?) before freeze? | The rubric must be frozen before the sealed test split | WS3 freeze |
 | Q7 | Real data: 200–300 de-identified events (S8) and chat threads (S9). Source, and who de-identifies? | Only real data supports a deployment conclusion | WS6, S8/S9 |
