@@ -6,7 +6,7 @@ Alt-JEV-LABs is a local-first framework for comparing how different solutions pe
 
 The v1 synthetic smoke-test harness has routes for Laya-MLX, a supervised ModernBERT multi-head model, a BM25 nearest-example baseline, and a local generative MLX model on `choice`, `score`, and `noul` tasks. Running the model routes requires local checkpoints on the target Mac. For v2, the seed registry and alert-triage rubric 2.4.0 are merged; the cohort generator, full model comparison, and real-traffic validation remain planned. The [tracker](docs/TRACKER.md) records current status.
 
-This is a **measurement harness**, not a claim that any model is deterministic, calibrated, or safe for policy enforcement. A valid JSON response can still be wrong; a probability is only useful after calibration on representative data. Synthetic data probes plumbing and failure modes, but cannot establish production accuracy.
+This is a **measurement and decision-support harness**. It does not certify a model or authorize deployment on its own. A named human decision owner reviews the combination of tests, results, deployment controls, and residual risks, and records whether that evidence is sufficient for a specified use case and environment. A valid JSON response can still be wrong; a probability is only useful after calibration on representative data. Synthetic data probes plumbing and failure modes, but cannot establish production accuracy.
 
 ## Quick start
 
