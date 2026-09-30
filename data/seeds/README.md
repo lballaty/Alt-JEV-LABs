@@ -34,9 +34,9 @@ builds a fixture with decoy raw files and asserts their sentinel IP/username
 never reach a record.
 
 Loghub's event *labels* are anomaly/normal (and only for some systems); they are
-**not** route/score/noul labels. This registry carries no such labels — the
-label-set decision (`service_outage` vs the five v2 routes) is open and owned by
-WS2/WS3.
+**not** route/score/noul labels. This registry carries no such labels. Labels
+come from the v2 rubric (`configs/domains/v2_rubric.json`, six routes including
+`service_outage`) applied by the WS3 generator.
 
 ## Record schema (`registry.jsonl`)
 
