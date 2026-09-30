@@ -119,7 +119,7 @@ hard_gates:            # fail any -> candidate not selectable
   must_page_recall_min: 0.95        # S1+S3 combined, at the false-page budget below
   false_pages_per_1k_max: 20        # S6
   p95_ms_max: 250                   # batch 1, target hardware
-  peak_memory_gb_max: 8
+  peak_memory_gb_max: 80          # owner-set 2026-09-30: whole test footprint incl. model weights, KV cache, runtime and harness
 cost_matrix:           # relative cost of errors, drives cost-weighted error
   missed_must_page: 50
   false_page: 1
