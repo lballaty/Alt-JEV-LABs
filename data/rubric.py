@@ -1,16 +1,20 @@
 """Load and apply the versioned v2 labeling rubric (answer key).
 
-Version 2.2 follows review 2 (docs/reviews/RUBRIC_REVIEW_2.md). Key rules:
+Version 2.3 follows review 3 (docs/reviews/RUBRIC_REVIEW_3.md), building on
+reviews 1 and 2. Key rules:
 
-- **Priority describes the condition; notification is a separate decision.**
+- **Priority comes from current evidence; notification is a separate decision.**
   A change explanation or an open-incident attachment suppresses the
-  notification only. It never lowers priority, and an attached repeat keeps
-  the incident's priority.
-- **Priority is a response class** (P1-P4) defined before any mapping, so the
-  priority table, the paging rule and the acknowledgement targets agree.
-- **Uncertainty is time-bound.** A case whose answer depends on unknown facts
-  gets a provisional label from the known facts, a reason, the missing facts,
-  a triage owner and a deadline. Possible ongoing harm still pages.
+  notification only; by itself it never lowers priority, and an attached
+  repeat keeps the incident's priority.
+- **Priority is a response class** (P1-P4) with two clocks: acknowledgement
+  and initial fact-finding. P4 splits into scheduled (targets) and retained
+  (no target).
+- **Pages go to a 24x7 team and state the immediate action.** A business-hours
+  owner (Privacy/DPO, platform/compliance) is covered out of hours by its
+  24x7 verifier (SOC, SRE).
+- **Uncertainty is time-bound.** A provisional label has a reason, the missing
+  facts, a triage owner and both clocks. Possible ongoing harm still pages.
 - **Claims inside logs are untrusted; observations are evidence.** "Authorized
   drill, do not page" carries no authority, but the action, actor, time and
   outcome in the same log are facts the case author uses.
@@ -62,6 +66,7 @@ class Evidence:
     threatens_critical: bool = False
     compromise_evidence: bool = False
     provisional_reason: str | None = None
+    immediate_action: str | None = None       # required whenever the case pages
 
 
 @dataclass(frozen=True)
@@ -75,12 +80,16 @@ class Label:
     priority: str                              # the condition's response class
     notification: str                          # page_now | urgent_review | scheduled_review | none
     page_now: bool
+    page_target: str | None                    # 24x7 team paged (owner, or its verifier)
+    response: str                              # respond | scheduled | retained
+    ack_target: str | None                     # None only when retained
     handling: str                              # new | explained_by_change | attached_to_incident
     provisional: bool
     provisional_reason: str | None
     missing_facts: tuple[str, ...]
     triage_owner: str | None
-    triage_deadline: str | None
+    fact_finding_deadline: str | None          # provisional cases only
+    immediate_action: str | None
     applied_rules: tuple[tuple[str, str], ...] = field(default_factory=tuple)  # (rule, reason)
     rubric_version: str = ""
 
@@ -90,13 +99,15 @@ class Rubric:
     version: str
     event_types: frozenset[str]
     owners: frozenset[str]
+    coverage: dict[str, str]
+    verifier_for: dict[str, str]
+    classes: dict[str, dict[str, Any]]
     default_owner: dict[str, str | None]
     impact_levels: tuple[str, ...]
     urgency_levels: tuple[str, ...]
     priority_matrix: dict[str, dict[str, str]]
     notification_rule: dict[str, Any]
     provisional_reasons: frozenset[str]
-    triage_deadlines: dict[str, str]
     lint_patterns: tuple[re.Pattern[str], ...]
     lint_allowed_cohorts: frozenset[str]
 
@@ -115,7 +126,7 @@ class Rubric:
     def from_dict(cls, raw: dict[str, Any]) -> "Rubric":
         required = ("rubric_version", "event_types", "owners", "default_owner_by_type", "impact_levels",
                     "urgency_levels", "response_classes", "priority_matrix", "notification_rule",
-                    "provisional", "leak_lint")
+                    "provisional", "page_routing", "leak_lint")
         for key in required:
             if key not in raw:
                 raise RubricError(f"Rubric is missing required key {key!r}")
@@ -124,8 +135,19 @@ class Rubric:
         if set(default_owner) != types or not {o for o in default_owner.values() if o} <= owners:
             raise RubricError("default_owner_by_type must map every event type to a known owner or null")
         impacts, urgencies = tuple(raw["impact_levels"]), tuple(raw["urgency_levels"])
-        if set(k for k in raw["response_classes"] if k != "note") != set(PRIORITIES):
-            raise RubricError("response_classes must define exactly P1-P4")
+        classes = {k: v for k, v in raw["response_classes"].items() if k != "note"}
+        if set(classes) != set(PRIORITIES) or any("ack_target" not in c or "fact_finding" not in c
+                                                   for c in classes.values()):
+            raise RubricError("response_classes must define P1-P4, each with ack_target and fact_finding")
+        coverage = {name: spec.get("coverage") for name, spec in raw["owners"].items()}
+        if any(c not in ("24x7", "business_hours") for c in coverage.values()):
+            raise RubricError("every owner needs coverage '24x7' or 'business_hours'")
+        verifier_for = dict(raw["page_routing"]["verifier_for"])
+        for owner, cov in coverage.items():
+            # A business-hours team cannot be paged at 03:00; someone 24x7 must
+            # be named to verify on its behalf, or pages would go nowhere.
+            if cov == "business_hours" and coverage.get(verifier_for.get(owner, "")) != "24x7":
+                raise RubricError(f"business-hours owner {owner!r} needs a 24x7 verifier in page_routing")
         matrix = {k: v for k, v in raw["priority_matrix"].items() if k != "note"}
         # Every cell must be defined ('x' = invalid combination), so no case can
         # fall through to an implicit priority.
@@ -137,17 +159,15 @@ class Rubric:
         if set(rule) != set(urgencies):
             raise RubricError("notification_rule must cover every urgency level")
         prov = raw["provisional"]
-        if set(prov["triage_deadline_by_priority"]) != set(PRIORITIES):
-            raise RubricError("provisional.triage_deadline_by_priority must cover P1-P4")
         try:
             patterns = tuple(re.compile(p, re.IGNORECASE) for p in raw["leak_lint"]["forbidden_patterns"])
         except re.error as exc:
             raise RubricError(f"Invalid leak_lint pattern: {exc}") from exc
         return cls(version=str(raw["rubric_version"]), event_types=types, owners=owners,
+                   coverage=coverage, verifier_for=verifier_for, classes=classes,
                    default_owner=default_owner, impact_levels=impacts, urgency_levels=urgencies,
                    priority_matrix=matrix, notification_rule=rule,
-                   provisional_reasons=frozenset(prov["reasons"]),
-                   triage_deadlines=dict(prov["triage_deadline_by_priority"]), lint_patterns=patterns,
+                   provisional_reasons=frozenset(prov["reasons"]), lint_patterns=patterns,
                    lint_allowed_cohorts=frozenset(raw["leak_lint"].get("allowed_in_cohorts", ())))
 
     # ---------------------------------------------------------------- helpers
@@ -238,14 +258,34 @@ class Rubric:
         provisional = ev.provisional_reason is not None
         if provisional:
             applied.append(("provisional", ev.provisional_reason))
+
+        page_now = notification == "page_now"
+        page_target = None
+        if page_now:
+            if not (ev.immediate_action or "").strip():
+                raise RubricError("a case that pages must state the responder's immediate action")
+            # Pages go to a 24x7 team: the owner itself, or its named verifier.
+            page_target = owner if self.coverage[owner] == "24x7" else self.verifier_for[owner]
+            if page_target != owner:
+                applied.append(("page_routing", f"{owner} is business-hours; {page_target} verifies 24x7"))
+
+        # P4 splits into scheduled work (has targets) and retained (no target).
+        response = ("scheduled" if notification == "scheduled_review"
+                    else "retained" if notification == "none" and priority == "P4" else "respond")
+        ack, fact = self.classes[priority]["ack_target"], self.classes[priority]["fact_finding"]
+        if isinstance(ack, dict):
+            ack, fact = ack["scheduled" if response == "scheduled" else "retained"], fact[
+                "scheduled" if response == "scheduled" else "retained"]
         return Label(
             event_type=ev.primary_type, secondary_types=ev.secondary_types, owner=owner,
             secondary_owners=ev.secondary_owners, impact=ev.impact, urgency=ev.urgency, priority=priority,
-            notification=notification, page_now=notification == "page_now", handling=handling,
+            notification=notification, page_now=page_now, page_target=page_target, response=response,
+            ack_target=ack, handling=handling,
             provisional=provisional, provisional_reason=ev.provisional_reason,
             missing_facts=ev.missing_context,
             triage_owner=owner if provisional else None,
-            triage_deadline=self.triage_deadlines[priority] if provisional else None,
+            fact_finding_deadline=fact if provisional else None,
+            immediate_action=ev.immediate_action,
             applied_rules=tuple(applied), rubric_version=self.version)
 
     def _matching_expected_activity(self, event: dict[str, Any], context: dict[str, Any],

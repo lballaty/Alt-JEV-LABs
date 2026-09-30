@@ -12,7 +12,7 @@ That decision has three operational outputs. Each output maps to something an op
 | --- | --- | --- | --- |
 | Choice | What type of event is this (security, service degradation, data protection, policy deviation, routine, telemetry)? Owner is recorded alongside | Router / owning team | Macro-F1 + per-type recall |
 | Noul | Page the on-call human now? | Paging policy (still behind a deterministic rule layer) | Recall of must-page at a fixed false-page budget per 1k events |
-| Score | Which priority (P1–P4)? Rubric 2.2: a response class (impact × urgency), never lowered by a suppressed notification | Acknowledgement target, queue order | Priority accuracy (exact and ±1) as an ordinal. Any 0–100 output is binned by the harness (a measurement convention, not an answer key) |
+| Score | Which priority (P1–P4)? Rubric 2.3: a response class from current evidence; a suppressed notification does not by itself lower it | Acknowledgement target, queue order | Priority accuracy (exact and ±1) as an ordinal. Any 0–100 output is binned by the harness (a measurement convention, not an answer key) |
 
 ## 2. Verification of current and proposed content
 
