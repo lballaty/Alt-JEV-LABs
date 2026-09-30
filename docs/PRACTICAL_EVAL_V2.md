@@ -26,7 +26,7 @@ That decision has three operational outputs. Each output maps to something an op
 | Cohort D: noul target p = 0.50 | ❌ | No real label is "0.5". An operator decides page / don't page / needs a human | Label as `needs_human` (adjudicated). Measure whether the model *abstains or routes to a human* on these cases (selective accuracy) |
 | Balanced cohorts (40/25/20/15) | ⚠️ | Real streams are overwhelmingly routine; balanced sets overstate precision and hide alert fatigue | Keep the balanced set for per-cohort diagnosis. **Add a replay stream at realistic prevalence** (§4 S6) |
 | ECE per cohort, paired-inversion accuracy as a headline, "O(1)", "deterministic", 255 options | ❌ for selection | Unstable at n≈11–30, or not something a buyer can act on | Demote to appendix diagnostics; pooled calibration only |
-| `service_outage` missing from v2 routes | ❌ | Outages are most real SRE pages | Add as a route (the open decision in DATASET_PLAN_V2 §2) |
+| `service_outage` missing from v2 routes | ❌ | Outages are most real SRE pages | **Decided: added as sixth route** (DATASET_PLAN_V2 §2) |
 
 ## 3. Input format: event + context, as a real gate sees it
 
@@ -112,7 +112,7 @@ Output per candidate: one row with gate results (pass/fail and the measured valu
 | WS | Change |
 | --- | --- |
 | WS1 seed registry (running) | Unchanged. Follow-up: add Alertmanager/Falco/k8s/auditd format seeds once sources are pinned |
-| WS2 rubric | Define queues, page policy, P1–P4 anchors, `needs_human`, and the context-block schema; add `service_outage` pending decision |
+| WS2 rubric | Define queues, page policy, P1–P4 anchors, `needs_human`, and the context-block schema; include `service_outage` |
 | WS3 generator | Emit `{event, context}` cases; leak lint; leave-one-source-out splits; S6 stream builder; S7 subsets |
 | WS4 report | Scorecard output + cost-weighted metrics (still waits for the other agent's branch to merge) |
 | New WS6 | S8 real-data protocol: de-identification, labeling guide, two-labeler agreement |

@@ -6,22 +6,29 @@ Status: **Draft / proposed — not implemented, not measured.** Companion to `do
 
 | Source | Verified here | License / terms | What it actually provides | Decision |
 | --- | --- | --- | --- | --- |
-| Loghub (`logpai/loghub`) | ✅ cloned | "Freely available for research or academic work"; any use or distribution must reference the repo URL and cite the paper | Per-system `*_2k.log`, `*_structured.csv`, `*_templates.csv` in-repo (OpenSSH 27, OpenStack 43, BGL 120, HDFS 14, Linux 118 templates). Full logs on Zenodo. Only BGL/HDFS/OpenStack carry anomaly labels (normal/anomaly), not route/score. | **Use templates only** (`<*>` placeholders), filled with synthetic entities. Do not vendor raw `.log` lines: OpenSSH samples contain real public IPs and usernames (AGENTS.md rule 4). |
+| Loghub (`logpai/loghub`) | ✅ cloned | "Freely available for research or academic work"; any use or distribution must reference the repo URL and cite the paper | Per-system `*_2k.log`, `*_structured.csv`, `*_templates.csv` in-repo (OpenSSH 27, OpenStack 43, BGL 120, HDFS 14, Linux 118 templates). Full logs on Zenodo. Only BGL/HDFS/OpenStack carry anomaly labels (normal/anomaly), not route/score. | **Use templates only** (`<*>` placeholders), filled with synthetic entities. Do not vendor raw `.log` lines: OpenSSH samples contain real public IPs and usernames (AGENTS.md rule 4). License scope is limited — see §1a. |
 | OpenEnv SRE triage (`DarDrax/incident-triage-env`, HF) | ❌ huggingface.co blocked by this environment's egress policy | Unverified | Unverified | **Excluded until verified** on a host with HF access (existence, license, content). Not a dependency of the pilot. |
 | Atomic Red Team (`redcanaryco/atomic-red-team`) | ✅ repo page | MIT | Test *definitions and command lines*, mapped to ATT&CK IDs — not captured telemetry | Use command lines + technique IDs as seeds; wrap them in synthetic process/auth log lines. Record technique ID per case. |
 | MITRE ATT&CK | not fetched | ATT&CK terms of use (attribution) — confirm before redistribution | Technique taxonomy | Use technique IDs/names as metadata only. |
 
+### 1a. Loghub license review (checked 2026-09-30, upstream LICENSE last changed at commit dd61d09, 2025-06-14)
+
+Verbatim terms: "freely available for research or academic work", provided that any usage or distribution refers to https://github.com/logpai/loghub, cites Zhu et al., ISSRE 2023 "where applicable", and "the above license notice shall be included in all copies of the datasets". The README also asks to cite Loghub-2.0 (Jiang et al., ISSTA 2024). GitHub reports no SPDX license. The Zenodo record (full datasets) could not be checked: zenodo.org is blocked here.
+
+| Use | Assessment |
+| --- | --- |
+| Internal benchmark / research in this repo | Within stated scope if notice + URL + citation are kept |
+| Redistributing derived templates in this repo | Allowed with the notice; `*_templates.csv` are part of the dataset, so the same terms apply. Ship `data/seeds/LOGHUB_LICENSE` + citation |
+| Commercial vendor selection, customer-facing or marketing publication of results | **Not expressly granted.** No commercial grant, no standard license. Get written permission from the maintainers (logpai) or use the fallback |
+| Underlying source systems (BGL, HDFS, OpenStack, …) | Collected from third parties; original terms not verified |
+
+Fallback that avoids the question: derive templates from **log format strings in permissively licensed source code** (e.g. OpenSSH `sshd` messages, OpenStack services under Apache-2.0), recording file, commit and license per template. Not yet verified for coverage/effort. Not legal advice; confirm with counsel if results will be published commercially.
+
 Consequence for the proposal text: Loghub labels are *anomaly/normal*, so "directly maps system error levels to our enum" is **our rubric applied to real syntax**, not upstream ground truth. Reports must say so.
 
-## 2. Contract alignment (needs decision)
+## 2. Contract alignment — **decided 2026-09-30: add `service_outage` as a sixth route**
 
-The proposal uses `service_outage`; BLUEPRINT_V2 routes are `routine_audit`, `policy_exception`, `security_escalation`, `data_sovereignty_flag`, `telemetry_heartbeat`. Storage timeouts and "proxy is toast, 502s" (Cohorts A and C) have no home in the v2 set. Options:
-
-| Option | Effect |
-| --- | --- |
-| Add `service_outage` as a 6th route | Matches the proposal; rubric and precedence must define outage vs security overlap |
-| Keep 5 routes; outages → `policy_exception` | Keeps blueprint; semantically weak, inflates one class |
-| Keep 5 routes; drop outage seeds (HDFS/BGL) | Loses the most realistic Loghub material |
+v2 routes: `routine_audit`, `policy_exception`, `security_escalation`, `data_sovereignty_flag`, `telemetry_heartbeat`, `service_outage`. BLUEPRINT_V2 (other agent's branch) still lists five and must be updated by its owner. WS2 defines outage-vs-security precedence (e.g. an auth burst that also causes 5xx: primary route by rubric, secondary tag kept separately).
 
 Noul is a binary proposition ("requires immediate human review?"). Targets like `p ≥ 0.90` / `p = 0.50` in the proposal are **model-output expectations, not labels**; the label is `true`/`false`, plus an `adjudication` field for Cohort D.
 
@@ -76,10 +83,10 @@ The other agent's branch (`feat/finite-json-calibration`) modifies `data/synthet
 ## Assumptions
 
 - The v1 generator and dataset stay intact; v2 is a separate dataset/config (per blueprint).
-- Loghub's research-only terms fit this work. If the results feed commercial or marketing material, confirm the license first.
+- Loghub use is internal research until permission is obtained (§1a).
 
 ## Review flags
 
-- Label set (§2) and B′ budget (§3) need an owner decision before WS2/WS3 freeze.
-- Loghub license scope vs intended publication.
+- B′ budget (§3) needs an owner decision before WS3 freezes.
+- Loghub: request written permission for commercial/published use, or approve the source-code fallback (§1a).
 - OpenEnv source is unverified and excluded.
