@@ -89,7 +89,7 @@ The claim "2,992 alerts per day, 63% unaddressed" appeared in search results wit
 
 | Parameter | Proposal | Basis | Status |
 | --- | --- | --- | --- |
-| Source-severity field on generated security alerts | Draw from the Sigma/Elastic mix: about 2% critical, 35–45% high, 45% medium, 10–25% low | Verified §1 | Usable now |
+| Source-severity field on generated security alerts | Draw from the Sigma/Elastic mix: about 1–2% critical, 28–45% high, 43–47% medium, 9–24% low | Verified §1 | Usable now |
 | Source severity vs rubric answer | Many "high"-severity source alerts must be benign or retained under the rubric, so over-trusting source severity costs accuracy. Target: about half of high/medium security alerts benign | Verified §1 (content skew); benign share from leads | Share **assumed** until leads are verified |
 | Security technique mix | Weight seeds by tactic counts in §3; keep the tactic label and ATT&CK version per case | Verified §3 | Usable now |
 | Platform mix | Add Windows event log and cloud audit (AWS CloudTrail, Azure activity) formats; target at least 30% non-Linux security cases | Verified §2 gap | Needs new seeds (WS1 follow-up) |
