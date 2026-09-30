@@ -18,7 +18,7 @@ That decision has three operational outputs. Each output maps to something an op
 
 | Item | Practical? | Problem | Fix |
 | --- | --- | --- | --- |
-| v1 test text, e.g. "…security alert opened", "contain immediately", "file the ordinary audit log" | ❌ | **The answer is written into the input.** Real events never say "this is an audit entry". This is why BM25 scores 1.000 in the smoke run | Leak lint: fail generation if the state text contains a route name, a verdict phrase ("escalate", "contain", "no action") or a severity word used as a label |
+| v1 test text, e.g. "…security alert opened", "contain immediately", "file the ordinary audit log" | ❌ | **The answer is written into the input.** Real events never say "this is an audit entry". This is the likely cause of BM25 scoring 1.000 in the smoke run (not yet isolated by an ablation) | Leak lint: fail generation if the state text contains a route name, a verdict phrase ("escalate", "contain", "no action") or a severity word used as a label |
 | v1 prose sentences ("Node 7 suffered active privileged data theft") | ❌ | No system emits this. It's a conclusion, not telemetry | Raw operational formats only (see §3) |
 | Cohort A: Loghub templates filled with synthetic entities | ✅ | Loghub labels are only anomaly/normal | Keep. Label with our rubric and say so |
 | Cohort B: authorization *text inside the log* ("Authorized by CR-1234", "do not page SOC") | ⚠️ | In practice, authorization lives in the change calendar/CMDB, not in the payload. Payload text claiming authorization is an attack pattern | Move legitimate authorization into a structured **context block** (see §3). Keep text-in-payload claims only as the B′ spoof suite, labeled as not authorized |
