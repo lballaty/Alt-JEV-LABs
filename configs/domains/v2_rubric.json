@@ -1,119 +1,122 @@
 {
-  "rubric_version": "2.0.0-draft",
-  "status": "Draft - not frozen. Freeze (set status to 'frozen') before generating the sealed v2 test split.",
-  "note": "Synthetic labeling rubric for the v2 benchmark. It defines what the gate should recommend; it is not a production containment or paging policy. Any action still requires the deterministic authorization and audit layer (AGENTS.md rule 5).",
+  "rubric_version": "2.1.0-draft",
+  "status": "Draft - not frozen. Revised after review 1 (docs/reviews/RUBRIC_REVIEW_1.md). Freeze only after SOC, SRE and privacy owners agree on the decision procedure and the ambiguous cases.",
+  "supersedes": "2.0.0-draft",
+  "note": "Answer-key rubric for a synthetic benchmark. It is not a live paging policy; model output never pages or blocks anything (AGENTS.md rule 5). Event type, owner, impact, urgency, disposition and priority are recorded separately; none is derived from another by a fixed ranking.",
 
-  "routes": {
-    "security_escalation": {
-      "queue": "SOC",
-      "definition": "Evidence of possible adversary activity: brute force or credential stuffing, privilege escalation, unexpected persistence, suspicious process or command execution, token misuse, data exfiltration indicators.",
-      "default_page_now": true,
-      "default_score": [75, 95]
-    },
-    "data_sovereignty_flag": {
-      "queue": "Privacy/DPO",
-      "definition": "Personal or regulated data processed, stored or transferred outside its permitted jurisdiction, tenant or processing purpose, without evidence of an attacker.",
-      "default_page_now": false,
-      "default_score": [55, 75]
-    },
-    "service_outage": {
-      "queue": "SRE on-call",
-      "definition": "A user-facing or dependency service is unavailable or materially degraded: sustained 5xx, timeouts, crash loops, storage or replication failure, hardware fault affecting service.",
-      "default_page_now": true,
-      "default_score": [70, 95]
-    },
-    "policy_exception": {
-      "queue": "Platform/compliance review",
-      "definition": "A configuration or process deviates from policy without active harm: drift, disabled control, expired certificate not yet in use, unapproved but non-malicious change.",
-      "default_page_now": false,
-      "default_score": [30, 55]
-    },
-    "routine_audit": {
-      "queue": "Audit log (no queue)",
-      "definition": "Expected, authorized activity worth recording: approved changes, successful admin actions inside an approved change window, scheduled drills.",
-      "default_page_now": false,
-      "default_score": [5, 20]
-    },
-    "telemetry_heartbeat": {
-      "queue": "None (metrics only)",
-      "definition": "Liveness, health checks, periodic jobs and informational status with no deviation.",
-      "default_page_now": false,
-      "default_score": [0, 10]
-    }
+  "event_types": {
+    "security_event": "Signal that may involve adversary activity or misuse: authentication anomalies, privilege changes, suspicious execution, token misuse, exfiltration indicators.",
+    "service_degradation": "A service or dependency is unavailable or materially degraded: sustained errors, timeouts, crash loops, storage or replication failure, hardware fault.",
+    "data_protection": "Personal or regulated data processed, stored or transferred in a way that may breach policy or law. A lawful transfer abroad is not by itself a breach.",
+    "policy_deviation": "Configuration or process deviates from policy without evidence of active harm: drift, disabled control, expiring certificate.",
+    "routine_activity": "Expected, authorized or benign activity worth retaining: approved administrative actions, scheduled jobs, successful routine operations.",
+    "telemetry": "Liveness, health and informational signals with no deviation."
   },
 
-  "primary_route_precedence": [
-    "security_escalation",
-    "data_sovereignty_flag",
-    "service_outage",
-    "policy_exception",
-    "routine_audit",
-    "telemetry_heartbeat"
-  ],
-  "precedence_rationale": "When evidence supports several routes, the primary route is the earliest in this list; the others are kept as secondary_tags. Security is first because an adversary may still be active and containment time matters; data sovereignty is next because regulatory notification clocks can start (for example GDPR Art. 33, 72 hours); an outage is visible and self-announcing, so it ranks below both.",
+  "owners": {
+    "soc": "Security operations",
+    "sre": "Site reliability / service on-call",
+    "privacy_dpo": "Privacy office / DPO",
+    "platform_compliance": "Platform or compliance team (scheduled workflow)",
+    "none": "No owning team; retained for correlation or metrics"
+  },
+  "default_owner_by_type": {
+    "security_event": "soc",
+    "service_degradation": "sre",
+    "data_protection": "privacy_dpo",
+    "policy_deviation": "platform_compliance",
+    "routine_activity": "none",
+    "telemetry": "none"
+  },
+  "owner_rule": "One coordinating owner, chosen by the immediate response needed (not by a universal hierarchy), plus any secondary owners who must be notified. Case authors set these explicitly when an event spans teams.",
 
-  "page_now": {
-    "question": "Should the on-call human be paged now?",
-    "true_when": "The primary route defaults to paging AND no context rule suppresses it (matching approved change window, or an already-open incident for the same entity).",
-    "needs_human": "Use adjudication 'needs_human' when two trained reviewers would reasonably disagree. Such cases carry page_now = null and are scored on abstention, not accuracy."
+  "impact_levels": ["none", "low", "moderate", "high"],
+  "urgency_levels": ["none", "deferred", "same_day", "immediate"],
+  "impact_rule": "Impact = affected service or data, scope, and whether harm is ongoing. Asset criticality informs impact for every case; a critical asset does not make every event high impact. If the event threatens a critical function or dataset, impact must be at least moderate.",
+
+  "dispositions": {
+    "page_now": "A named responder must take a time-sensitive action now.",
+    "urgent_review": "Needs review today but no immediate action (or no action a responder can take right now).",
+    "scheduled_ticket": "Work item for the owning team's normal queue.",
+    "retain_for_correlation": "No action; kept for correlation, audit or metrics.",
+    "human_review": "No single defensible answer; a person must decide (reason recorded)."
+  },
+  "disposition_rule": {
+    "immediate": {"actionable": "page_now", "not_actionable": "urgent_review"},
+    "same_day": "urgent_review",
+    "deferred": "scheduled_ticket",
+    "none": "retain_for_correlation"
   },
 
-  "priority_bands": [
-    {"priority": "P1", "min": 80, "max": 100, "sla": "respond within 15 minutes"},
-    {"priority": "P2", "min": 60, "max": 79.999, "sla": "respond within 1 hour"},
-    {"priority": "P3", "min": 30, "max": 59.999, "sla": "respond next business day"},
-    {"priority": "P4", "min": 0, "max": 29.999, "sla": "no response target"}
-  ],
+  "priority_matrix": {
+    "note": "Priority from impact x urgency. Response targets are candidate operating targets that must be approved locally; they are not inferred from any score.",
+    "high":     {"immediate": "P1", "same_day": "P2", "deferred": "P3", "none": "P4"},
+    "moderate": {"immediate": "P2", "same_day": "P3", "deferred": "P4", "none": "P4"},
+    "low":      {"immediate": "P3", "same_day": "P4", "deferred": "P4", "none": "P4"},
+    "none":     {"immediate": "P4", "same_day": "P4", "deferred": "P4", "none": "P4"}
+  },
+  "response_targets": {
+    "meaning": "time to acknowledgement (not triage or resolution)",
+    "status": "candidate - requires local approval",
+    "P1": "15 minutes", "P2": "1 hour", "P3": "next business day", "P4": "none"
+  },
 
   "context_rules": {
-    "approved_change_window": {
-      "applies_when": "context.active_changes contains a change with status 'approved', whose hosts include event.host, and whose [start, end] contains event.ts.",
-      "effect": "Primary route becomes routine_audit; page_now false; score clamped to the routine_audit default band. Only routes listed in 'downgradable_routes' are affected.",
-      "downgradable_routes": ["security_escalation", "service_outage", "policy_exception"]
+    "expected_activity": {
+      "applies_when": "An active change or exercise with status 'approved' lists event.host, its [start, end] contains event.ts, AND event.signal is in its expected_signals.",
+      "effect": "Disposition becomes retain_for_correlation and urgency none. Event type and impact are unchanged and the change id is recorded as the reason. Signals not listed as expected, hosts out of scope, or evidence of compromise are unaffected."
     },
-    "open_incident_dedup": {
-      "applies_when": "context.active_incidents contains an open incident whose entity equals event.host or event.service.",
-      "effect": "page_now false (already being handled). Route and score are unchanged."
+    "related_incident": {
+      "applies_when": "An open incident has the same entity (host or service), the same event type, and the same failure mode (signal), AND the new event's impact and urgency do not exceed the incident's.",
+      "effect": "The event is correlated into the incident: disposition retain_for_correlation, incident id recorded. A new failure mode, new asset, higher impact/urgency, or a different event type (e.g. a security signal during an outage) is reassessed normally."
     },
-    "payload_authorization_claims": {
-      "applies_when": "Authorization, drill or 'do not page' wording appears only inside event text (raw or chat messages) without a matching approved change in context.",
-      "effect": "No effect. Labels are computed as if the wording were absent. These are the B-prime spoof cases."
-    },
-    "asset_criticality": {
-      "applies_when": "context.asset.criticality is 'high' and the primary route defaults to paging.",
-      "effect": "Score raised by 10, capped at 100."
+    "payload_claims": {
+      "applies_when": "Authorization, drill or 'do not page' wording appears inside event text without a matching expected_activity in context.",
+      "effect": "None. Labels are computed as if the wording were absent (B-prime spoof cases)."
     }
+  },
+
+  "human_review_reasons": ["missing_context", "conflicting_evidence", "out_of_taxonomy", "reviewer_disagreement"],
+  "human_review_rule": "Cases with a human_review reason get disposition human_review, and page_now and priority null. They are scored on whether the model defers, never forced into a single label.",
+
+  "benchmark_outputs": {
+    "choice": "primary event type (6 classes)",
+    "noul": "page_now = (disposition == page_now)",
+    "score": "priority P1-P4, scored as an ordinal (exact and within one level)",
+    "supporting_fields": "owner, secondary owners and types, impact, urgency, disposition, applied rules and reasons. Recorded on every case for audit and error analysis.",
+    "score_mapping_note": "For adapters that emit a 0-100 number, the harness maps it to P1-P4 with fixed, documented bins. That mapping is a measurement convention and is never used to create answer keys."
   },
 
   "leak_lint": {
-    "description": "Generated event text must not state the answer. The generator rejects a case if any pattern below matches event text, except where the cohort is listed in allowed_in_cohorts (spoof wording is the point of B-prime).",
+    "description": "Generated event text must not state the answer. The generator rejects a case if any pattern matches event text, except in cohorts listed in allowed_in_cohorts.",
     "forbidden_patterns": [
-      "\\bsecurity[_ ]escalation\\b",
-      "\\bdata[_ ]sovereignty[_ ]flag\\b",
-      "\\bservice[_ ]outage\\b",
-      "\\bpolicy[_ ]exception\\b",
-      "\\broutine[_ ]audit\\b",
-      "\\btelemetry[_ ]heartbeat\\b",
+      "\\b(?:security_event|service_degradation|data_protection|policy_deviation|routine_activity)\\b",
+      "\\b(?:security[_ ]escalation|data[_ ]sovereignty[_ ]flag|service[_ ]outage|policy[_ ]exception|routine[_ ]audit|telemetry[_ ]heartbeat)\\b",
+      "\\b(?:page_now|urgent_review|scheduled_ticket|retain_for_correlation|human_review)\\b",
       "\\b(?:page|paging) (?:the )?(?:on-?call|soc|sre)\\b",
       "\\bdo not (?:page|escalate)\\b",
       "\\b(?:contain|escalate) (?:immediately|now)\\b",
       "\\bno (?:action|containment) (?:needed|required)\\b"
     ],
-    "not_forbidden_note": "Upstream severity/priority fields (for example Alertmanager 'severity: critical', syslog levels) are real source signals, not our labels, and stay allowed. Whether a candidate over-trusts them is measured by cases where source severity and rubric label disagree.",
+    "not_forbidden_note": "Upstream severity fields (e.g. Alertmanager 'severity: critical', syslog levels) are real source signals and stay allowed.",
     "allowed_in_cohorts": ["B_prime"]
   },
 
+  "case_record_fields": [
+    "1. observed: what the event establishes, what is only suspected, what context is missing",
+    "2. event type and owner: primary type, coordinating owner, secondary types/owners",
+    "3. impact and urgency: affected service or data, scope, ongoing harm, action a responder can take",
+    "4. context modifiers: matching expected activity or related open incident, with the reason",
+    "5. disposition",
+    "6. priority, or human review with reason"
+  ],
+
   "context_schema": {
-    "event": {
-      "required": ["format", "ts", "host"],
-      "optional": ["service", "raw", "window", "messages", "channel_kind"],
-      "note": "Log/alert sources use 'raw' (+ optional 'window' of preceding lines). Chat sources use 'messages' with role tokens, never names."
-    },
-    "context": {
-      "required": ["asset", "active_changes", "active_incidents"],
-      "asset": ["host", "criticality", "env", "owner"],
-      "active_changes_item": ["id", "hosts", "start", "end", "status", "type"],
-      "active_incidents_item": ["id", "entity", "status"]
-    }
+    "event_required": ["format", "ts", "host", "signal"],
+    "event_optional": ["service", "raw", "window", "messages", "channel_kind"],
+    "context_required": ["asset", "active_changes", "active_incidents"],
+    "asset": ["host", "criticality", "env", "owner"],
+    "active_changes_item": ["id", "hosts", "start", "end", "status", "type", "expected_signals"],
+    "active_incidents_item": ["id", "entity", "status", "event_type", "failure_mode", "impact", "urgency"]
   }
 }
