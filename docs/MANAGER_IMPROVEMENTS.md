@@ -33,6 +33,7 @@ Status: **Draft / proposed.** Based on reading `arionrepo/llamacppmanager` at `b
 | M6 | Test lock: `lock <model> --reason benchmark --ttl 2h` / `unlock`. While locked: monitor auto-restart paused, GUI/CLI stop/restart/start of *other* models refused unless `--force`, all logged | A restart or a second model loading mid-run invalidates timing and memory | **Must** | Operator discipline only |
 | M7 | Lifecycle correlation: `lifecycle mark --run-id R --event benchmark.run.begin/end` (or accept events from the harness), and include crash/restart events in `manifest`/`status` since a timestamp | Tie backend failures to a run; report exceptions vs wrong answers correctly (AGENTS.md rule 8) | Should | Harness reads `lifecycle.jsonl` by time window |
 | M8 | System snapshot: `system --json` → chip, unified memory total, macOS version, power source/mode, thermal pressure | Timing provenance (blueprint: power mode, hardware) | Should | Harness runs `sysctl`/`pmset` itself |
+| M11 | **Co-tenancy report** in `system --json`: memory used by everything the manager knows about (other models, Colima/Docker VMs, MyRAGDB) plus total used, pressure and swap. Include the Metal GPU working-set limit (`recommendedMaxWorkingSetSize`; the `iogpu.wired_limit_mb` sysctl if set; *verify* values on the M4 Max) | The 128 GB machine is shared; the effective memory gate (D12) depends on the measured baseline. A model larger than the GPU working-set limit may fail or spill regardless of free RAM | **Must** | Harness reads `vm_stat`/`memory_pressure`/`sysctl` itself; cannot attribute memory to manager-owned VMs as cleanly |
 | M9 | Query/MCP passthrough: explicit `temperature`, `seed`, `top_k`, `n_probs`/logprobs, `json_schema`/`grammar` on chat and completion; scripted callers must pass temperature (no hidden 0.7 default) | Useful for agents and manual checks; the benchmark calls endpoints directly anyway | Could | Harness calls the server API directly |
 | M10 | MCP tools: `model_manifest`, `ensure_model`, `lock_model`, `system_info` | Lets an agent orchestrate test setup through the same contract | Could | CLI |
 
@@ -50,7 +51,7 @@ Status: **Draft / proposed.** Based on reading `arionrepo/llamacppmanager` at `b
 
 1. Inventory on the Mac (Q1–Q3): which models, runtimes and sizes.
 2. **M1 + M5 + M3** (provenance, offline, readiness) → enough for the WS8 preflight.
-3. **M4** after verifying the RSS vs physical-footprint gap on a real model; this gates D11.
+3. **M4 + M11** after verifying the RSS vs physical-footprint gap on a real model; these gate the memory budget (D12).
 4. **M6 + U1** before the first timed pilot run.
 5. The rest as needed.
 

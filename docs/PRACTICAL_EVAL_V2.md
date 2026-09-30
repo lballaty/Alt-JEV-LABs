@@ -119,7 +119,13 @@ hard_gates:            # fail any -> candidate not selectable
   must_page_recall_min: 0.95        # S1+S3 combined, at the false-page budget below
   false_pages_per_1k_max: 20        # S6
   p95_ms_max: 250                   # batch 1, target hardware
-  peak_memory_gb_max: 80          # owner-set 2026-09-30: whole test footprint incl. model weights, KV cache, runtime and harness
+  # Memory (D12). Host: M4 Max, 128 GB unified memory, shared with everything else running.
+  peak_memory_gb_max: 96          # cap for model + KV cache + runtime + harness; raised from 80 (D11); placeholder to confirm
+  memory_reserve_gb: 16           # always left for macOS and other processes
+  # Effective gate per run = min(peak_memory_gb_max, 128 - baseline_other_gb - memory_reserve_gb),
+  # where baseline_other_gb is measured in preflight with no candidate loaded (other manager models,
+  # Colima/Docker VMs, MyRAGDB, IDEs, browsers). The run is invalid (not failed) if memory pressure
+  # leaves 'normal' or swap grows during the timed window. Record baseline, pressure and swap in provenance.
 cost_matrix:           # relative cost of errors, drives cost-weighted error
   missed_must_page: 50
   false_page: 1
