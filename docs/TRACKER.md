@@ -11,9 +11,9 @@ Plan documents:
 | Doc | Branch | Purpose |
 | --- | --- | --- |
 | `docs/BLUEPRINT_V2.md` | `main` (PR #1) | v2 protocol, candidate matrix, training/calibration, timing |
-| `docs/DATASET_PLAN_V2.md` | `plan/v2-datasets-test-structure` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
-| `docs/PRACTICAL_EVAL_V2.md` | `plan/v2-datasets-test-structure` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
-| `docs/MODEL_MANAGER_INTEGRATION.md` | `plan/v2-datasets-test-structure` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
+| `docs/DATASET_PLAN_V2.md` | `main` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
+| `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
+| `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
 
 ## Decisions log
 
@@ -40,9 +40,9 @@ Plan documents:
 | WS | Scope | Owner | Branch | Status | Blocked by | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | — | Finite JSON decoding, validation calibration, v2 blueprint | Other agent | `feat/finite-json-calibration` | Merged (PR #1) | — | Six routes applied to BLUEPRINT_V2 on the plan branch |
-| — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | main merged in; README license + Loghub credits added |
-| WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` (merged into `feat/v2-rubric`) | Ready for review | — | 330 seeds (Loghub 322: BGL 120, Linux 118, OpenStack 43, OpenSSH 27, HDFS 14; ART 8), pinned commits + sha256; no IPs in templates (checked). 8 tests collected (session summary said 13). |
-| WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | This session | `feat/v2-rubric` | Ready for review | — | `configs/domains/v2_rubric.json` (2.0.0-draft), `data/rubric.py`, 16 tests; needs independent SOC/SRE review before freeze |
+| — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Merged (PR #2) | — | main merged in; README license + Loghub credits added |
+| WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` (via PR #3) | Merged (PR #3) | — | 330 seeds (Loghub 322: BGL 120, Linux 118, OpenStack 43, OpenSSH 27, HDFS 14; ART 8), pinned commits + sha256; no IPs in templates (checked). 8 tests collected (session summary said 13). |
+| WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | This session | `feat/v2-rubric` | Merged (PR #3) | — | `configs/domains/v2_rubric.json` (2.0.0-draft), `data/rubric.py`, 16 tests; needs independent SOC/SRE review before freeze |
 | WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1 (WS2 draft available) | New files only; target 560 cases (D7) |
 | WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Planned | O4 (thresholds); other branch merged | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
@@ -75,11 +75,11 @@ Plan documents:
 
 ## Handoff: continue on the M4 Mac
 
-Branch state at handoff (review order): PR #2 `plan/v2-datasets-test-structure` → PR #3 `feat/v2-rubric` (includes the WS1 seed registry). `feat/v2-rubric` is the integration head. Everything is Linux-tested only.
+Branch state at handoff: PR #2 (plan, licensing) and PR #3 (WS1 seed registry + WS2 rubric) are **merged into `main`**. Everything is Linux-tested only.
 
 Steps on the Mac:
 
-1. `git clone https://github.com/lballaty/Alt-JEV-LABs && cd Alt-JEV-LABs && git checkout feat/v2-rubric` (or `main` once #2 and #3 are merged).
+1. `git clone https://github.com/lballaty/Alt-JEV-LABs && cd Alt-JEV-LABs && git checkout main`.
 2. `uv sync --extra apple --extra test && uv run pytest -q`: expect 31 passed. The Apple extras have never been installed; record any failure verbatim.
 3. `llamacpp-manager status --json > artifacts/manager_status.json`: keep it out of Git (it contains local paths). It is the input for the WS8 preflight.
 4. `llama-server --version`: confirm the build is ≥ b10154, per the manager policy.
@@ -96,5 +96,4 @@ Steps on the Mac:
 | Q5 | Scorecard cost matrix and thresholds (placeholders in PRACTICAL_EVAL_V2 §5) | Ranking among candidates that pass the gates | WS4 |
 | Q6 | Who reviews the rubric (routes, precedence: sovereignty above outage?) before freeze? | The rubric must be frozen before the sealed test split | WS3 freeze |
 | Q7 | Real data: 200–300 de-identified events (S8) and chat threads (S9). Source, and who de-identifies? | Only real data supports a deployment conclusion | WS6, S8/S9 |
-| Q8 | Merge #2 and #3 to `main` before starting on the Mac? | Simplest clone path | — |
 
