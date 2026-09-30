@@ -1,0 +1,68 @@
+{
+  "generator": "data.seed_registry",
+  "loghub_commit": "dd61d0952749ee7963bde24220d1be5ede023033",
+  "atomic_red_team_commit": "388942adbd9641f4dfdcf079d7efe9a75ec0ac43",
+  "record_count": 330,
+  "counts_by_source": {
+    "atomic-red-team": 8,
+    "loghub": 322
+  },
+  "counts_by_system": {
+    "atomic-red-team/linux": 8,
+    "loghub/BGL": 120,
+    "loghub/HDFS": 14,
+    "loghub/Linux": 118,
+    "loghub/OpenSSH": 27,
+    "loghub/OpenStack": 43
+  },
+  "source_files": [
+    {
+      "path": "BGL/BGL_2k.log_templates.csv",
+      "sha256": "fe156be23d4401ffeb57f15893127cbcdd59805b53e5195f3504cb7a3bf81f0a"
+    },
+    {
+      "path": "HDFS/HDFS_2k.log_templates.csv",
+      "sha256": "a07307511f67c9dc1f41ae730ae60dcce8360f2c72742f0b8a3a9cf1a403d1db"
+    },
+    {
+      "path": "Linux/Linux_2k.log_templates.csv",
+      "sha256": "60ed088e0aa899a467c66863c30e2ae460d7bc1def1a65bff70ec47a668df0f7"
+    },
+    {
+      "path": "OpenSSH/OpenSSH_2k.log_templates.csv",
+      "sha256": "c23fb1bb925abd0ca2b110e661f5f0a1e0f66e4783e61a502ef3486a2d84b2c7"
+    },
+    {
+      "path": "OpenStack/OpenStack_2k.log_templates.csv",
+      "sha256": "1224f332d48f91a122696d8bc88b5d23649fd7a7361e3eb1e4e57986526aac36"
+    },
+    {
+      "path": "atomics/T1053.003/T1053.003.yaml",
+      "sha256": "4830ac00380213b101a686458ddebdbf92757f5b68b285aab09cac909cac63ab"
+    },
+    {
+      "path": "atomics/T1070.003/T1070.003.yaml",
+      "sha256": "88075299e51af4705aae2a02ba68fc00e29204a2cd1c1c2f25a517af20ebd41f"
+    },
+    {
+      "path": "atomics/T1082/T1082.yaml",
+      "sha256": "6cfdcdd8d114195f788bf719baecda1a95363d904316a156c8f44e45e71e9f29"
+    },
+    {
+      "path": "atomics/T1087.001/T1087.001.yaml",
+      "sha256": "ba0cd860b165e332747c5d3b2be19980840e992951940f7ac95a430cded38c3c"
+    },
+    {
+      "path": "atomics/T1136.001/T1136.001.yaml",
+      "sha256": "1a6cd567e53bb42eb7564bd46bdf2299d3c805f2faa25a397a64886494ae5f3f"
+    },
+    {
+      "path": "atomics/T1222.002/T1222.002.yaml",
+      "sha256": "76ea316186fe0c7f1d7bdaa9b29c92684eb7f63e28ba14834f50b9bd4fcc2049"
+    }
+  ],
+  "licenses": [
+    "Atomic Red Team: MIT; https://github.com/redcanaryco/atomic-red-team",
+    "Loghub: research/academic use; cite https://github.com/logpai/loghub"
+  ]
+}
