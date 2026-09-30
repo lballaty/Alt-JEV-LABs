@@ -60,6 +60,7 @@ All open owner decisions are consolidated under **Open questions** at the end of
 | WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | — (WS2 draft available) | Modular, toggled in config |
 | WS8 | Manager boundary: `status --json` preflight + provenance, `generative_managed` adapter (prompt-JSON / grammar / logprob modes), encoder local-path manifest | Unassigned | — | Planned | Mac for final verification | Encoders are not served by the manager |
 | WS9 | llamaCPPManager improvements for testing: M0 (pin mcp<2), M1 manifest, M2 local_artifacts, M3 wait/exclusive, M4 memory sampling, M5 offline, M6 test lock, M7 lifecycle-mark, M8/M11 system snapshot; UI U1–U5 deferred | This session | manager branch `feat/benchmark-support` (not pushed: no push access; delivered as patch/bundle) | Done on Linux; pending apply + verification on Mac | Push access or manual apply; Mac checklist in the manager's `docs/BENCHMARK-SUPPORT-TRACKER.md` | Manager suite: 181 passed / 6 failed on Linux (same 6 macOS-only failures as baseline) |
+| WS10 | Realism grounding: make the synthetic tests match published evidence on real alert streams. Research sources (industry SOC/SRE surveys, public incident reports and postmortems, academic log/alert datasets) for class mix and base rates, alert volumes and false-positive rates, burst and correlation patterns, message formats and noise. Set generator parameters from them with citations. Add a realism check: compare generated distributions with the cited figures, and have a practitioner rate a blind sample of generated vs real-looking cases | Unassigned | — | Planned | Research access (web); feeds WS3 parameters | Every parameter carries a source or is marked 'assumed'; reports state which |
 
 ## Verified vs not verified
 
@@ -82,6 +83,7 @@ All open owner decisions are consolidated under **Open questions** at the end of
 | Payload-text authorization teaches a prompt-injection bypass | B′ suite as hard gate; authorization only via context |
 | Pilot test split too small for stable rankings | Report n and CIs; S8 real data before any deployment claim |
 | MLX servers can download on HF cache miss; manager query defaults to temperature 0.7 | `HF_HUB_OFFLINE=1` on benchmark models; benchmark sets temperature/seed explicitly (WS8) |
+| Synthetic tests unlike real alert streams (wrong base rates, too clean, too balanced), so rankings don't transfer | WS10 research-grounded parameters with citations; realism check; S6 stream at realistic prevalence; S8 real data remains the decisive check |
 | Parallel agents editing the same files | WS1–WS3, WS7 add new files only; WS4 waits for the other branch to merge |
 
 ## Handoff: continue on the M4 Mac
@@ -108,3 +110,5 @@ Steps on the Mac:
 | Q6 | Rubric freeze | **Closed 2026-09-30:** frozen as 2.4.0 (D18), with validity limits recorded | — |
 | Q7 | Real data: is there any source of real operational events (logs/alerts, ideally chat threads) from your systems, a lab or a customer that can be de-identified and labeled by two people? Target 200–300 events. If none, results stay synthetic-only and reports say so | Only real data supports a deployment conclusion | WS6, S8/S9 |
 | Q8 | Non-served checkpoints (Laya, ModernBERT heads, GLiClass, Von, SemIf): inventory in the manager (M2) or in this repo? | Single source of model provenance | WS8, WS9 |
+
+| Q9 | Realism sources: any internal or customer figures (alert volumes, false-positive rates, class mix) we may use alongside published research? | Published figures are generic; own figures make the stream suite representative | WS10 |
