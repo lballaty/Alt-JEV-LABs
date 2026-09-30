@@ -1,4 +1,4 @@
-"""Contract tests for the v2.3 labeling rubric (data/rubric.py).
+"""Contract tests for the v2.4 labeling rubric (data/rubric.py).
 
 The worked examples in configs/domains/v2_worked_examples.json are the
 reviewer-facing specification; every one must be reproduced exactly. Review 2
@@ -49,7 +49,8 @@ def test_worked_example(example):
     assert got == {k: exp[k] for k in got}
     assert [rule for rule, _ in label.applied_rules] == exp["rules"]
     if exp["provisional"]:
-        assert label.triage_owner == exp["owner"] and label.missing_facts
+        assert label.triage_owner == exp["triage_owner"] and label.missing_facts
+    assert label.owner_review_target == exp.get("owner_review_target")
     if label.page_now:
         assert label.immediate_action  # every page says what the responder does now
     # Leak lint: examples must not state their own answer (B-prime is exempt).
@@ -87,8 +88,11 @@ def test_W6_security_during_outage_is_assessed_separately():
 
 def test_W9_uncertainty_is_time_bound_and_paged_to_24x7_verifier():
     label = RUBRIC.label(*_swap(BY_ID["W9"]))
-    assert label.provisional and label.triage_owner == "privacy_dpo"
+    # Out of hours SOC owns verification and the 4 h fact-finding clock; the DPO's
+    # review is a business-hours target, not a promised out-of-hours assessment.
+    assert label.provisional and label.owner == "privacy_dpo" and label.triage_owner == "soc"
     assert (label.ack_target, label.fact_finding_deadline) == ("1 hour", "4 hours")  # two distinct clocks
+    assert label.owner_review_target == "4 business hours"
     assert label.page_now and label.page_target == "soc" and "soc" in label.secondary_owners
 
 
@@ -218,3 +222,14 @@ def test_bad_rubric_files_rejected():
         broken = copy.deepcopy(raw); mutate(broken)
         with pytest.raises(RubricError):
             Rubric.from_dict(broken)
+
+
+def test_review4_containment_is_a_recorded_decision_not_automatic():
+    for wid in ("W3", "W5", "W8", "W9"):
+        action = BY_ID[wid]["evidence"]["immediate_action"]
+        assert "decides and records containment" in action and "not proof of compromise" in action
+
+
+def test_review4_W4d_states_why_same_day_is_safe():
+    facts = " ".join(BY_ID["W4d"]["evidence"]["established"])
+    assert "alternate replica" in facts and "projected below" in facts
