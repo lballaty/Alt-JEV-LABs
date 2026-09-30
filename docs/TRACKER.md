@@ -33,6 +33,7 @@ Plan documents:
 | D10 | 2026-09-30 | Models on the M4 are managed by llamaCPPManager; the benchmark consumes served endpoints and never loads/downloads generative weights itself | MODEL_MANAGER_INTEGRATION |
 | D11 | 2026-09-30 | M4 memory budget for testing ≈ 80 GB including the model: peak unified-memory footprint of the model server/process plus harness during the timed run. A candidate above it fails the hard gate. The measurement method is to be fixed in WS8/WS4 on the Mac | PRACTICAL_EVAL_V2 §5 |
 | D12 | 2026-09-30 | Host is an M4 Max with 128 GB unified memory. Memory cap raised to a proposed 96 GB (from 80), with a 16 GB reserve. The effective gate per run = min(cap, 128 − measured baseline of other processes − reserve). A run is marked invalid if memory pressure leaves normal or swap grows. Supersedes D11's number; cap/reserve are placeholders to confirm | PRACTICAL_EVAL_V2 §5 |
+| D13 | 2026-09-30 | Scorecard starts with the placeholder cost matrix and thresholds (PRACTICAL_EVAL_V2 §5); revisit after the pilot | PRACTICAL_EVAL_V2 §5 |
 
 ## Open decisions
 
@@ -46,7 +47,7 @@ All open owner decisions are consolidated under **Open questions** at the end of
 | — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Merged (PR #2) | — | main merged in; README license + Loghub credits added |
 | WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` (via PR #3) | Merged (PR #3) | — | 330 seeds (Loghub 322: BGL 120, Linux 118, OpenStack 43, OpenSSH 27, HDFS 14; ART 8), pinned commits + sha256; no IPs in templates (checked). 8 tests collected (session summary said 13). |
 | WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | This session | `feat/v2-rubric` | Merged (PR #3) | — | `configs/domains/v2_rubric.json` (2.0.0-draft), `data/rubric.py`, 16 tests; needs independent SOC/SRE review before freeze |
-| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1 (WS2 draft available) | New files only; target 560 cases (D7) |
+| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | — (WS1 and WS2 merged) | New files only; target 560 cases (D7) |
 | WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Planned | O4 (thresholds); other branch merged | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | O3 | |
@@ -97,7 +98,7 @@ Steps on the Mac:
 | Q2 | `HF_HUB_OFFLINE=1` permanently on the MLX entries, or a benchmark-only group/profile? | Prevents downloads during runs | WS8 |
 | Q3 | Which encoder/classifier candidates to include (Laya English 421M vs multilingual 322M, Von, GLiClass, SemIf, ModernBERT heads, Gemma LoRA)? Where are they stored locally? | The manager does not serve these; they need a local-path manifest | WS8, candidate matrix |
 | Q4 | p95 latency budget; confirm memory cap 96 GB / reserve 16 GB (D12) | Sets the remaining scorecard hard gate | WS4 |
-| Q5 | Scorecard cost matrix and thresholds (placeholders in PRACTICAL_EVAL_V2 §5) | Ranking among candidates that pass the gates | WS4 |
-| Q6 | Who reviews the rubric (routes, precedence: sovereignty above outage?) before freeze? | The rubric must be frozen before the sealed test split | WS3 freeze |
-| Q7 | Real data: 200–300 de-identified events (S8) and chat threads (S9). Source, and who de-identifies? | Only real data supports a deployment conclusion | WS6, S8/S9 |
+| Q5 | Scorecard cost matrix and thresholds | **Decided (D13): start with placeholders** from PRACTICAL_EVAL_V2 §5; revisit after the pilot | WS4 not blocked |
+| Q6 | Rubric review by a SOC/SRE triager before freeze: 9 concrete questions R1–R9 in `docs/RUBRIC_V2.md` → Review checklist (R6, change-window downgrade of security events, is the riskiest) | The rubric must be frozen before the sealed test split | WS3 freeze |
+| Q7 | Real data: is there any source of real operational events (logs/alerts, ideally chat threads) from your systems, a lab or a customer that can be de-identified and labeled by two people? Target 200–300 events. If none, results stay synthetic-only and reports say so | Only real data supports a deployment conclusion | WS6, S8/S9 |
 | Q8 | Non-served checkpoints (Laya, ModernBERT heads, GLiClass, Von, SemIf): inventory in the manager (M2) or in this repo? | Single source of model provenance | WS8, WS9 |

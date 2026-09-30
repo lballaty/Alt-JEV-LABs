@@ -48,3 +48,21 @@ Precedence: security → data sovereignty → outage → policy exception → ro
 
 - Independent review of route definitions and precedence by someone who triages SOC/SRE queues.
 - Set `status` to `frozen` and bump the version. Record the version in every dataset manifest and report.
+
+## Review checklist (Q6)
+
+Reviewer: someone who triages SOC and/or SRE queues. It takes about 30–45 minutes. For each item, answer **keep** or give the change. Values are from `configs/domains/v2_rubric.json` `2.0.0-draft`.
+
+| # | Question | Current draft |
+| --- | --- | --- |
+| R1 | Are these the right six queues? Is anything missing (e.g. performance/capacity degradation, cost anomaly, data quality)? | security_escalation → SOC; data_sovereignty_flag → Privacy/DPO; service_outage → SRE on-call; policy_exception → Platform/compliance review; routine_audit → audit log only; telemetry_heartbeat → metrics only |
+| R2 | When one event fits several routes, which wins? | security > data sovereignty > outage > policy exception > routine audit > heartbeat |
+| R3 | Which routes page a human immediately? | Pages: security, outage. Does not page: sovereignty, policy exception, audit, heartbeat. Should a confirmed cross-border transfer of personal data page? |
+| R4 | Priority thresholds and response targets | P1 ≥ 80 (15 min), P2 ≥ 60 (1 h), P3 ≥ 30 (next business day), P4 < 30 (none) |
+| R5 | Default severity range per route (0–100) | security 75–95, sovereignty 55–75, outage 70–95, policy exception 30–55, audit 5–20, heartbeat 0–10 |
+| R6 | **Riskiest rule.** An approved change window covering the host and time downgrades the event to routine audit with no page. Should that apply to security events? An attacker can hide in a maintenance window. Alternative: downgrade security only for change types like `pentest` / `red_team` | Downgradable: security, outage, policy exception |
+| R7 | An open incident on the same host/service suppresses a second page. Should it still page if the new event is a *different, higher* route (e.g. an outage incident is open and a security signal appears)? | Suppresses any duplicate page; route and priority unchanged |
+| R8 | High-criticality assets add +10 to the score of paging routes. Is +10 right? Should it also apply to non-paging routes? | +10, capped at 100, paging routes only |
+| R9 | When is a case "needs a human" (no right answer, scored on deferral)? | "When two trained reviewers would reasonably disagree" |
+
+After review: apply the changes, set `status` to `frozen`, bump `rubric_version`, and record the reviewer and date here.
