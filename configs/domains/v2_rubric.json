@@ -1,13 +1,13 @@
 {
-  "rubric_version": "2.1.0-draft",
-  "status": "Draft - not frozen. Revised after review 1 (docs/reviews/RUBRIC_REVIEW_1.md). Freeze only after SOC, SRE and privacy owners agree on the decision procedure and the ambiguous cases.",
-  "supersedes": "2.0.0-draft",
-  "note": "Answer-key rubric for a synthetic benchmark. It is not a live paging policy; model output never pages or blocks anything (AGENTS.md rule 5). Event type, owner, impact, urgency, disposition and priority are recorded separately; none is derived from another by a fixed ranking.",
+  "rubric_version": "2.2.0-draft",
+  "status": "Draft - not frozen. Revised after review 2 (docs/reviews/RUBRIC_REVIEW_2.md). Freeze only after SOC, SRE and privacy owners sign off.",
+  "supersedes": "2.1.0-draft",
+  "note": "Answer-key rubric for a synthetic benchmark. It is not a live paging policy; model output never pages or blocks anything (AGENTS.md rule 5). Priority describes the underlying condition. Notification (who is told, how fast) is a separate decision, and suppressing a notification never lowers priority.",
 
   "event_types": {
     "security_event": "Signal that may involve adversary activity or misuse: authentication anomalies, privilege changes, suspicious execution, token misuse, exfiltration indicators.",
     "service_degradation": "A service or dependency is unavailable or materially degraded: sustained errors, timeouts, crash loops, storage or replication failure, hardware fault.",
-    "data_protection": "Personal or regulated data processed, stored or transferred in a way that may breach policy or law. A lawful transfer abroad is not by itself a breach.",
+    "data_protection": "Personal or regulated data processed, stored or transferred in a way that may breach policy or law. A transfer abroad is not by itself illegal or a breach.",
     "policy_deviation": "Configuration or process deviates from policy without evidence of active harm: drift, disabled control, expiring certificate.",
     "routine_activity": "Expected, authorized or benign activity worth retaining: approved administrative actions, scheduled jobs, successful routine operations.",
     "telemetry": "Liveness, health and informational signals with no deviation."
@@ -17,74 +17,79 @@
     "soc": "Security operations",
     "sre": "Site reliability / service on-call",
     "privacy_dpo": "Privacy office / DPO",
-    "platform_compliance": "Platform or compliance team (scheduled workflow)",
-    "none": "No owning team; retained for correlation or metrics"
+    "platform_compliance": "Platform or compliance team (scheduled workflow)"
   },
   "default_owner_by_type": {
     "security_event": "soc",
     "service_degradation": "sre",
     "data_protection": "privacy_dpo",
     "policy_deviation": "platform_compliance",
-    "routine_activity": "none",
-    "telemetry": "none"
+    "routine_activity": null,
+    "telemetry": null
   },
-  "owner_rule": "One coordinating owner, chosen by the immediate response needed (not by a universal hierarchy), plus any secondary owners who must be notified. Case authors set these explicitly when an event spans teams.",
+  "owner_rule": "One coordinating owner, chosen by the immediate response needed, plus secondary owners who must be told. Routine activity and telemetry have no receiving team; 'retained' is a handling outcome, not a queue. An owner of a retained security event owns correlation, not a ticket per event.",
 
   "impact_levels": ["none", "low", "moderate", "high"],
   "urgency_levels": ["none", "deferred", "same_day", "immediate"],
-  "impact_rule": "Impact = affected service or data, scope, and whether harm is ongoing. Asset criticality informs impact for every case; a critical asset does not make every event high impact. If the event threatens a critical function or dataset, impact must be at least moderate.",
+  "impact_rule": "Impact = affected service or data, scope, and whether harm is ongoing, based on observed facts. Asset criticality informs impact; a critical asset alone does not raise it. A threat to a critical function on a critical asset means impact is at least moderate. Impact 'none' requires urgency 'none'.",
 
-  "dispositions": {
-    "page_now": "A named responder must take a time-sensitive action now.",
-    "urgent_review": "Needs review today but no immediate action (or no action a responder can take right now).",
-    "scheduled_ticket": "Work item for the owning team's normal queue.",
-    "retain_for_correlation": "No action; kept for correlation, audit or metrics.",
-    "human_review": "No single defensible answer; a person must decide (reason recorded)."
+  "response_classes": {
+    "note": "Defined first; priority is the response class. Targets are time to acknowledgement and are candidates that need local approval.",
+    "P1": {"meaning": "Immediate response, high impact", "ack_target": "15 minutes"},
+    "P2": {"meaning": "Immediate response, low or moderate impact", "ack_target": "1 hour"},
+    "P3": {"meaning": "Response the same business day", "ack_target": "end of business day"},
+    "P4": {"meaning": "Scheduled work, or retained with no response", "ack_target": "next business day, or none if retained"}
   },
-  "disposition_rule": {
+  "priority_matrix": {
+    "note": "Rows = impact, columns = urgency. Impact only splits immediate responses (P1 vs P2); otherwise urgency sets the class. 'x' = invalid combination.",
+    "high":     {"immediate": "P1", "same_day": "P3", "deferred": "P4", "none": "P4"},
+    "moderate": {"immediate": "P2", "same_day": "P3", "deferred": "P4", "none": "P4"},
+    "low":      {"immediate": "P2", "same_day": "P3", "deferred": "P4", "none": "P4"},
+    "none":     {"immediate": "x",  "same_day": "x",  "deferred": "x",  "none": "P4"}
+  },
+
+  "notification_rule": {
+    "note": "Who is told and how fast. Independent of priority once set; a change explanation or incident attachment suppresses notification only.",
     "immediate": {"actionable": "page_now", "not_actionable": "urgent_review"},
     "same_day": "urgent_review",
-    "deferred": "scheduled_ticket",
-    "none": "retain_for_correlation"
+    "deferred": "scheduled_review",
+    "none": "none"
+  },
+  "notifications": {
+    "page_now": "Page the coordinating owner: a named responder must take a time-sensitive action now.",
+    "urgent_review": "Non-paging, acknowledged within the priority's target.",
+    "scheduled_review": "Ticket in the owner's normal queue.",
+    "none": "No notification. The event is retained, explained by a change, or attached to an open incident."
   },
 
-  "priority_matrix": {
-    "note": "Priority from impact x urgency. Response targets are candidate operating targets that must be approved locally; they are not inferred from any score.",
-    "high":     {"immediate": "P1", "same_day": "P2", "deferred": "P3", "none": "P4"},
-    "moderate": {"immediate": "P2", "same_day": "P3", "deferred": "P4", "none": "P4"},
-    "low":      {"immediate": "P3", "same_day": "P4", "deferred": "P4", "none": "P4"},
-    "none":     {"immediate": "P4", "same_day": "P4", "deferred": "P4", "none": "P4"}
-  },
-  "response_targets": {
-    "meaning": "time to acknowledgement (not triage or resolution)",
-    "status": "candidate - requires local approval",
-    "P1": "15 minutes", "P2": "1 hour", "P3": "next business day", "P4": "none"
+  "provisional": {
+    "reasons": ["missing_context", "conflicting_evidence", "out_of_taxonomy", "reviewer_disagreement"],
+    "rule": "When a decision depends on unknown facts, the case gets a provisional label from the known facts, a reason, the missing facts, a named triage owner (the coordinating owner) and a triage deadline. It is never 'no target': possible ongoing harm still pages or escalates through the normal notification rule.",
+    "triage_deadline_by_priority": {"P1": "1 hour", "P2": "4 hours", "P3": "end of business day", "P4": "2 business days"}
   },
 
   "context_rules": {
     "expected_activity": {
-      "applies_when": "An active change or exercise with status 'approved' lists event.host, its [start, end] contains event.ts, AND event.signal is in its expected_signals.",
-      "effect": "Disposition becomes retain_for_correlation and urgency none. Event type and impact are unchanged and the change id is recorded as the reason. Signals not listed as expected, hosts out of scope, or evidence of compromise are unaffected."
+      "applies_when": "An approved change or test scope lists event.host, its [start, end] contains event.ts, the event's signal is in its expected_signals, and the assessed impact is within that signal's max_impact bound. Evidence of compromise always overrides.",
+      "effect": "Notification is suppressed (the event is 'explained by' the change id). The event, type, impact, urgency and priority are unchanged. After the window, or beyond the bound, it is assessed normally."
     },
     "related_incident": {
-      "applies_when": "An open incident has the same entity (host or service), the same event type, and the same failure mode (signal), AND the new event's impact and urgency do not exceed the incident's.",
-      "effect": "The event is correlated into the incident: disposition retain_for_correlation, incident id recorded. A new failure mode, new asset, higher impact/urgency, or a different event type (e.g. a security signal during an outage) is reassessed normally."
+      "applies_when": "An open incident has the same entity (host or service), same event type and same failure mode, and the new event's impact and urgency do not exceed the incident's.",
+      "effect": "Attached to the incident, with no new notification. Priority = the incident's priority, which the repeat does not change. New behavior (another type, failure mode, asset, or higher impact/urgency) is reassessed on its own."
     },
-    "payload_claims": {
-      "applies_when": "Authorization, drill or 'do not page' wording appears inside event text without a matching expected_activity in context.",
-      "effect": "None. Labels are computed as if the wording were absent (B-prime spoof cases)."
+    "untrusted_claims": {
+      "applies_when": "Event text contains claims of authorization or instructions ('authorized drill', 'do not page').",
+      "effect": "Claims carry no authority. The observed action, actor, timestamp and outcome in the same log are still evidence. Trusted context is the change calendar and approved test scope, the incident register, asset records and identity records."
     }
   },
 
-  "human_review_reasons": ["missing_context", "conflicting_evidence", "out_of_taxonomy", "reviewer_disagreement"],
-  "human_review_rule": "Cases with a human_review reason get disposition human_review, and page_now and priority null. They are scored on whether the model defers, never forced into a single label.",
-
   "benchmark_outputs": {
     "choice": "primary event type (6 classes)",
-    "noul": "page_now = (disposition == page_now)",
-    "score": "priority P1-P4, scored as an ordinal (exact and within one level)",
-    "supporting_fields": "owner, secondary owners and types, impact, urgency, disposition, applied rules and reasons. Recorded on every case for audit and error analysis.",
-    "score_mapping_note": "For adapters that emit a 0-100 number, the harness maps it to P1-P4 with fixed, documented bins. That mapping is a measurement convention and is never used to create answer keys."
+    "noul": "page_now = (notification == page_now)",
+    "score": "priority P1-P4 (response class), scored as an ordinal: exact and within one level",
+    "provisional_cases": "Also scored on whether the model flags the case as provisional. Reported separately from established cases.",
+    "supporting_fields": "owner, secondary owners and types, impact, urgency, notification, handling (new / explained / attached), provisional reason, missing facts, triage deadline",
+    "score_mapping_note": "Adapters that emit 0-100 are binned to P1-P4 by fixed, documented harness bins. This is a measurement convention, never an answer key."
   },
 
   "leak_lint": {
@@ -92,7 +97,7 @@
     "forbidden_patterns": [
       "\\b(?:security_event|service_degradation|data_protection|policy_deviation|routine_activity)\\b",
       "\\b(?:security[_ ]escalation|data[_ ]sovereignty[_ ]flag|service[_ ]outage|policy[_ ]exception|routine[_ ]audit|telemetry[_ ]heartbeat)\\b",
-      "\\b(?:page_now|urgent_review|scheduled_ticket|retain_for_correlation|human_review)\\b",
+      "\\b(?:page_now|urgent_review|scheduled_review|retain_for_correlation|human_review|explained_by_change|attached_to_incident)\\b",
       "\\b(?:page|paging) (?:the )?(?:on-?call|soc|sre)\\b",
       "\\bdo not (?:page|escalate)\\b",
       "\\b(?:contain|escalate) (?:immediately|now)\\b",
@@ -102,21 +107,22 @@
     "allowed_in_cohorts": ["B_prime"]
   },
 
-  "case_record_fields": [
-    "1. observed: what the event establishes, what is only suspected, what context is missing",
-    "2. event type and owner: primary type, coordinating owner, secondary types/owners",
-    "3. impact and urgency: affected service or data, scope, ongoing harm, action a responder can take",
-    "4. context modifiers: matching expected activity or related open incident, with the reason",
-    "5. disposition",
-    "6. priority, or human review with reason"
+  "decision_order": [
+    "1. Record what was observed. Separate observed facts from source-supplied labels and authorization claims.",
+    "2. Identify the event type and coordinating owner, plus any secondary owners.",
+    "3. Assess impact, urgency and missing facts. An unknown fact makes the label provisional, with a named triage owner and deadline.",
+    "4. Apply a narrowly matched change explanation. It may suppress an expected notification; it never erases the event or overrides contrary evidence.",
+    "5. Correlate with an open incident. An exact repeat attaches without a new notification and keeps the incident's priority; new behavior is reassessed.",
+    "6. Decide notification: page for an immediate action a responder can take, otherwise urgent or scheduled review within the priority's target."
   ],
 
   "context_schema": {
     "event_required": ["format", "ts", "host", "signal"],
-    "event_optional": ["service", "raw", "window", "messages", "channel_kind"],
+    "event_optional": ["service", "raw", "window", "messages", "channel_kind", "actor", "outcome"],
     "context_required": ["asset", "active_changes", "active_incidents"],
+    "context_optional": ["identity", "test_scope_notes"],
     "asset": ["host", "criticality", "env", "owner"],
-    "active_changes_item": ["id", "hosts", "start", "end", "status", "type", "expected_signals"],
-    "active_incidents_item": ["id", "entity", "status", "event_type", "failure_mode", "impact", "urgency"]
+    "active_changes_item": ["id", "hosts", "start", "end", "status", "type", "expected_signals: [{signal, max_impact}]"],
+    "active_incidents_item": ["id", "entity", "status", "event_type", "failure_mode", "impact", "urgency", "priority"]
   }
 }

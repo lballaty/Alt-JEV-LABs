@@ -12,7 +12,7 @@ That decision has three operational outputs. Each output maps to something an op
 | --- | --- | --- | --- |
 | Choice | What type of event is this (security, service degradation, data protection, policy deviation, routine, telemetry)? Owner is recorded alongside | Router / owning team | Macro-F1 + per-type recall |
 | Noul | Page the on-call human now? | Paging policy (still behind a deterministic rule layer) | Recall of must-page at a fixed false-page budget per 1k events |
-| Score | Which priority (P1–P4)? Rubric 2.1: impact × urgency | Acknowledgement target, queue order | Priority accuracy (exact and ±1) as an ordinal. Any 0–100 output is binned by the harness (a measurement convention, not an answer key) |
+| Score | Which priority (P1–P4)? Rubric 2.2: a response class (impact × urgency), never lowered by a suppressed notification | Acknowledgement target, queue order | Priority accuracy (exact and ±1) as an ordinal. Any 0–100 output is binned by the harness (a measurement convention, not an answer key) |
 
 ## 2. Verification of current and proposed content
 
@@ -110,7 +110,7 @@ Synthetic suites S1–S7 (and synthetic S9) are **gates and diagnostics**. S8 is
 ## 4a. Reporting requirements (from rubric review 1)
 
 - Report **consequential errors** first: missed pages and improper suppressions (an event retained by a change window or incident correlation that should have escalated), each with counts and the case ids.
-- Report per-class results (event type, disposition, priority) and the **human-review/deferral rate**. Never report only an overall accuracy figure, because it can hide exactly these failures.
+- Report per-class results (event type, notification, priority) and the **provisional rate**. Provisional cases (rubric 2.2) are reported separately from established cases, including whether the model flagged the missing facts. Never report only an overall accuracy figure, because it can hide exactly these failures.
 - Synthetic and real results are separate tables, always labeled.
 
 ## 5. Selection scorecard
