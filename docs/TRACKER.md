@@ -15,6 +15,7 @@ Plan documents:
 | `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
 | `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
 | `docs/MANAGER_IMPROVEMENTS.md` | `main` | Proposed llamaCPPManager API/CLI (M1–M10) and UI (U1–U5) changes to support testing |
+| `docs/MANAGER_HANDOFF.md` | `main` | How the llamaCPPManager work (delivered as a bundle) gets into that repo: commit hashes, checksum, remaining items H1–H9, prompt for the next agent |
 
 ## Decisions log
 
