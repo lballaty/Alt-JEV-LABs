@@ -48,4 +48,4 @@ The generative adapter currently uses `mlx-lm` with a strict JSON parser after g
 
 ## Status
 
-The code can be checked on a non-Mac host for syntax and contract behavior. Full MLX and MPS integration, lockfile resolution, model downloads, and benchmark results require an Apple Silicon run. No measured results are included in this scaffold.
+The code and lockfile were checked on a Linux host for syntax and contract behavior. MLX/MPS installation and integration, model downloads, and Apple Silicon benchmark results require a run on the target Mac. No Apple Silicon measurements are included in this scaffold.
