@@ -1,6 +1,7 @@
 """Run the same held-out cases through selected local model adapters."""
 
 import argparse
+import json
 import importlib.metadata
 import platform
 import sys
@@ -112,8 +113,12 @@ def run(config_path: Path, data_dir: Path, names: list[str], iterations: int,
     manifest = data_dir / "manifest.json"
     if not manifest.exists():
         raise ValueError("Missing dataset manifest; regenerate splits to establish provenance")
+    metadata = json.loads(manifest.read_text(encoding="utf-8"))
+    if metadata.get("kind") != "synthetic":
+        raise ValueError("Dataset manifest kind differs from this synthetic benchmark")
     results = {
-        "dataset": manifest.read_text(encoding="utf-8").strip(),
+        "dataset": f"synthetic (seed={metadata['seed']}, count={metadata['count']})",
+        "dataset_manifest": metadata,
         "test_cases": len(test), "platform": platform.platform(),
         "python": sys.version.split()[0], "iterations": iterations, "warmup": warmup,
         "models": {},
