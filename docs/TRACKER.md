@@ -25,13 +25,14 @@ Plan documents:
 | D5 | 2026-09-30 | Chat ingestion in scope as an optional module (S9), scored and reported separately | PRACTICAL_EVAL_V2 §3a |
 | D6 | 2026-09-30 | OpenEnv SRE triage source excluded until verified | DATASET_PLAN_V2 §1 |
 | D7 | 2026-09-30 | Grow pilot to 560: add 60 B′ spoofed-authorization cases on top of the 500 | DATASET_PLAN_V2 §3 |
+| D8 | 2026-09-30 | Loghub used non-commercially (research); preliminary results published publicly in this repo. Obligations: ship Loghub license notice with derived templates, reference repo URL, cite ISSRE 2023 + ISSTA 2024 in README and every report using Loghub-derived data. Revisit before any commercial use | DATASET_PLAN_V2 §1a |
 
 ## Open decisions (owner: Libor)
 
 | # | Question | Options | Blocks |
 | --- | --- | --- | --- |
-| O1 | Loghub: how results may be used | (a) internal-only use now + permission email in parallel (recommended) · (b) replace Loghub with templates from open-source code · (c) internal-only, never publish | Publishing results or shipping derived data |
 | O3 | Own real data for S8 (200–300 events) and S9 (chat threads) | Source, de-identification owner | Deployment-grade conclusion |
+| O5 | Repo license for public release (no LICENSE file today). Loghub-derived files stay under Loghub terms regardless | MIT / Apache-2.0 / other for code; data carve-out | Public publication |
 | O4 | Scorecard thresholds, cost matrix, latency/memory budgets | Placeholder values in PRACTICAL_EVAL_V2 §5 | WS4 scorecard |
 
 ## Workstreams
@@ -40,10 +41,10 @@ Plan documents:
 | --- | --- | --- | --- | --- | --- | --- |
 | — | Finite JSON decoding, validation calibration, v2 blueprint | Other agent | `feat/finite-json-calibration` | In progress (not merged) | — | Blueprint still lists 5 routes; needs D2 applied |
 | — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | No PR yet |
-| WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` | In progress | — | Started before the license review: verify it ships `LOGHUB_LICENSE` + citation before merge |
+| WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` | In progress | — | Started before the license review: must ship `data/seeds/LOGHUB_LICENSE` (verbatim notice) + citation before merge (D8) |
 | WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | Unassigned | — | Planned | — | Unblocked by D2 |
 | WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1, WS2 | New files only; target 560 cases (D7) |
-| WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Blocked | Merge of `feat/finite-json-calibration`, O4 | Touches the same files as the other agent |
+| WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Blocked | Merge of `feat/finite-json-calibration`, O4 | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | O3 | |
 | WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | WS2 | Modular, toggled in config |

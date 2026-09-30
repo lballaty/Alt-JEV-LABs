@@ -22,7 +22,15 @@ Verbatim terms: "freely available for research or academic work", provided that 
 | Commercial vendor selection, customer-facing or marketing publication of results | **Not expressly granted.** No commercial grant, no standard license. Get written permission from the maintainers (logpai) or use the fallback |
 | Underlying source systems (BGL, HDFS, OpenStack, …) | Collected from third parties; original terms not verified |
 
-Fallback that avoids the question: derive templates from **log format strings in permissively licensed source code** (e.g. OpenSSH `sshd` messages, OpenStack services under Apache-2.0), recording file, commit and license per template. Not yet verified for coverage/effort. Not legal advice; confirm with counsel if results will be published commercially.
+**Decided 2026-09-30 (D8):** use is non-commercial research, and preliminary results are published publicly in this repo. That is within the stated scope. Required:
+
+1. `data/seeds/LOGHUB_LICENSE` containing the verbatim notice, alongside any derived templates.
+2. Repo URL + ISSRE 2023 and ISSTA 2024 citations in `README.md` and in every generated report whose manifest includes Loghub seeds.
+3. No raw Loghub log lines in the repo (templates only, D3).
+4. Loghub-derived files keep Loghub terms even if the repo adopts a code license.
+5. Revisit before any commercial use.
+
+Fallback if commercial use starts: derive templates from **log format strings in permissively licensed source code** (e.g. OpenSSH `sshd` messages, OpenStack services under Apache-2.0), recording file, commit and license per template. Not yet verified for coverage/effort. Not legal advice; confirm with counsel if results will be published commercially.
 
 Consequence for the proposal text: Loghub labels are *anomaly/normal*, so "directly maps system error levels to our enum" is **our rubric applied to real syntax**, not upstream ground truth. Reports must say so.
 
