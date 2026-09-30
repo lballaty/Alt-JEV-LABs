@@ -109,13 +109,12 @@ Passing case tests shows the code matches the chosen answers. It does not show t
 | Version | 2.4.0, frozen 2026-09-30 |
 | Closed by | Libor Ballaty (project owner) |
 | Reviewer B | Approve in the SOC, SRE and Privacy/DPO roles (Libor Ballaty) |
-| Reviewer A | Approve with changes on 2.3; all four changes applied in 2.4; not re-confirmed |
+| Reviewer A | Approve with changes on 2.3; all four changes applied in 2.4; **confirmed 2.4 with no comments** |
 | Business hours | 08:00–18:00 Mon–Fri. Timezone (Europe/Prague or Europe/Lisbon) and holiday calendar are deployment settings. They do not change any answer key |
 
 **Validity limits, to be stated in every report that uses these answer keys:**
 
 - The three domain roles were signed by one person, not by independent named owners.
-- Reviewer A did not re-confirm the 2.4 corrections.
 - Tests prove the code reproduces the chosen answers, not that the answers match operational practice. Real, independently labeled data (WS6) is the check for that.
 
 Any change after the freeze needs a new version number and a new entry in the review log. Generated datasets and reports record the rubric version they used.
@@ -129,3 +128,4 @@ Any change after the freeze needs a new version number and a new entry in the re
 | 2.2.0-draft | 2026-09-30 | [Review 3](reviews/RUBRIC_REVIEW_3.md), two reviewers; SOC, SRE and DPO roles | Approve with changes; two clocks, 24x7 routing, P4 split, W4d and W9b added (2.3) |
 | 2.3.0-draft | 2026-09-30 | [Review 4](reviews/RUBRIC_REVIEW_4.md): B approve (three roles, one person), A approve with changes | Containment as a recorded decision, W4d justification, DPO business-hours review target, evidence requirements (2.4) |
 | 2.4.0 | 2026-09-30 | Closed by the project owner | **Frozen**; 100% rubric code coverage; validity limits recorded |
+| 2.4.0 | 2026-09-30 | Reviewer A confirmed 2.4, no comments | Record-only amendment; no rule changes |
