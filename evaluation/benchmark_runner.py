@@ -1,6 +1,7 @@
 """Run the same held-out cases through selected local model adapters."""
 
 import argparse
+import hashlib
 import json
 import importlib.metadata
 import platform
@@ -15,7 +16,7 @@ from evaluation.metrics import brier, ece, percentile
 from evaluation.reporter import write_report
 from models.base import BaseDecisionModel, DecisionCase, DecisionResult, ModelUnavailable, SchemaFailure
 
-KNOWN_MODELS = ("lexical", "laya", "mps", "generative")
+KNOWN_MODELS = ("lexical", "laya", "mps", "generative", "generative_finite")
 
 
 def load_model(name: str, config: dict, train_cases: list[DecisionCase]) -> BaseDecisionModel:
@@ -27,10 +28,14 @@ def load_model(name: str, config: dict, train_cases: list[DecisionCase]) -> Base
         return LayaMLX(config["laya_checkpoint"], config["score_levels"])
     if name == "mps":
         from models.custom_heads_mps import ModernBERTMPS
-        return ModernBERTMPS(config["mps_backbone"], config["mps_checkpoint"], config["max_length"])
-    if name == "generative":
+        return ModernBERTMPS(
+            config["mps_backbone"], config["mps_checkpoint"], config["max_length"],
+            config.get("mps_calibration"),
+        )
+    if name in ("generative", "generative_finite"):
         from models.generative_mlx import GenerativeMLX
-        return GenerativeMLX(config["generative_checkpoint"])
+        mode = "finite_json" if name == "generative_finite" else "prompt_json"
+        return GenerativeMLX(config["generative_checkpoint"], mode=mode)
     raise ValueError(f"Unknown model: {name}")
 
 
@@ -114,8 +119,12 @@ def run(config_path: Path, data_dir: Path, names: list[str], iterations: int,
     if not manifest.exists():
         raise ValueError("Missing dataset manifest; regenerate splits to establish provenance")
     metadata = json.loads(manifest.read_text(encoding="utf-8"))
-    if metadata.get("kind") != "synthetic":
-        raise ValueError("Dataset manifest kind differs from this synthetic benchmark")
+    if metadata.get("kind") != "synthetic" or metadata.get("generator_version") != 2:
+        raise ValueError("Dataset manifest is old or incompatible; regenerate splits")
+    for name in ("train", "val", "test"):
+        actual = hashlib.sha256((data_dir / f"{name}.jsonl").read_bytes()).hexdigest()
+        if actual != metadata.get("split_sha256", {}).get(name):
+            raise ValueError(f"{name} split differs from the dataset manifest; regenerate splits")
     results = {
         "dataset": f"synthetic (seed={metadata['seed']}, count={metadata['count']})",
         "dataset_manifest": metadata,
@@ -128,7 +137,8 @@ def run(config_path: Path, data_dir: Path, names: list[str], iterations: int,
             model = load_model(name, config, train)
             item = assess(model, test, iterations, warmup)
             item["checkpoint"] = (config.get({"laya": "laya_checkpoint", "mps": "mps_checkpoint",
-                                               "generative": "generative_checkpoint"}.get(name, ""), "train split"))
+                                               "generative": "generative_checkpoint",
+                                               "generative_finite": "generative_checkpoint"}.get(name, ""), "train split"))
         except ModelUnavailable as exc:
             item = {"status": "unavailable", "note": str(exc)}
         except Exception as exc:
@@ -150,7 +160,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=Path("configs/benchmark_config.yaml"))
     parser.add_argument("--data-dir", type=Path, default=Path("data/splits"))
-    parser.add_argument("--models", default="lexical,laya,mps,generative")
+    parser.add_argument("--models", default="lexical,laya,mps,generative,generative_finite")
     parser.add_argument("--iterations", type=int, default=500)
     parser.add_argument("--warmup", type=int, default=10)
     parser.add_argument("--report", type=Path, default=Path("benchmark_results.md"))

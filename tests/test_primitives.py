@@ -7,6 +7,7 @@ import pytest
 from data.synthetic_generator import generate
 from evaluation.metrics import brier, ece, percentile
 from models.base import DecisionCase, DecisionResult, SchemaFailure
+from models.generative_mlx import FiniteTokenTrie, json_candidates
 from training.calibrate import fit_temperature, temperature_scale
 
 
@@ -38,3 +39,17 @@ def test_calibration_metrics_and_temperature():
     temp = fit_temperature([0.1, 0.9], [False, True])
     assert 0.5 <= temp <= 5
     assert temperature_scale(0.5, temp) == pytest.approx(0.5)
+
+
+def test_finite_json_candidate_space_and_token_trie():
+    choice = DecisionCase("a", "g", "state", "question", "choice", "one", ("one", "two"))
+    score = DecisionCase("b", "g", "state", "question", "score", 50.0)
+    noul = DecisionCase("c", "g", "state", "question", "noul", True)
+    assert json_candidates(choice) == ['{"choice":"one"}', '{"choice":"two"}']
+    assert len(json_candidates(score)) == len(json_candidates(noul)) == 101
+    trie = FiniteTokenTrie([[11, 21], [11, 22]])
+    assert trie.allowed([], {99}) == {11}
+    assert trie.allowed([11], {99}) == {21, 22}
+    assert trie.allowed([11, 21], {99}) == {99}
+    with pytest.raises(SchemaFailure):
+        trie.allowed([11, 23], {99})

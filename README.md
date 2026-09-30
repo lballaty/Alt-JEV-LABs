@@ -12,13 +12,14 @@ Use Python 3.12 on an Apple Silicon Mac. Model weights download only on explicit
 uv sync --extra apple --extra test
 uv run python -m data.synthetic_generator --output data/splits --count 1000 --seed 42
 uv run pytest -q
-uv run python -m evaluation.benchmark_runner --models lexical,laya,mps,generative --iterations 500 --warmup 10
+uv run python -m evaluation.benchmark_runner --models lexical,laya,mps,generative,generative_finite --iterations 500 --warmup 10
 ```
 
 `mps` requires a trained checkpoint. Train on the generated train split first:
 
 ```bash
 uv run python -m training.train_heads --epochs 3 --output artifacts/mps-heads.pt
+uv run python -m training.calibrate --validation data/splits/val.jsonl --checkpoint artifacts/mps-heads.pt
 ```
 
 The runner writes `benchmark_results.md` and `artifacts/benchmark_results.json`. It records failures and unavailable models rather than inventing measurements. To run only the lexical baseline while preparing weights, use `--models lexical`. The report contains `N/A` for unsupported metrics (for example, a generative model does not expose calibrated probabilities from a JSON answer).
@@ -31,7 +32,7 @@ The runner writes `benchmark_results.md` and `artifacts/benchmark_results.json`.
 - **Timing:** one complete API call per sample, including tokenization, formatting, and synchronized inference. Loading, download, training, and warm-up are excluded. P50/P95 are over 500 calls after 10 untimed calls by default; hardware, software, model revision, prompt length, power mode, and precision must accompany a report.
 - **Invalid output:** parse/type/range failure is counted as schema failure. Backend exceptions are counted separately. Do not silently coerce them into success.
 
-The generative adapter currently uses `mlx-lm` with a strict JSON parser after generation and a JSON-only prompt. This is **prompt-constrained, not grammar-constrained decoding**. Its schema failure rate therefore measures the mode actually run. A grammar-backed mode must be separately implemented and labeled before claiming schema enforcement. See [design and validity notes](docs/EVALUATION.md).
+The generative adapter has two separate modes. `generative` uses a JSON-only prompt and strict parser, with no token restriction. `generative_finite` masks logits to tokenizations of complete JSON candidates (up to 255 choice labels, 101 integer scores, or 101 probability increments). This enforces a finite output set, **not a general JSON Schema grammar**, and quantizes numeric answers. Both modes require Apple Silicon integration tests. See [design and validity notes](docs/EVALUATION.md).
 
 ## Repository guidance
 
