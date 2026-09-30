@@ -1,7 +1,7 @@
 {
-  "rubric_version": "2.3.0-draft",
-  "status": "Draft - not frozen. Revised after review 3 (two reviewers, docs/reviews/RUBRIC_REVIEW_3.md; all three owner roles: approve with changes). Freeze after owners confirm the changed cases and the automated tests pass against this file.",
-  "supersedes": "2.2.0-draft",
+  "rubric_version": "2.4.0-draft",
+  "status": "Draft - not frozen. Revised after review 4 (docs/reviews/RUBRIC_REVIEW_4.md). Freeze after the named SOC, SRE and privacy owners approve, the business-hours settings are filled, and the tests pass on the frozen revision.",
+  "supersedes": "2.3.0-draft",
   "note": "Answer-key rubric for a synthetic benchmark. It is not a live paging policy; model output never pages or blocks anything (AGENTS.md rule 5). Priority is set from current evidence and reassessed when evidence or impact changes. A change window or a duplicate alert does not, by itself, lower priority. Notification is a separate decision.",
   "event_types": {
     "security_event": "Signal that may involve adversary activity or misuse: authentication anomalies, privilege changes, suspicious execution, token misuse, exfiltration indicators.",
@@ -223,16 +223,18 @@
     ]
   },
   "page_routing": {
-    "rule": "A page always goes to a team with 24x7 coverage. When the coordinating owner has business-hours coverage, the page goes to its 24x7 verifier for technical verification, and the owner gets an expedited assessment within the fact-finding deadline (immediately via incident management if the verifier confirms harm).",
+    "rule": "A page always goes to a team with 24x7 coverage. When the coordinating owner has business-hours coverage, its 24x7 verifier handles verification and containment out of hours and owns the fact-finding clock; the owner's own review starts within owner_review_target, counted in business hours. No out-of-hours owner assessment is promised.",
     "verifier_for": {
       "privacy_dpo": "soc",
       "platform_compliance": "sre"
-    }
+    },
+    "owner_review_target": "4 business hours"
   },
   "business_hours": {
     "timezone": "TO BE SET BY OWNERS",
-    "hours": "TO BE SET BY OWNERS",
-    "note": "Placeholders: the owners set these at freeze."
+    "hours": "08:00-18:00 Mon-Fri (proposed by reviewer B, pass 4)",
+    "holidays": "TO BE SET BY OWNERS (statutory calendar of the operating entity)",
+    "note": "Timezone and holiday calendar are set at freeze."
   },
   "provisional": {
     "reasons": [
@@ -242,7 +244,12 @@
       "reviewer_disagreement"
     ],
     "rule": "When the answer depends on unknown facts, the label is provisional: reason, missing facts, triage owner, and the priority's two clocks. It is never 'no target'; possible ongoing harm still pages through the normal rule.",
-    "containment_decision": "For a paged provisional case, if the key fact (e.g. whether the actor is legitimate) is not verified by the acknowledgement target, the responder makes the containment decision named in the case's immediate action, per runbook.",
+    "containment_decision": "For a paged provisional case, at the acknowledgement target the responder makes and records a containment decision based on current evidence and operational impact, with the relevant SRE or incident lead involved. Options (e.g. session termination, rule rollback, host isolation, pausing a job) are listed in the case. An unanswered verification request is not, by itself, proof of compromise.",
     "on_deadline_expiry": "If the fact-finding deadline passes unresolved, escalate to the owner's lead and re-triage on the evidence then available. Priority is not raised automatically."
-  }
+  },
+  "case_authoring_rules": [
+    "A condition that exceeds a stated objective (e.g. a recovery-point objective) gets same-day review instead of an immediate assessment only if the case states why that is safe: an alternate that meets the objective, or a projection below the objective within a defined short period (at most 15 minutes).",
+    "Immediate actions for provisional pages are decision points with options, not automatic actions: an unanswered verification request is not proof of compromise.",
+    "A containment step that can affect availability during an open incident is coordinated with that incident's lead."
+  ]
 }

@@ -1,6 +1,6 @@
 {
-  "rubric_version": "2.3.0-draft",
-  "purpose": "Worked examples for rubric 2.3, revised after review 3 (two reviewers). Each shows the authored evidence (observed facts only), the trusted context, and the label the rubric must produce. tests/test_rubric.py checks every example against data/rubric.py.",
+  "rubric_version": "2.4.0-draft",
+  "purpose": "Worked examples for rubric 2.4, revised after review 4. Each shows the authored evidence (observed facts only), the trusted context, and the label the rubric must produce. tests/test_rubric.py checks every example against data/rubric.py.",
   "shared": {
     "asset_bastion": {
       "host": "bastion-2",
@@ -177,7 +177,7 @@
           "what access the session obtained"
         ],
         "provisional_reason": "missing_context",
-        "immediate_action": "Confirm with the 'deploy' owner whether the session is legitimate; if not verified within 1 hour, kill the session and disable the account per runbook."
+        "immediate_action": "Confirm the session with the 'deploy' account owner. At 1 hour, if still unverified, SOC decides and records containment on current evidence and operational impact, with the platform on-call: options are terminating the session, disabling the account, or monitoring with tightened access. An unanswered request is not proof of compromise."
       },
       "expected": {
         "event_type": "security_event",
@@ -193,7 +193,8 @@
         "response": "respond",
         "ack_target": "1 hour",
         "page_target": "soc",
-        "fact_finding_deadline": "4 hours"
+        "fact_finding_deadline": "4 hours",
+        "triage_owner": "soc"
       },
       "reviewer_note": "Page SOC to investigate promptly. P1 is not established from the sequence alone, so this is provisional P2 until the missing facts are known."
     },
@@ -341,7 +342,7 @@
         "host": "db-7",
         "service": "postgres",
         "signal": "replication_lag",
-        "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"95\",\"lag_30m_ago\":\"610\",\"trend\":\"falling\",\"rpo_seconds\":\"60\"}}"
+        "raw": "{\"alertname\":\"PostgresReplicationLag\",\"labels\":{\"severity\":\"critical\",\"instance\":\"db-7\"},\"annotations\":{\"lag_seconds\":\"95\",\"lag_30m_ago\":\"610\",\"trend\":\"falling\",\"drain_rate_s_per_min\":\"17\",\"rpo_seconds\":\"60\",\"alternate_replica\":\"db-8 lag 3s\"}}"
       },
       "context": {
         "asset": "asset_db",
@@ -356,7 +357,9 @@
         "impact": "low",
         "urgency": "same_day",
         "established": [
-          "lag 95 s and falling steadily from 610 s as the replica catches up on the drill backlog; writes healthy"
+          "lag 95 s and falling about 17 s per minute from 610 s; projected below the 60 s objective within about 2 minutes",
+          "alternate replica db-8 is at 3 s lag, so the recovery objective is met by the replica set",
+          "writes healthy"
         ]
       },
       "expected": {
@@ -373,7 +376,7 @@
         "page_target": null,
         "fact_finding_deadline": null
       },
-      "reviewer_note": "Catching up after failover: review the same day and confirm it drains below the objective. No page."
+      "reviewer_note": "Above the 60 s objective, but safe for same-day review: db-8 meets the objective and db-7 is projected below it within about 2 minutes. Without those facts this would need an immediate SRE assessment."
     },
     {
       "id": "W5",
@@ -411,7 +414,7 @@
           "whether it is active or being used"
         ],
         "provisional_reason": "missing_context",
-        "immediate_action": "Identify auid 1003 and check the change record; if not verified within 1 hour, remove the sudoers rule and isolate the host per runbook."
+        "immediate_action": "Identify auid 1003 and check the change record. At 1 hour, if still unverified, SOC decides and records containment on current evidence and operational impact, with the SRE on-call for db-7: options are rolling back the sudoers rule, restricting the account, or isolating the host. An unanswered request is not proof of compromise."
       },
       "expected": {
         "event_type": "security_event",
@@ -427,7 +430,8 @@
         "response": "respond",
         "ack_target": "1 hour",
         "page_target": "soc",
-        "fact_finding_deadline": "4 hours"
+        "fact_finding_deadline": "4 hours",
+        "triage_owner": "soc"
       },
       "reviewer_note": "Outside the drill's expected signals, so it needs prompt validation. The page to SOC stands; P1 is not established."
     },
@@ -516,7 +520,7 @@
           "the authentication layer accepted a revoked token 37 times from one external source",
           "all 37 requests to protected billing endpoints succeeded (HTTP 200)"
         ],
-        "immediate_action": "Revoke the billing service's sessions and block the source; fix revocation enforcement (fail closed) with SRE."
+        "immediate_action": "Revoke the billing service's sessions and block the source. Coordinate enforcing revocation (fail closed) with the INC-881 incident lead, because it may affect availability during the outage."
       },
       "expected": {
         "event_type": "security_event",
@@ -616,7 +620,7 @@
           "what access the session obtained"
         ],
         "provisional_reason": "missing_context",
-        "immediate_action": "Confirm with the 'deploy' owner whether the session is legitimate; if not verified within 1 hour, kill the session and disable the account per runbook."
+        "immediate_action": "Confirm the session with the 'deploy' account owner. At 1 hour, if still unverified, SOC decides and records containment on current evidence and operational impact, with the platform on-call: options are terminating the session, disabling the account, or monitoring with tightened access. An unanswered request is not proof of compromise."
       },
       "expected": {
         "event_type": "security_event",
@@ -632,7 +636,8 @@
         "response": "respond",
         "ack_target": "1 hour",
         "page_target": "soc",
-        "fact_finding_deadline": "4 hours"
+        "fact_finding_deadline": "4 hours",
+        "triage_owner": "soc"
       },
       "reviewer_note": "The instruction has no authority, but the observed login sequence is evidence. Same provisional answer as W3."
     },
@@ -682,7 +687,7 @@
           "whether a transfer mechanism covers the destination"
         ],
         "provisional_reason": "missing_context",
-        "immediate_action": "SOC verifies the job run, service account and bucket ownership; if not verified within 1 hour, pause the job and revoke the destination credentials. Hand to Privacy/DPO for breach assessment."
+        "immediate_action": "SOC verifies the job run, service account and bucket owner. At 1 hour, if still unverified, SOC decides and records containment on current evidence and operational impact, with the data platform on-call: options are pausing the job, revoking the destination credentials, or letting it complete under watch. An unanswered request is not proof of compromise. Privacy/DPO review starts within 4 business hours, or at once via incident management if SOC confirms an unapproved export."
       },
       "expected": {
         "event_type": "data_protection",
@@ -699,9 +704,11 @@
         "response": "respond",
         "ack_target": "1 hour",
         "page_target": "soc",
-        "fact_finding_deadline": "4 hours"
+        "fact_finding_deadline": "4 hours",
+        "triage_owner": "soc",
+        "owner_review_target": "4 business hours"
       },
-      "reviewer_note": "Paged because personal data may still be leaving and the destination is unregistered. Privacy/DPO has business-hours coverage, so SOC (24x7) verifies the technical facts now; DPO assesses within the 4-hour fact-finding deadline, or immediately if SOC confirms an unapproved export (the GDPR Art. 33 clock starts once a breach is established). A foreign region alone is not a breach."
+      "reviewer_note": "Paged because personal data may still be leaving and the destination is unregistered. Out of hours SOC owns verification, containment and the 4-hour fact-finding clock; Privacy/DPO review starts within 4 business hours (no out-of-hours DPO assessment is promised). A foreign region alone is not a breach."
     },
     {
       "id": "W9b",

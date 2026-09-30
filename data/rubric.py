@@ -87,8 +87,9 @@ class Label:
     provisional: bool
     provisional_reason: str | None
     missing_facts: tuple[str, ...]
-    triage_owner: str | None
+    triage_owner: str | None                   # who owns fact-finding (the 24x7 verifier out of hours)
     fact_finding_deadline: str | None          # provisional cases only
+    owner_review_target: str | None            # business-hours owner's review start, when a verifier was paged
     immediate_action: str | None
     applied_rules: tuple[tuple[str, str], ...] = field(default_factory=tuple)  # (rule, reason)
     rubric_version: str = ""
@@ -101,6 +102,7 @@ class Rubric:
     owners: frozenset[str]
     coverage: dict[str, str]
     verifier_for: dict[str, str]
+    owner_review_target: str
     classes: dict[str, dict[str, Any]]
     default_owner: dict[str, str | None]
     impact_levels: tuple[str, ...]
@@ -165,6 +167,7 @@ class Rubric:
             raise RubricError(f"Invalid leak_lint pattern: {exc}") from exc
         return cls(version=str(raw["rubric_version"]), event_types=types, owners=owners,
                    coverage=coverage, verifier_for=verifier_for, classes=classes,
+                   owner_review_target=str(raw["page_routing"].get("owner_review_target", "")),
                    default_owner=default_owner, impact_levels=impacts, urgency_levels=urgencies,
                    priority_matrix=matrix, notification_rule=rule,
                    provisional_reasons=frozenset(prov["reasons"]), lint_patterns=patterns,
@@ -283,8 +286,13 @@ class Rubric:
             ack_target=ack, handling=handling,
             provisional=provisional, provisional_reason=ev.provisional_reason,
             missing_facts=ev.missing_context,
-            triage_owner=owner if provisional else None,
+            # Out of hours the 24x7 verifier owns fact-finding; the business-hours
+            # owner's review starts within its own business-hours target. No
+            # out-of-hours owner assessment is promised (review 4).
+            triage_owner=(page_target or owner) if provisional else None,
             fact_finding_deadline=fact if provisional else None,
+            owner_review_target=(self.owner_review_target
+                                 if page_target and page_target != owner else None),
             immediate_action=ev.immediate_action,
             applied_rules=tuple(applied), rubric_version=self.version)
 
