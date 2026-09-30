@@ -1,5 +1,7 @@
 # Evaluation specification and validity notes
 
+This document describes the implemented four-route **v1** fixture. See [the revised v2 blueprint](BLUEPRINT_V2.md) for the proposed five-route, four-cohort study and the external model-manager boundary. V1 and v2 datasets/results are not interchangeable.
+
 ## Purpose
 
 Determine when a local typed decision model is useful for enterprise policy-gating and agent routing, compared with a supervised encoder, lexical retrieval, and a small local generative model. Accuracy, confidence, robustness, operational cost, and abstention behavior matter as much as latency. An agent must never receive authority merely because a classifier predicts a label.

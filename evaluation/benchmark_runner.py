@@ -5,6 +5,7 @@ import hashlib
 import json
 import importlib.metadata
 import platform
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -17,6 +18,20 @@ from evaluation.reporter import write_report
 from models.base import BaseDecisionModel, DecisionCase, DecisionResult, ModelUnavailable, SchemaFailure
 
 KNOWN_MODELS = ("lexical", "laya", "mps", "generative", "generative_finite")
+
+
+def hardware_description() -> str:
+    """Use the Mac-reported chip name when available; do not guess M4/M5."""
+    if sys.platform == "darwin":
+        try:
+            chip = subprocess.run(["sysctl", "-n", "machdep.cpu.brand_string"],
+                                  check=True, capture_output=True, text=True).stdout.strip()
+            memory = subprocess.run(["sysctl", "-n", "hw.memsize"],
+                                    check=True, capture_output=True, text=True).stdout.strip()
+            return f"{chip}; {int(memory) / 1024**3:.1f} GiB unified memory"
+        except (OSError, subprocess.CalledProcessError, ValueError):
+            return f"Apple platform: {platform.machine()} (chip/memory unavailable)"
+    return f"{platform.machine()} (non-Apple validation host)"
 
 
 def load_model(name: str, config: dict, train_cases: list[DecisionCase]) -> BaseDecisionModel:
@@ -129,6 +144,7 @@ def run(config_path: Path, data_dir: Path, names: list[str], iterations: int,
         "dataset": f"synthetic (seed={metadata['seed']}, count={metadata['count']})",
         "dataset_manifest": metadata,
         "test_cases": len(test), "platform": platform.platform(),
+        "hardware": hardware_description(), "power_mode": "not recorded",
         "python": sys.version.split()[0], "iterations": iterations, "warmup": warmup,
         "models": {},
     }

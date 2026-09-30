@@ -38,6 +38,17 @@ def write_report(results: dict, destination: Path, raw_destination: Path) -> Non
     lines += ["", "## Interpretation", ""]
     for name, item in results["models"].items():
         lines.append(f"- **{name}:** {item.get('note', 'No additional note.')}")
+    lines += ["", "## Provenance", "",
+              f"- Hardware: {results.get('hardware', 'not recorded')}",
+              f"- Power mode: {results.get('power_mode', 'not recorded')}",
+              f"- Dataset SHA-256: {results.get('dataset_manifest', {}).get('split_sha256', {})}",
+              "- Checkpoint IDs below may point to mutable upstream revisions; pin commits before publishing comparative results.",
+              ""]
+    for name, item in results["models"].items():
+        lines.append(f"- {name} checkpoint: {item.get('checkpoint', 'N/A')}")
+    lines.append("")
+    for package, version in results.get("packages", {}).items():
+        lines.append(f"- {package}: {version or 'not installed'}")
     lines += ["", "Schema failures are malformed/out-of-range outputs. Exceptions and unavailable models are separate. "
               "BM25 hard labels and generated LLM probability claims are not calibrated probabilities.",
               "", "See docs/EVALUATION.md for validity limits and the measurement protocol.", ""]
