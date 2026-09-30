@@ -2,15 +2,15 @@
 
 ## Purpose
 
-Alt-JEV-LABs develops a repeatable way to validate local AI decision workflows. A project should be able to define a concrete decision, compare a local model with simpler baselines, test the model and any deterministic controls together, and publish the evidence and limits needed for a product decision. The lab is intended to support more than one use case. It does not assume that a model must win or that every decision needs an LLM.
+Alt-JEV-LABs develops a repeatable way to compare possible solutions for a concrete decision workflow and choose the best fit for its use case. A project should define the decision, compare rules, retrieval, specialized and generative models, and relevant combinations, test each viable solution with its independent controls, and publish the evidence and limits needed for a product decision. The lab is intended to support more than one use case. It does not assume that a model must win or that every decision needs an LLM.
 
 For each use case, distinguish three questions:
 
 1. **Can the decision be expressed and tested?** Specify inputs, trusted context, outputs, a versioned rubric, ambiguous cases and failure costs.
-2. **Does a candidate add value?** Compare it with deterministic rules, retrieval and other local models on ordinary, adversarial and shifted inputs, with the same cases and stated resource limits.
+2. **Which solution fits best?** Compare viable approaches on the same ordinary, adversarial and shifted cases, using the same decision contract. Measure consequential errors, coverage and abstention, latency, resource and labeling needs, operating cost, and behavior under the required controls.
 3. **Can the proposed system operate within its controls?** Test the model's proposal alongside the independent policy boundary, routing and failure behavior. Measure the complete path when the use case requires live operation.
 
-A favorable synthetic score demonstrates behavior on those constructed cases. It does not prove future accuracy or operational readiness. Real, independently labeled cases from the intended environment and a monitored pilot are needed to support a deployment decision. Reports should include missed consequential events, false actions, coverage, latency, resource use, uncertainty, provenance and the conditions under which the result applies.
+A favorable synthetic score demonstrates behavior on those constructed cases. It does not prove future accuracy or operational readiness. Real, independently labeled cases from the intended environment and a monitored pilot are needed to support a deployment decision. Reports should show each feasible candidate against use-case requirements, including missed consequential events, false actions, coverage, latency, resource and labeling needs, uncertainty, provenance and the conditions under which the result applies. State which candidates fail hard requirements, then explain any recommended choice and the trade-offs among the remaining options. If evidence is insufficient or no candidate qualifies, report that explicitly. A recommendation estimates likely performance under the tested conditions; it is not a guarantee.
 
 ## First reference use case: operational alert triage
 
@@ -33,8 +33,8 @@ A new project should provide:
 - **Decision contract:** the questions, output types, downstream consumers and actions that remain outside model authority.
 - **Domain rubric:** versioned labels, priority or score meaning, contextual exceptions, uncertainty and adjudication rules.
 - **Evidence:** representative and difficult cases, provenance and usage rights, independent labels where possible, and split groups that prevent related cases from leaking across train and test.
-- **Comparisons:** at least one simple baseline, candidate models, supported capabilities and a common measurement protocol.
-- **Acceptance criteria:** consequential error costs, coverage, calibration where probabilities are used, latency, memory, offline behavior and operational failure paths.
+- **Comparisons:** viable solution classes, including a simple baseline, candidate models where appropriate, supported capabilities and a common measurement protocol.
+- **Acceptance criteria:** hard constraints and weighted preferences for consequential error costs, coverage, calibration where probabilities are used, latency, memory, labeling and operating cost, offline behavior and operational failure paths.
 - **System boundary:** deterministic checks and human oversight appropriate to that project's actions, tested separately from model accuracy.
 
 These are design requirements for a reusable framework, not a claim that the present code has a general use-case plug-in interface. Domain-specific code and adapters are expected until such an interface is implemented and tested.
