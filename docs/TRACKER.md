@@ -24,13 +24,13 @@ Plan documents:
 | D4 | 2026-09-30 | Authorization/negation comes from a structured `context` block; payload-text authorization is tested as spoof (B′) | PRACTICAL_EVAL_V2 §2–3 |
 | D5 | 2026-09-30 | Chat ingestion in scope as an optional module (S9), scored and reported separately | PRACTICAL_EVAL_V2 §3a |
 | D6 | 2026-09-30 | OpenEnv SRE triage source excluded until verified | DATASET_PLAN_V2 §1 |
+| D7 | 2026-09-30 | Grow pilot to 560: add 60 B′ spoofed-authorization cases on top of the 500 | DATASET_PLAN_V2 §3 |
 
 ## Open decisions (owner: Libor)
 
 | # | Question | Options | Blocks |
 | --- | --- | --- | --- |
-| O1 | Loghub commercial / published use | Request written permission from logpai · derive templates from permissively licensed source code · both | Any external publication of results |
-| O2 | B′ spoof budget | Carve from the 500 · grow pilot to ~560 | WS3 freeze |
+| O1 | Loghub: how results may be used | (a) internal-only use now + permission email in parallel (recommended) · (b) replace Loghub with templates from open-source code · (c) internal-only, never publish | Publishing results or shipping derived data |
 | O3 | Own real data for S8 (200–300 events) and S9 (chat threads) | Source, de-identification owner | Deployment-grade conclusion |
 | O4 | Scorecard thresholds, cost matrix, latency/memory budgets | Placeholder values in PRACTICAL_EVAL_V2 §5 | WS4 scorecard |
 
@@ -42,7 +42,7 @@ Plan documents:
 | — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | No PR yet |
 | WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` | In progress | — | Started before the license review: verify it ships `LOGHUB_LICENSE` + citation before merge |
 | WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | Unassigned | — | Planned | — | Unblocked by D2 |
-| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1, WS2, O2 | New files only |
+| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1, WS2 | New files only; target 560 cases (D7) |
 | WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Blocked | Merge of `feat/finite-json-calibration`, O4 | Touches the same files as the other agent |
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | O3 | |

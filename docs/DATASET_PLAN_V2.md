@@ -45,7 +45,7 @@ Noul is a binary proposition ("requires immediate human review?"). Targets like 
 
 **On the "BM25 near 0% on Cohort B is proof" claim.** Don't use that framing. It is a hypothesis, and it conflicts with AGENTS.md ("comparative evidence, not a favorable demonstration"). BM25 retrieves labeled training examples. If B-style wrappers appear in train, BM25 can match them lexically and may score well. The fair test is held-out wrapper families + B′. Whatever BM25 scores there is the result.
 
-Suggested pilot split (from 500): cohort shares as proposed, reserve ~10% of total as B′ taken proportionally from A/B budget, or grow the pilot to ~560. Needs decision; the blueprint's 70/15/15 grouped split applies either way.
+**Decided 2026-09-30: grow the pilot to 560.** A 200 · B 125 · B′ 60 · C 100 · D 75. The original 500 is unchanged and B′ is added on top. Each B′ case is paired with its Cohort A/B parent in the same split group. The blueprint's 70/15/15 grouped split applies, and actual counts go in the manifest.
 
 ## 4. Test structure
 
@@ -87,6 +87,5 @@ The other agent's branch (`feat/finite-json-calibration`) modifies `data/synthet
 
 ## Review flags
 
-- B′ budget (§3) needs an owner decision before WS3 freezes.
 - Loghub: request written permission for commercial/published use, or approve the source-code fallback (§1a).
 - OpenEnv source is unverified and excluded.
