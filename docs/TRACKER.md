@@ -41,18 +41,19 @@ Plan documents:
 | — | Finite JSON decoding, validation calibration, v2 blueprint | Other agent | `feat/finite-json-calibration` | Merged (PR #1) | — | Six routes applied to BLUEPRINT_V2 on the plan branch |
 | — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Ready for review | — | main merged in; README license + Loghub credits added |
 | WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` | In progress | — | `data/seeds/LOGHUB_LICENSE` now exists on the plan branch; WS1 must keep it and not overwrite it with different text |
-| WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | Unassigned | — | Planned | — | Unblocked by D2 |
-| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1, WS2 | New files only; target 560 cases (D7) |
+| WS2 | v2 rubric: 6 routes, precedence, page policy, P1–P4 anchors, `needs_human`, context schema | This session | `feat/v2-rubric` | Ready for review | — | `configs/domains/v2_rubric.json` (2.0.0-draft), `data/rubric.py`, 16 tests; needs independent SOC/SRE review before freeze |
+| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned | WS1 (WS2 draft available) | New files only; target 560 cases (D7) |
 | WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Planned | O4 (thresholds); other branch merged | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | O3 | |
-| WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | WS2 | Modular, toggled in config |
+| WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | — (WS2 draft available) | Modular, toggled in config |
 
 ## Verified vs not verified
 
 | Item | Status |
 | --- | --- |
 | v1 harness tests (5/5) and lexical-only smoke run on Linux | ✅ Verified 2026-09-30 |
+| v2 rubric contract tests (16) + full suite 23/23 on Linux | ✅ Verified 2026-09-30 |
 | Loghub in-repo license, template counts | ✅ Verified 2026-09-30 |
 | Zenodo license, OpenEnv dataset, ATT&CK terms | ❌ Not verified (egress blocked / not fetched) |
 | Any Apple Silicon run (MLX, MPS, Laya, generative) | ❌ Not run |
