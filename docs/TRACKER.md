@@ -40,7 +40,7 @@ Plan documents:
 | D17 | 2026-09-30 | Rubric review 4: B approves (SOC/SRE/DPO roles, all signed by one person); A approves with changes → 2.4.0-draft: containment is a recorded decision with options, not automatic; W4d justifies same-day review (alternate replica, short projection); DPO review within 4 business hours, SOC owns out-of-hours fact-finding; approval record must include revision, test command, result and a named approver per role | RUBRIC_V2.md, reviews/RUBRIC_REVIEW_4.md |
 | D18 | 2026-09-30 | Rubric **frozen as 2.4.0** by the project owner after reviewer A's corrections were applied and rubric code coverage reached 100% (lines and branches; 60 rubric tests, 75 total). Validity limits recorded: roles signed by one person; reviewer A did not re-confirm 2.4; tests prove the code matches the chosen answers, not operational practice | RUBRIC_V2.md freeze record |
 | D19 | 2026-09-30 | Reviewer A confirmed rubric 2.4 with no comments; both reviewers approve. The 'not re-confirmed' validity limit is removed (record-only) | RUBRIC_V2.md freeze record |
-| D20 | 2026-10-01 | Add a small generative arm (Gemma family, ~270M and ~1B, alongside the existing Gemma 4 E2B entry) to test the smallest viable local LLM. Served through llamaCPPManager like the other generative arms; checkpoints pinned from the Mac inventory. A fine-tuned checkpoint (e.g. `gemma-270m-compliance-mlx`) is reported as a separate arm with its training data disclosed | BLUEPRINT_V2 candidate matrix |
+| D20 | 2026-10-01 | Add a small generative arm (Gemma family, ~270M and ~1B, alongside the existing Gemma 4 E2B entry) to test the smallest viable local LLM. Served through llamaCPPManager like the other generative arms; checkpoints pinned from the Mac inventory. A fine-tuned checkpoint (e.g. `gemma-270m-compliance-mlx`) is reported as a separate arm with its training data disclosed. **Amended 2026-10-01:** `gemma-270m-compliance-mlx` is excluded from the alert-triage use case because it was tuned for compliance questions; it is reserved for a future compliance-domain use case | BLUEPRINT_V2 candidate matrix |
 
 ## Open decisions
 
@@ -104,7 +104,7 @@ Steps on the Mac:
 
 | # | Question | Why it matters | Blocks |
 | --- | --- | --- | --- |
-| Q1 | Which llamaCPPManager model names/ports are the generative candidates? Include the small Gemma arm (D20): which Gemma sizes and quantizations are installed, and is `gemma-270m-compliance-mlx` still available? | Defines the served generative arms | WS8 |
+| Q1 | Which llamaCPPManager model names/ports are the generative candidates? Include the small Gemma arm (D20): which base (not fine-tuned) Gemma sizes and quantizations are installed? | Defines the served generative arms | WS8 |
 | Q2 | `HF_HUB_OFFLINE=1` permanently on the MLX entries, or a benchmark-only group/profile? | Prevents downloads during runs | WS8 |
 | Q3 | Which encoder/classifier candidates to include (Laya English 421M vs multilingual 322M, Von, GLiClass, SemIf, ModernBERT heads, Gemma LoRA)? Where are they stored locally? | The manager does not serve these; they need a local-path manifest | WS8, candidate matrix |
 | Q4 | p95 latency budget; confirm memory cap 96 GB / reserve 16 GB (D12) | Sets the remaining scorecard hard gate | WS4 |
