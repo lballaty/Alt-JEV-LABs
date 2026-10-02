@@ -4,7 +4,9 @@ Last updated: 2026-09-30 (end of cloud session; next session continues on the M4
 
 ## Intent
 
-Build a practical, reproducible evaluation for choosing a local decision model to put in front of SOC/SRE queues. It must rank candidates on offline operation, correct routing, must-page recall, resistance to spoofed authorization, labeling cost, latency and throughput on the target Mac. The output is a selection scorecard, not a showcase for one model. Classifier output never authorizes an action (AGENTS.md rule 5).
+Build a reusable, local-first way to compare viable solutions for a concrete decision use case and choose the best fit under stated requirements. Each use case supplies a decision contract and rubric, representative and adversarial cases, candidate approaches and simple baselines, failure costs, operational constraints and acceptance criteria. The result is a comparative scorecard: screen hard requirements first, show consequential errors and operational trade-offs for feasible candidates, and explain the recommendation or why evidence is insufficient. Performance estimates apply only under the tested conditions. The scorecard supports a named human decision owner, who records whether the combined evidence and residual risk justify a specified pilot or deployment; a test pass is not an automatic certification or release decision.
+
+The first reference use case is an operational triage gateway in front of SOC/SRE and privacy workflows. Its v2 evaluation ranks candidates on offline operation, correct event classification and priority, must-page recall, resistance to spoofed authorization, labeling cost, latency and throughput on the target Mac. A separate proposed gateway would handle live ingress, policy enforcement and dispatch; this repository is the evaluation harness. Classifier output never authorizes an action (AGENTS.md rule 5). See [project intent and adaptation](PROJECT_INTENT.md).
 
 Plan documents:
 
