@@ -99,3 +99,7 @@ The other agent's branch (`feat/finite-json-calibration`) modifies `data/synthet
 
 - Loghub: request written permission for commercial/published use, or approve the source-code fallback (§1a).
 - OpenEnv source is unverified and excluded.
+
+## WS10 research handoff
+
+Use [REALISM_RESEARCH.md](REALISM_RESEARCH.md) for source interpretation and [REALISM_DATASETS.md](REALISM_DATASETS.md) for pinned Windows/cloud/SRE candidates. These guides do not change the frozen rubric, existing cohort counts or seed registry. Candidate imports require artifact-specific terms, content hashes and de-identification review. Rule-library severity/tactic mixes are coverage inventories, not observed event prevalence. Preserve all scenario assumptions in dataset/report provenance.
