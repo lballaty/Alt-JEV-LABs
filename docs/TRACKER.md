@@ -1,6 +1,6 @@
 # v2 evaluation tracker
 
-Last updated: 2026-09-30 (end of cloud session; next session continues on the M4 Mac). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
+Last updated: 2026-10-04 (PR #17 intent reconciled; WS3/WS7 implementation updates preserved; WS10 evidence audit; WS9 bundle verified; Mac/target-stream gates open). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
 
 ## Intent
 
@@ -15,6 +15,8 @@ Plan documents:
 | `docs/BLUEPRINT_V2.md` | `main` (PR #1) | v2 protocol, candidate matrix, training/calibration, timing |
 | `docs/DATASET_PLAN_V2.md` | `main` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
+| `docs/PROJECT_INTENT.md` | `main` (PR #17) | Reusable comparison framework, reference triage use case, implementation boundary |
+| `docs/OWNERSHIP.md` | `main` | Who owns which files/workstreams; working rules incl. auto-merge (D21) |
 | `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
 | `docs/MANAGER_IMPROVEMENTS.md` | `main` | Proposed llamaCPPManager API/CLI (M1–M10) and UI (U1–U5) changes to support testing |
 | `docs/MANAGER_HANDOFF.md` | `main` | How the llamaCPPManager work (delivered as a bundle) gets into that repo: commit hashes, checksum, remaining items H1–H9, prompt for the next agent |
@@ -42,10 +44,18 @@ Plan documents:
 | D17 | 2026-09-30 | Rubric review 4: B approves (SOC/SRE/DPO roles, all signed by one person); A approves with changes → 2.4.0-draft: containment is a recorded decision with options, not automatic; W4d justifies same-day review (alternate replica, short projection); DPO review within 4 business hours, SOC owns out-of-hours fact-finding; approval record must include revision, test command, result and a named approver per role | RUBRIC_V2.md, reviews/RUBRIC_REVIEW_4.md |
 | D18 | 2026-09-30 | Rubric **frozen as 2.4.0** by the project owner after reviewer A's corrections were applied and rubric code coverage reached 100% (lines and branches; 60 rubric tests, 75 total). Validity limits recorded: roles signed by one person; reviewer A did not re-confirm 2.4; tests prove the code matches the chosen answers, not operational practice | RUBRIC_V2.md freeze record |
 | D19 | 2026-09-30 | Reviewer A confirmed rubric 2.4 with no comments; both reviewers approve. The 'not re-confirmed' validity limit is removed (record-only) | RUBRIC_V2.md freeze record |
+| D20 | 2026-10-01 | Add a small generative arm (Gemma family, ~270M and ~1B, alongside the existing Gemma 4 E2B entry) to test the smallest viable local LLM. Served through llamaCPPManager like the other generative arms; checkpoints pinned from the Mac inventory. A fine-tuned checkpoint (e.g. `gemma-270m-compliance-mlx`) is reported as a separate arm with its training data disclosed. **Amended 2026-10-01:** `gemma-270m-compliance-mlx` is excluded from the alert-triage use case because it was tuned for compliance questions; it is reserved for a future compliance-domain use case | BLUEPRINT_V2 candidate matrix |
+| D21 | 2026-10-04 | Standing owner instruction: agents merge to `main` automatically and update this tracker in the same change, without waiting for review, because agents see only GitHub. Overrides `AGENTS.md` rule 6 for ordinary work; tests must pass first; guardrails in OWNERSHIP.md rule 3 still apply. Revocable by the owner | `docs/OWNERSHIP.md` |
+
+| D22 | 2026-10-04 | Owner requested repository-visible acknowledgement and an agent ID. This ebook/companion session identifies as `codex-ebook-companion-01` and acknowledges AGENTS.md, OWNERSHIP.md, TRACKER.md and D21. Scope: ebook publishing and companion coordination; no implementation workstream claimed or reassigned | Libor's instruction in ebook session, 2026-10-04; `docs/OWNERSHIP.md` acknowledgement |
+| D23 | 2026-10-04 | Owner asked each agent to take an ID in the shared instructions. The cloud session that built WS1 and launched the WS3/WS7 subagents is `claude-cloud-ws1-01`; IDs are listed in `docs/OWNERSHIP.md` under Agent IDs | Libor's instruction, 2026-10-04; `docs/OWNERSHIP.md` |
+| D24 | 2026-10-04 | Only two agents exist: `claude-cloud-ws1-01` (implementation) and `codex-ebook-companion-01` (ebook/companion). References to a calibration agent, planning agent, 'other agent' or 'this session' in older rows are earlier ended sessions, not active agents. WS4, WS8, WS9, WS10 are unassigned; `docs/OWNERSHIP.md` updated | Libor's instruction, 2026-10-04 |
+
+| D25 | 2026-10-04 | Owner asked `codex-ebook-companion-01` to take prior calibration/planning work only where non-conflicting. Latest D24 ownership gives implementation files to Claude; calibration/code/WS4 remain there. Codex takes planning docs/tracker maintenance, manager docs/WS9 handoff coordination and WS10 research. Blueprint and frozen rubric remain Claude's. Preserve PR #17 and existing branches/bundles; hardware/evidence gates unchanged | Libor's instruction in ebook session, 2026-10-04; `docs/OWNERSHIP.md` |
 
 ## Open decisions
 
-All open owner decisions are consolidated under **Open questions** at the end of this file (Q1–Q7). The former O3 is now Q7 and O4 is now Q4/Q5.
+All open owner decisions are consolidated under **Open questions** at the end of this file. The former O3 is now Q7 and O4 is now Q4/Q5.
 
 ## Workstreams
 
@@ -55,13 +65,23 @@ All open owner decisions are consolidated under **Open questions** at the end of
 | — | Dataset + practical eval plan, this tracker | This session | `plan/v2-datasets-test-structure` | Merged (PR #2) | — | main merged in; README license + Loghub credits added |
 | WS1 | Seed registry: Loghub templates, ART seeds, synthetic entity filler, tests | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/v2-seed-registry` (via PR #3) | Merged (PR #3) | — | 330 seeds (Loghub 322: BGL 120, Linux 118, OpenStack 43, OpenSSH 27, HDFS 14; ART 8), pinned commits + sha256; no IPs in templates (checked). 8 tests collected (session summary said 13). |
 | WS2 | v2 rubric | This session | merged to `main` | **Done: frozen 2.4.0** | — | 14 worked examples; 60 rubric tests; 100% line and branch coverage of `data/rubric.py` |
-| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Unassigned | — | Planned (unblocked: rubric frozen) | — (WS1 and WS2 merged) | New files only; target 560 cases (D7) |
-| WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned | — | Planned | O4 (thresholds); other branch merged | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
+| WS3 | Cohort generator (A/B/B′/C/D), leak lint, leave-one-source-out, stream replay, label-budget subsets | Cloud session `session_016suEmxQMsUKD66MEcF2kow` | `feat/ws3-cohort-generator` | Cohorts, grouped split, manifest and leak lint merged under D21 once tests pass; **leave-one-source-out, stream replay (S6) and label-budget subsets (S7) not yet built** | — (WS1 and WS2 merged) | Added `data/generator_v2.py`, `tests/test_generator_v2.py`, `docs/GENERATOR_V2.md`. 560 cases (A 200, B 125, B′ 60, C 100, D 75), seed 42, labels only from rubric 2.4.0, cohort D unlabeled (`needs_adjudication`). Verified on Linux: lint-clean and byte-identical for the same seed (also across PYTHONHASHSEED); manifest hashes match files. Generated data is synthetic and git-ignored. 294 of 560 cases use generator-authored seeds (disclosed in the manifest); archetype evidence is single-author, unreviewed by SOC/SRE/DPO; cohort B is service events only. See GENERATOR_V2.md review flags |
+| WS4 | Runner/reporter: cohort matrix, CIs, scorecard output | Unassigned (free to claim by `claude-cloud-ws1-01`) | — | Planned | O4 (thresholds); other branch merged | Touches the same files as the other agent. Reporter must auto-add the Loghub citation when the dataset manifest lists Loghub seeds (D8) |
 | WS5 | Verify OpenEnv, ATT&CK terms, Zenodo license, alternative telemetry sources | Unassigned | — | Blocked | Hugging Face/Zenodo egress blocked here | Run on Mac or allowlist hosts |
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | Q7 (real data source) | Must include an adjudication log (disagreements recorded, uncertain cases never silently made gold) and a separate rare high-impact set (S10) |
-| WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | Unassigned | — | Planned | — (WS2 draft available) | Modular, toggled in config |
-| WS8 | Manager boundary: `status --json` preflight + provenance, `generative_managed` adapter (prompt-JSON / grammar / logprob modes), encoder local-path manifest | Unassigned | — | Planned | Mac for final verification | Encoders are not served by the manager |
-| WS9 | llamaCPPManager improvements for testing: M0 (pin mcp<2), M1 manifest, M2 local_artifacts, M3 wait/exclusive, M4 memory sampling, M5 offline, M6 test lock, M7 lifecycle-mark, M8/M11 system snapshot; UI U1–U5 deferred | This session | manager branch `feat/benchmark-support` (not pushed: no push access; delivered as patch/bundle) | Done on Linux; pending apply + verification on Mac | Push access or manual apply; Mac checklist in the manager's `docs/BENCHMARK-SUPPORT-TRACKER.md` | Manager suite: 181 passed / 6 failed on Linux (same 6 macOS-only failures as baseline) |
+| WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | `claude-cloud-ws1-01` (cloud session `session_016suEmxQMsUKD66MEcF2kow`) | `feat/ws7-chat-module` | Ready for review (merged under D21 once tests pass) | — (WS2 frozen) | Off by default (`configs/chat_module.json`). Added `ingest/__init__.py`, `ingest/chat.py`, `tests/test_chat_ingest.py` (30 tests), `docs/CHAT_MODULE.md`; no existing code touched. Verified on Linux: full suite 105 passed (75 + 30), synthetic sentinels fully removed by de-identification, deterministic output. **Not verified:** de-identification recall on real chat (none used), any S9 model result, S9 runner registration (WS4). Chat claims are flagged, never authorization (D4). Review flags in `docs/CHAT_MODULE.md` |
+| WS8 | Manager boundary: `status --json` preflight + provenance, `generative_managed` adapter (prompt-JSON / grammar / logprob modes), encoder local-path manifest | Unassigned (free to claim by `claude-cloud-ws1-01`) | — | Planned | Mac for final verification | Encoders are not served by the manager |
+| WS9 | llamaCPPManager improvements for testing: M0 (pin mcp<2), M1 manifest, M2 local_artifacts, M3 wait/exclusive, M4 memory sampling, M5 offline, M6 test lock, M7 lifecycle-mark, M8/M11 system snapshot; UI U1–U5 deferred | codex-ebook-companion-01 | archived delivery on manager main; application pending | Blocked (Mac application/validation; delivery verified) | Mac host, manager file claims and H2–H5 | 2026-10-04: archive SHA-256, member inventory, bundle tip/prerequisite and patch headers verified. No applied benchmark branch/tracker found. Historical Linux results retained; live CLI/MLX/GUI checks not run. See MANAGER_HANDOFF.md. |
+| WS10 | Realism grounding: make the synthetic tests match published evidence on real alert streams. Research sources (industry SOC/SRE surveys, public incident reports and postmortems, academic log/alert datasets) for class mix and base rates, alert volumes and false-positive rates, burst and correlation patterns, message formats and noise. Set generator parameters from them with citations. Add a realism check: compare generated distributions with the cited figures, and have a practitioner rate a blind sample of generated vs real-looking cases | codex-ebook-companion-01 | this PR → main | In progress (source audit complete; validation open) | Artifact license clarification, independent count reproduction, practitioner assessment and target-stream evidence | 2026-10-04: read Microsoft/Omdia summary, USENIX paper, Zhao bank study and PagerDuty primary report; corrected denominator/prevalence claims. Pinned four dataset candidates and flagged license conflicts; no imports. REALISM_RESEARCH.md / REALISM_DATASETS.md. Web retrieval works here; shell/model egress not established. |
+
+## Planning successor queue
+
+Owner: `codex-ebook-companion-01` (D25).
+
+- PR #17 reconciled with current main in this change: reusable evaluation intent preserved; WS3/WS7 status updated without changing implementation or the frozen rubric.
+- Realism branch inventoried: behind main, no unique commits/content requiring import. Manager bundle inventoried and checksum verified; Mac application/validation remains open.
+- Coordinate with Claude's WS3/WS7 work through GitHub; calibration/code/WS4 and blueprint/rubric remain Claude's scope.
+- No new measurement, implementation completion or Mac verification is implied by this handover.
 
 ## Verified vs not verified
 
@@ -84,6 +104,8 @@ All open owner decisions are consolidated under **Open questions** at the end of
 | Payload-text authorization teaches a prompt-injection bypass | B′ suite as hard gate; authorization only via context |
 | Pilot test split too small for stable rankings | Report n and CIs; S8 real data before any deployment claim |
 | MLX servers can download on HF cache miss; manager query defaults to temperature 0.7 | `HF_HUB_OFFLINE=1` on benchmark models; benchmark sets temperature/seed explicitly (WS8) |
+| Synthetic tests unlike real alert streams (wrong base rates, too clean, too balanced), so rankings don't transfer | WS10 research-grounded parameters with citations; realism check; S6 stream at realistic prevalence; S8 real data remains the decisive check |
+| Public evidence has incompatible denominators and does not establish target-stream prevalence | Use source-backed case designs and explicitly assumed sensitivity profiles; obtain independent labels and practitioner validation before deployment claims |
 | Parallel agents editing the same files | WS1–WS3, WS7 add new files only; WS4 waits for the other branch to merge |
 
 ## Handoff: continue on the M4 Mac
@@ -102,7 +124,7 @@ Steps on the Mac:
 
 | # | Question | Why it matters | Blocks |
 | --- | --- | --- | --- |
-| Q1 | Which llamaCPPManager model names/ports are the generative candidates? | Defines the served generative arms | WS8 |
+| Q1 | Which llamaCPPManager model names/ports are the generative candidates? Include the small Gemma arm (D20): which base (not fine-tuned) Gemma sizes and quantizations are installed? | Defines the served generative arms | WS8 |
 | Q2 | `HF_HUB_OFFLINE=1` permanently on the MLX entries, or a benchmark-only group/profile? | Prevents downloads during runs | WS8 |
 | Q3 | Which encoder/classifier candidates to include (Laya English 421M vs multilingual 322M, Von, GLiClass, SemIf, ModernBERT heads, Gemma LoRA)? Where are they stored locally? | The manager does not serve these; they need a local-path manifest | WS8, candidate matrix |
 | Q4 | p95 latency budget; confirm memory cap 96 GB / reserve 16 GB (D12) | Sets the remaining scorecard hard gate | WS4 |
@@ -110,3 +132,5 @@ Steps on the Mac:
 | Q6 | Rubric freeze | **Closed 2026-09-30:** frozen as 2.4.0 (D18), with validity limits recorded | — |
 | Q7 | Real data: is there any source of real operational events (logs/alerts, ideally chat threads) from your systems, a lab or a customer that can be de-identified and labeled by two people? Target 200–300 events. If none, results stay synthetic-only and reports say so | Only real data supports a deployment conclusion | WS6, S8/S9 |
 | Q8 | Non-served checkpoints (Laya, ModernBERT heads, GLiClass, Von, SemIf): inventory in the manager (M2) or in this repo? | Single source of model provenance | WS8, WS9 |
+
+| Q9 | Realism sources: internal or customer figures? | **Answered 2026-09-30: none available.** Realism rests on public evidence only (WS10) | — |

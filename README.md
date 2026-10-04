@@ -4,7 +4,7 @@ Alt-JEV-LABs is a local-first framework for comparing how different solutions pe
 
 **First reference use case:** first-line triage of security and operational alerts. The proposed Intent-Governed Triage Gateway would assemble trusted context, ask a local model for a structured triage proposal, and pass that proposal through a separate deterministic policy boundary before dispatch. The gateway is a proposed runtime product, not an implemented component of this repository. See [project intent and adaptation](docs/PROJECT_INTENT.md).
 
-The v1 synthetic smoke-test harness has routes for Laya-MLX, a supervised ModernBERT multi-head model, a BM25 nearest-example baseline, and a local generative MLX model on `choice`, `score`, and `noul` tasks. Running the model routes requires local checkpoints on the target Mac. For v2, the seed registry and alert-triage rubric 2.4.0 are merged; the cohort generator, full model comparison, and real-traffic validation remain planned. The [tracker](docs/TRACKER.md) records current status.
+The v1 synthetic smoke-test harness has routes for Laya-MLX, a supervised ModernBERT multi-head model, a BM25 nearest-example baseline, and a local generative MLX model on `choice`, `score`, and `noul` tasks. Running the model routes requires local checkpoints on the target Mac. For v2, the seed registry and alert-triage rubric 2.4.0 are merged; the cohort generator and optional chat ingestion are merged. Leave-one-source-out evaluation, stream replay, label-budget subsets, the full model comparison, and real-traffic validation remain open. The [tracker](docs/TRACKER.md) records current status.
 
 This is a **measurement and decision-support harness**. It does not certify a model or authorize deployment on its own. A named human decision owner reviews the combination of tests, results, deployment controls, and residual risks, and records whether that evidence is sufficient for a specified use case and environment. A valid JSON response can still be wrong; a probability is only useful after calibration on representative data. Synthetic data probes plumbing and failure modes, but cannot establish production accuracy.
 
@@ -44,7 +44,7 @@ The generative adapter has two separate modes. `generative` uses a JSON-only pro
 - Compare the same cases and state/question text. Report coverage and failures alongside accuracy. Do not turn synthetic labels into security policy.
 - Prefer explicit adapters and typed results. Fail loudly on unsupported option sets, missing checkpoints, and incompatible library APIs.
 - Preserve local-first operation. The external model manager provisions weights; benchmark execution uses locally available models and must not download them. Harness dependency installation is separate from model provisioning.
-- Work in a branch for changes after this initial scaffold; review before merging into `main`. Explain changes, run the relevant tests, and record what could not be exercised on Apple Silicon.
+- Work in a branch and open a PR. Under the owner's standing instruction D21, merge ordinary work automatically after relevant checks pass and update the tracker in the same change. Follow [ownership rules](docs/OWNERSHIP.md), explain changes, and record what could not be exercised on Apple Silicon.
 
 ## Layout
 

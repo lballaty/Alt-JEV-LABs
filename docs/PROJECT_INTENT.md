@@ -43,6 +43,6 @@ These are design requirements for a reusable framework, not a claim that the pre
 
 ## Current implementation boundary
 
-The repository currently has a v1 synthetic smoke-test harness with four model routes; Mac model runs require local checkpoints. For the first v2 use case, the pinned seed registry and rubric 2.4.0 are merged, while WS3 cohort generation, the full report matrix and Mac model measurements are not complete. No v2 or Apple Silicon performance result is claimed. The [tracker](TRACKER.md) is the current status and decisions record; [README](../README.md) distinguishes the runnable v1 commands from v2 plans.
+The repository currently has a v1 synthetic smoke-test harness with four model routes; Mac model runs require local checkpoints. For the first v2 use case, the pinned seed registry, rubric 2.4.0, WS3 cohort generator and optional WS7 chat ingestion are merged. Leave-one-source-out evaluation, stream replay (S6), label-budget subsets (S7), the full report matrix and Mac model measurements remain open. No v2 or Apple Silicon performance result is claimed. The [tracker](TRACKER.md) is the current status and decisions record; [README](../README.md) distinguishes the runnable v1 commands from v2 plans.
 
 The code is Apache-2.0 and documentation is CC BY 4.0. Third-party seeds keep their own terms; review [the dataset plan](DATASET_PLAN_V2.md) and [NOTICE](../NOTICE) before reusing those records in another project.

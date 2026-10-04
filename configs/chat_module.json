@@ -1,0 +1,8 @@
+{
+  "_comment": "Toggle and limits for the optional chat module (WS7, suite S9). Off by default: set enabled to true deliberately. The salt is a non-secret label that makes pseudonyms reproducible; it does NOT protect real data, so use a private salt (pass ChatConfig(pseudonym_salt=...)) for real chat.",
+  "enabled": false,
+  "suite": "S9",
+  "pseudonym_salt": "alt-jev-labs-chat-fixture-v1",
+  "max_messages_per_thread": 40,
+  "max_message_chars": 2000
+}
