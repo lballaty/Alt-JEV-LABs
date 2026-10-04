@@ -13,3 +13,8 @@ data/raw/*
 
 # Claude Code subagent worktrees (full repo copies; never commit)
 .claude/worktrees/
+
+# Reference-only seed sources (docs/SEED_REFERENCES.md, D27): fetched upstream files and the
+# derived local-only registry must never be committed or published.
+data/seeds_local/
+.seed_refs_work/
