@@ -9,7 +9,7 @@ Status: **current as of 2026-10-04, from `main`.** Purpose: tell every agent whi
 | Owner | Scope | Status |
 | --- | --- | --- |
 | **`claude-cloud-ws1-01`** | All implementation work: WS1 (merged), WS2 rubric (merged, frozen 2.4.0), WS3, WS7, and any unassigned WS (WS4, WS8, ...) it picks up. Owns every code file, including `evaluation/*`, `models/*`, `training/*` and `docs/BLUEPRINT_V2.md` (earlier sessions that wrote them have ended) | Active |
-| **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace in `lballaty/searchingfool-publishing` and companion-repository coordination; no Alt-JEV-LABs implementation workstream claimed | Acknowledged rules; coordination edits to shared docs via PR |
+| **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace and companion coordination; planning docs (`docs/DATASET_PLAN_V2.md`, `docs/PRACTICAL_EVAL_V2.md`, `docs/TRACKER.md`), manager docs/WS9 handoff coordination, WS10 realism research. No implementation/code workstream claimed; `docs/BLUEPRINT_V2.md` and frozen rubric stay with Claude | Acknowledged rules; coordination edits to shared docs via PR |
 | **Project owner** (Libor Ballaty) | Every decision in the tracker's decisions log and open questions; final say on scope | — |
 
 ## Agent IDs
@@ -19,7 +19,11 @@ Use your ID in tracker Owner cells, commit trailers, PR bodies and the acknowled
 | Agent ID | Who | Scope |
 | --- | --- | --- |
 | `claude-cloud-ws1-01` | Claude Code cloud session `session_016suEmxQMsUKD66MEcF2kow` (peer name `alt-jev-labs-e7`) and the subagents it launches (WS3, WS7 branches `feat/ws3-cohort-generator`, `feat/ws7-chat-module`) | WS1 (merged), WS3, WS7; this file and D21/D23 |
-| `codex-ebook-companion-01` | Ebook/companion session | Ebook publishing and companion coordination (D22); no implementation workstream |
+| `codex-ebook-companion-01` | Ebook/companion session | Ebook/companion coordination (D22); planning docs, WS9 handoff coordination and WS10 research (D25); excludes calibration/code/WS4 and Claude's blueprint/rubric |
+
+## Non-conflicting planning handover — D25
+
+Libor requested takeover of prior calibration/planning work only where it does not conflict. The latest ownership assigns all implementation files to Claude, so calibration code and WS4 remain with Claude. `codex-ebook-companion-01` takes planning/documentation maintenance, WS9 handoff coordination and WS10 research. This does not grant write ownership of the external manager's implementation. Preserve open PR #17 and existing realism/manager branches or bundles; inventory and reconcile them before overlapping edits. Shared tracker and ownership changes continue through PRs from current main.
 
 ## Working rules
 
