@@ -44,6 +44,8 @@ Plan documents:
 | D20 | 2026-10-01 | Add a small generative arm (Gemma family, ~270M and ~1B, alongside the existing Gemma 4 E2B entry) to test the smallest viable local LLM. Served through llamaCPPManager like the other generative arms; checkpoints pinned from the Mac inventory. A fine-tuned checkpoint (e.g. `gemma-270m-compliance-mlx`) is reported as a separate arm with its training data disclosed. **Amended 2026-10-01:** `gemma-270m-compliance-mlx` is excluded from the alert-triage use case because it was tuned for compliance questions; it is reserved for a future compliance-domain use case | BLUEPRINT_V2 candidate matrix |
 | D21 | 2026-10-04 | Standing owner instruction: agents merge to `main` automatically and update this tracker in the same change, without waiting for review, because agents see only GitHub. Overrides `AGENTS.md` rule 6 for ordinary work; tests must pass first; guardrails in OWNERSHIP.md rule 3 still apply. Revocable by the owner | `docs/OWNERSHIP.md` |
 
+| D22 | 2026-10-04 | Owner requested repository-visible acknowledgement and an agent ID. This ebook/companion session identifies as `codex-ebook-companion-01` and acknowledges AGENTS.md, OWNERSHIP.md, TRACKER.md and D21. Scope: ebook publishing and companion coordination; no implementation workstream claimed or reassigned | Libor's instruction in ebook session, 2026-10-04; `docs/OWNERSHIP.md` acknowledgement |
+
 ## Open decisions
 
 All open owner decisions are consolidated under **Open questions** at the end of this file (Q1–Q7). The former O3 is now Q7 and O4 is now Q4/Q5.
