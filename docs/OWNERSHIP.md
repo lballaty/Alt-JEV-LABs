@@ -6,11 +6,11 @@ Status: **current as of 2026-10-04, from `main`.** Purpose: tell every agent whi
 
 | Owner | Scope | Status |
 | --- | --- | --- |
-| **Calibration agent** ("other agent") | Finite JSON decoding, validation calibration, v2 blueprint (`docs/BLUEPRINT_V2.md`, `training/calibrate.py`, and the v1 files it changed) | Merged (PR #1). Edits to its files by other agents go through a PR. |
-| **Planning session** | `docs/DATASET_PLAN_V2.md`, `docs/PRACTICAL_EVAL_V2.md`, `docs/TRACKER.md`, rubric (WS2, frozen 2.4.0), manager docs, realism research (WS10) | Merged except WS10 (in progress) |
+| **codex-ebook-companion-01 — calibration successor** | Finite JSON decoding, validation calibration, v2 blueprint (`docs/BLUEPRINT_V2.md`, `training/calibrate.py`, existing evaluation files), WS4 runner/reporter | Prior implementation merged (PR #1); maintenance and WS4 handed over by owner on 2026-10-04 (D24) |
+| **codex-ebook-companion-01 — planning successor** | `docs/DATASET_PLAN_V2.md`, `docs/PRACTICAL_EVAL_V2.md`, `docs/TRACKER.md`, custody of frozen WS2 rubric, manager docs/WS9 handoff, realism research WS10 | Handed over by owner on 2026-10-04 (D24); rubric remains frozen; Mac-only checks still pending |
 | **Seed-registry session** (cloud session `session_016suEmxQMsUKD66MEcF2kow`) | WS1: `data/seed_registry.py`, `data/entity_filler.py`, `data/seeds/*`, `tests/test_seed_registry.py`; this file | Merged (PR #3). |
-| **Unassigned** | WS3 cohort generator, WS4 runner/reporter, WS5, WS6, WS7, WS8 | See tracker. Take one by writing your name in the tracker's Owner column in the same PR that starts it. |
-| **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace in `lballaty/searchingfool-publishing` and companion-repository coordination; no Alt-JEV-LABs implementation workstream claimed | Acknowledged rules; coordination edits to shared docs via PR |
+| **Unassigned** | WS5, WS6, WS8 | See tracker. Take one by writing your name in the tracker's Owner column in the same PR that starts it. |
+| **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace and companion coordination, plus calibration/planning successor scopes listed above; excludes Claude's WS1/WS3/WS7 | Acknowledged rules; coordination edits to shared docs via PR |
 | **Project owner** (Libor Ballaty) | Every decision in the tracker's decisions log and open questions; final say on scope | — |
 
 ## Agent IDs
@@ -20,8 +20,12 @@ Use your ID in tracker Owner cells, commit trailers, PR bodies and the acknowled
 | Agent ID | Who | Scope |
 | --- | --- | --- |
 | `claude-cloud-ws1-01` | Claude Code cloud session `session_016suEmxQMsUKD66MEcF2kow` (peer name `alt-jev-labs-e7`) and the subagents it launches (WS3, WS7 branches `feat/ws3-cohort-generator`, `feat/ws7-chat-module`) | WS1 (merged), WS3, WS7; this file and D21/D23 |
-| `codex-ebook-companion-01` | Ebook/companion session | Ebook publishing and companion coordination (D22); no implementation workstream |
-| _not yet given_ | Calibration agent; planning session | Add a row here when you pick an ID |
+| `codex-ebook-companion-01` | Ebook/companion session | Ebook/companion coordination (D22); calibration maintenance, WS4, planning documents, WS9 handoff and WS10 (D24) |
+| Historical calibration/planning sessions | Prior work retained under original provenance | Follow-on ownership transferred to `codex-ebook-companion-01` by D24; no retrospective authorship change |
+
+## Handover boundary
+
+D24 transfers follow-on work to `codex-ebook-companion-01`; it does not change authorship of prior commits. Claude retains WS1, WS3 and WS7, including their new generator/chat files. Shared interfaces and tracker changes go through PRs from current main. Open PR #17 (`docs/reusable-use-case-intent`) touches the tracker and must be reconciled before overlapping intent edits; its existing work is preserved. Existing realism and manager branches/bundles must be inventoried before continuation. No permission to alter frozen rubric 2.4.0 is implied.
 
 ## Working rules
 
