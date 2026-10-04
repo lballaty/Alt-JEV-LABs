@@ -1,6 +1,6 @@
 # v2 evaluation tracker
 
-Last updated: 2026-09-30 (end of cloud session; next session continues on the M4 Mac). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
+Last updated: 2026-10-04 (ownership file and auto-merge rule added; WS3 next; Mac steps unchanged). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
 
 ## Intent
 
@@ -13,6 +13,7 @@ Plan documents:
 | `docs/BLUEPRINT_V2.md` | `main` (PR #1) | v2 protocol, candidate matrix, training/calibration, timing |
 | `docs/DATASET_PLAN_V2.md` | `main` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
+| `docs/OWNERSHIP.md` | `main` | Who owns which files/workstreams; working rules incl. auto-merge (D21) |
 | `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
 | `docs/MANAGER_IMPROVEMENTS.md` | `main` | Proposed llamaCPPManager API/CLI (M1–M10) and UI (U1–U5) changes to support testing |
 | `docs/MANAGER_HANDOFF.md` | `main` | How the llamaCPPManager work (delivered as a bundle) gets into that repo: commit hashes, checksum, remaining items H1–H9, prompt for the next agent |
@@ -41,6 +42,7 @@ Plan documents:
 | D18 | 2026-09-30 | Rubric **frozen as 2.4.0** by the project owner after reviewer A's corrections were applied and rubric code coverage reached 100% (lines and branches; 60 rubric tests, 75 total). Validity limits recorded: roles signed by one person; reviewer A did not re-confirm 2.4; tests prove the code matches the chosen answers, not operational practice | RUBRIC_V2.md freeze record |
 | D19 | 2026-09-30 | Reviewer A confirmed rubric 2.4 with no comments; both reviewers approve. The 'not re-confirmed' validity limit is removed (record-only) | RUBRIC_V2.md freeze record |
 | D20 | 2026-10-01 | Add a small generative arm (Gemma family, ~270M and ~1B, alongside the existing Gemma 4 E2B entry) to test the smallest viable local LLM. Served through llamaCPPManager like the other generative arms; checkpoints pinned from the Mac inventory. A fine-tuned checkpoint (e.g. `gemma-270m-compliance-mlx`) is reported as a separate arm with its training data disclosed. **Amended 2026-10-01:** `gemma-270m-compliance-mlx` is excluded from the alert-triage use case because it was tuned for compliance questions; it is reserved for a future compliance-domain use case | BLUEPRINT_V2 candidate matrix |
+| D21 | 2026-10-04 | Standing owner instruction: agents merge to `main` automatically and update this tracker in the same change, without waiting for review, because agents see only GitHub. Overrides `AGENTS.md` rule 6 for ordinary work; tests must pass first; guardrails in OWNERSHIP.md rule 3 still apply. Revocable by the owner | `docs/OWNERSHIP.md` |
 
 ## Open decisions
 
