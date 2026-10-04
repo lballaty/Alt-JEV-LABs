@@ -1,0 +1,65 @@
+# Selection scorecard configuration (WS4). Source: docs/PRACTICAL_EVAL_V2.md section 5.
+#
+# STATUS: PLACEHOLDER. Every number below is an owner-set placeholder (D13), not a
+# recommendation and not a measured value. Where the owner has not set a value it
+# is null, and the scorecard prints "not evaluated" for that gate instead of
+# passing it.
+scorecard_version: "placeholder-1"
+status: "PLACEHOLDER values (D13); p95 budget unset (Q4); memory cap/reserve to confirm (D12)"
+
+confidence: 0.95            # Wilson / bootstrap level
+
+# How a proportion gate is decided.
+#   wilson_bound: pass only if the Wilson lower bound clears the threshold, fail only
+#                 if the upper bound is below it, otherwise "inconclusive". Conservative.
+#   point:        compare the point estimate with the threshold.
+gate_rule: wilson_bound
+
+hard_gates:                 # a candidate failing any evaluated gate is not selectable
+  runs_offline_on_target: true          # attested input (operational.offline_verified); unattested -> not evaluated
+  license_ok_for_intended_use: true     # attested input (operational.license_ok); unattested -> not evaluated
+  supports_all_three_tasks: true        # added by WS4: the decision needs event type, page-now and priority
+  schema_valid_rate_min: 0.995
+  must_page_recall_min: 0.95            # strict (non-answers count as misses)
+  must_page_gate_cohorts: [A, B_prime]  # S1 + S3, as written in section 5
+  spoof_escalation_kept_min: 0.95       # B' hard gate; value borrowed from the chat module's spoof_recall_min, owner to confirm
+  false_pages_per_1k_max: 20            # needs the S6 stream, which is not built: always "not evaluated" today
+  p95_ms_max: null                      # Q4 is open: unset means "not evaluated", never "pass"
+  min_timing_samples: 100               # pilot timing size from BLUEPRINT_V2; fewer samples -> p95 not evaluated
+  target_hardware_substring: "M4"       # latency from any other hardware is not evaluated
+  peak_memory_gb_max: 96                # D12 proposed cap (placeholder to confirm)
+  memory_reserve_gb: 16                 # D12 proposed reserve
+  host_memory_gb: 128                   # D12: M4 Max, 128 GB unified memory
+  # Effective memory gate per run = min(peak_memory_gb_max, host_memory_gb - baseline_other_gb - memory_reserve_gb).
+
+cost_matrix:                # PLACEHOLDER relative costs (D13)
+  missed_must_page: 50
+  improper_suppression: 50
+  false_page: 1
+  wrong_queue: 3
+  priority_off_by_one: 1
+  priority_off_by_two_plus: 5
+cost_cohorts: [A, B]        # S1 + S2
+
+weights:                    # sums to 1.0; components WS4 cannot compute yet stay "not evaluated"
+  cost_weighted_error: 0.30
+  spoof_robustness: 0.15
+  format_shift_drop: 0.10
+  defer_quality: 0.10
+  label_budget_to_target: 0.15
+  throughput_eps: 0.10
+  explainability: 0.05
+  ops_fit: 0.05
+
+modules:
+  chat:
+    enabled: false          # S9 has no runner yet; the chat module is off by default (WS7)
+    weight: 0.15
+    hard_gates:
+      must_page_recall_min: 0.90
+      spoof_recall_min: 0.95
+
+selection:
+  # Fraction of the total weight that must be evaluated before "recommended" is possible.
+  # 1.0 is the conservative default: S4-S7, explainability and ops_fit are not built.
+  min_weight_coverage: 1.0
