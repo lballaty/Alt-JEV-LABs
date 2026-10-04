@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "decision": "D27 (docs/TRACKER.md): sources whose license does not clearly allow us to publish their content are reference-only. This file holds pointers and hashes, never upstream content.",
+  "instructions": "docs/SEED_REFERENCES.md",
+  "notes": [
+    "No file content, not even a sample line, belongs in this file. Entries carry only a location, a pinned commit, a sha256 and short generic format descriptions written by this project.",
+    "Licenses were read from each repository's root LICENSE at the pinned commit (verified 2026-10-04). Not legal advice."
+  ],
+  "sources": [
+    {
+      "id": "logstash-patterns-core",
+      "name": "Logstash grok patterns (core) spec files",
+      "status": "reference-only",
+      "repo_url": "https://github.com/logstash-plugins/logstash-patterns-core.git",
+      "commit": "74a4098582d3331a2b9b18c04d2446f2c0efb648",
+      "license": {
+        "spdx": "Apache-2.0",
+        "note": "Permissive. Redistribution would be allowed with the license text and notices kept, but this project still treats the derived text as local-only under D27."
+      },
+      "license_file": {
+        "path": "LICENSE",
+        "sha256": "7f11abf94ab761bc849033573542324e8a46332cafbf6fda21ceb43c92c4902e"
+      },
+      "files": [
+        {
+          "path": "spec/patterns/syslog_spec.rb",
+          "sha256": "48ceb30199956742e73431e45d223798acfda172c9d7d78189ab0f5cb3e276b8",
+          "format": "ruby-spec",
+          "format_description": "Ruby test file; log lines appear as quoted string literals passed to the pattern matcher.",
+          "extractor": "ruby_spec_literals",
+          "system": "syslog"
+        },
+        {
+          "path": "spec/patterns/firewalls_spec.rb",
+          "sha256": "b5a03da96ef4507c35388d117b062ea43c10f352416181492a3bdce642ec3a34",
+          "format": "ruby-spec",
+          "format_description": "Ruby test file; firewall and router messages appear as quoted string literals, some split across lines.",
+          "extractor": "ruby_spec_literals",
+          "system": "firewall"
+        }
+      ]
+    },
+    {
+      "id": "vector",
+      "name": "Vector syslog source tests",
+      "status": "reference-only",
+      "repo_url": "https://github.com/vectordotdev/vector.git",
+      "commit": "9aee1f50eefe4c077ba9d640edd7cbbe3b7dc1a2",
+      "license": {
+        "spdx": "MPL-2.0",
+        "note": "File-level (weak) copyleft: copying or modifying these files carries MPL obligations for those files. We do not copy them; we only point at them."
+      },
+      "license_file": {
+        "path": "LICENSE",
+        "sha256": "60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d"
+      },
+      "files": [
+        {
+          "path": "src/sources/syslog.rs",
+          "sha256": "80b052d2661e227a24bc81c4c3f190220b95fa1e5e178b13bf8108ad5c546f73",
+          "format": "rust-source",
+          "format_description": "Rust source with test strings; syslog lines appear as raw or ordinary string literals with value holes written as braces.",
+          "extractor": "rust_string_literals",
+          "system": "syslog"
+        }
+      ]
+    },
+    {
+      "id": "wazuh",
+      "name": "Wazuh manager benchmark syslog payload",
+      "status": "reference-only",
+      "repo_url": "https://github.com/wazuh/wazuh.git",
+      "commit": "74ed87cb8775ab2dcfb74835ca9ab91f87cac0be",
+      "license": {
+        "spdx": "GPL-2.0-only WITH OpenSSL-exception",
+        "note": "Strong copyleft (GPL v2 with an OpenSSL linking exception). We do not copy, vendor or publish any of it."
+      },
+      "license_file": {
+        "path": "LICENSE",
+        "sha256": "9136fd9ef577a45b1bcea8c8cd761e8c9c21e15cc2a09e7c139755e581bde00e"
+      },
+      "files": [
+        {
+          "path": "tools/manager_benchmark/sample_payloads/engine/syslog.log",
+          "sha256": "0bdc99eae9f91b84d12de166e89aff92492e20faaa7f7e5cc2717670c84b9caf",
+          "format": "syslog-text",
+          "format_description": "Plain text, one traditional (RFC 3164 style) syslog line per line; many repeated lines.",
+          "extractor": "syslog_lines",
+          "system": "syslog"
+        }
+      ]
+    },
+    {
+      "id": "secrepo",
+      "name": "SecRepo (secrepo.com)",
+      "status": "unverified, excluded",
+      "reason": "License and terms not verified; host not reachable from the verifying environment (docs/SEED_SOURCE_LICENSES.md)."
+    },
+    {
+      "id": "openenv-sre-triage",
+      "name": "OpenEnv SRE triage dataset (Hugging Face)",
+      "status": "unverified, excluded",
+      "reason": "License not verified; excluded since D6."
+    },
+    {
+      "id": "mitre-attack",
+      "name": "MITRE ATT&CK",
+      "status": "unverified, excluded",
+      "reason": "Terms of use not verified for redistribution of content; technique ids and names as metadata only."
+    },
+    {
+      "id": "zenodo-loghub-full",
+      "name": "Zenodo Loghub full logs",
+      "status": "unverified, excluded",
+      "reason": "License not verified; not used."
+    }
+  ]
+}

@@ -110,3 +110,7 @@ Verified on this Linux host (2026-09-30):
 
 Not verified here (no such step in WS1): any model behaviour, benchmark number,
 or Apple-Silicon result.
+
+## Reference-only sources (not committed)
+
+Sources whose license does not clearly allow us to publish their content (Logstash patterns, Vector, Wazuh) are **not** in this registry. `references.json` in this directory lists where to get them, the pinned commits and file hashes. `data/seed_references.py` fetches and derives a git-ignored local registry from them. Never commit or publish that registry. See [`docs/SEED_REFERENCES.md`](../../docs/SEED_REFERENCES.md).
