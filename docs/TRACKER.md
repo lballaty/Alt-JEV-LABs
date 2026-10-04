@@ -1,10 +1,12 @@
 # v2 evaluation tracker
 
-Last updated: 2026-10-04 (WS3 implementation update preserved; WS10 source/dataset audit; WS9 bundle verified; Mac/target-stream gates open). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
+Last updated: 2026-10-04 (PR #17 intent reconciled; WS3/WS7 implementation updates preserved; WS10 evidence audit; WS9 bundle verified; Mac/target-stream gates open). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
 
 ## Intent
 
-Build a practical, reproducible evaluation for choosing a local decision model to put in front of SOC/SRE queues. It must rank candidates on offline operation, correct routing, must-page recall, resistance to spoofed authorization, labeling cost, latency and throughput on the target Mac. The output is a selection scorecard, not a showcase for one model. Classifier output never authorizes an action (AGENTS.md rule 5).
+Build a reusable, local-first way to compare viable solutions for a concrete decision use case and choose the best fit under stated requirements. Each use case supplies a decision contract and rubric, representative and adversarial cases, candidate approaches and simple baselines, failure costs, operational constraints and acceptance criteria. The result is a comparative scorecard: screen hard requirements first, show consequential errors and operational trade-offs for feasible candidates, and explain the recommendation or why evidence is insufficient. Performance estimates apply only under the tested conditions. The scorecard supports a named human decision owner, who records whether the combined evidence and residual risk justify a specified pilot or deployment; a test pass is not an automatic certification or release decision.
+
+The first reference use case is an operational triage gateway in front of SOC/SRE and privacy workflows. Its v2 evaluation ranks candidates on offline operation, correct event classification and priority, must-page recall, resistance to spoofed authorization, labeling cost, latency and throughput on the target Mac. A separate proposed gateway would handle live ingress, policy enforcement and dispatch; this repository is the evaluation harness. Classifier output never authorizes an action (AGENTS.md rule 5). See [project intent and adaptation](PROJECT_INTENT.md).
 
 Plan documents:
 
@@ -13,6 +15,7 @@ Plan documents:
 | `docs/BLUEPRINT_V2.md` | `main` (PR #1) | v2 protocol, candidate matrix, training/calibration, timing |
 | `docs/DATASET_PLAN_V2.md` | `main` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
+| `docs/PROJECT_INTENT.md` | `main` (PR #17) | Reusable comparison framework, reference triage use case, implementation boundary |
 | `docs/OWNERSHIP.md` | `main` | Who owns which files/workstreams; working rules incl. auto-merge (D21) |
 | `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
 | `docs/MANAGER_IMPROVEMENTS.md` | `main` | Proposed llamaCPPManager API/CLI (M1–M10) and UI (U1–U5) changes to support testing |
@@ -75,7 +78,7 @@ All open owner decisions are consolidated under **Open questions** at the end of
 
 Owner: `codex-ebook-companion-01` (D25).
 
-- Reconcile open PR #17 before overlapping project-intent/tracker edits; preserve its work.
+- PR #17 reconciled with current main in this change: reusable evaluation intent preserved; WS3/WS7 status updated without changing implementation or the frozen rubric.
 - Realism branch inventoried: behind main, no unique commits/content requiring import. Manager bundle inventoried and checksum verified; Mac application/validation remains open.
 - Coordinate with Claude's WS3/WS7 work through GitHub; calibration/code/WS4 and blueprint/rubric remain Claude's scope.
 - No new measurement, implementation completion or Mac verification is implied by this handover.
