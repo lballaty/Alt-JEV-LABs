@@ -4,12 +4,11 @@ Status: **current as of 2026-10-04, from `main`.** Purpose: tell every agent whi
 
 ## Who owns what
 
+**There are exactly two agents: `claude-cloud-ws1-01` and `codex-ebook-companion-01`.** There is no calibration agent and no planning agent. Those names in older docs and in the tracker's history ("other agent", "this session", "calibration agent", "planning session") are earlier sessions whose work is merged and which have ended. They will not act, review or acknowledge anything. Nothing is waiting on them. Unclaimed work is unassigned, not held by them.
+
 | Owner | Scope | Status |
 | --- | --- | --- |
-| **Calibration agent** ("other agent") | Finite JSON decoding, validation calibration, v2 blueprint (`docs/BLUEPRINT_V2.md`, `training/calibrate.py`, and the v1 files it changed) | Merged (PR #1). Edits to its files by other agents go through a PR. |
-| **Planning session** | `docs/DATASET_PLAN_V2.md`, `docs/PRACTICAL_EVAL_V2.md`, `docs/TRACKER.md`, rubric (WS2, frozen 2.4.0), manager docs, realism research (WS10) | Merged except WS10 (in progress) |
-| **Seed-registry session** (cloud session `session_016suEmxQMsUKD66MEcF2kow`) | WS1: `data/seed_registry.py`, `data/entity_filler.py`, `data/seeds/*`, `tests/test_seed_registry.py`; this file | Merged (PR #3). |
-| **Unassigned** | WS3 cohort generator, WS4 runner/reporter, WS5, WS6, WS7, WS8 | See tracker. Take one by writing your name in the tracker's Owner column in the same PR that starts it. |
+| **`claude-cloud-ws1-01`** | All implementation work: WS1 (merged), WS2 rubric (merged, frozen 2.4.0), WS3, WS7, and any unassigned WS (WS4, WS8, ...) it picks up. Owns every code file, including `evaluation/*`, `models/*`, `training/*` and `docs/BLUEPRINT_V2.md` (earlier sessions that wrote them have ended) | Active |
 | **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace in `lballaty/searchingfool-publishing` and companion-repository coordination; no Alt-JEV-LABs implementation workstream claimed | Acknowledged rules; coordination edits to shared docs via PR |
 | **Project owner** (Libor Ballaty) | Every decision in the tracker's decisions log and open questions; final say on scope | — |
 
@@ -21,7 +20,6 @@ Use your ID in tracker Owner cells, commit trailers, PR bodies and the acknowled
 | --- | --- | --- |
 | `claude-cloud-ws1-01` | Claude Code cloud session `session_016suEmxQMsUKD66MEcF2kow` (peer name `alt-jev-labs-e7`) and the subagents it launches (WS3, WS7 branches `feat/ws3-cohort-generator`, `feat/ws7-chat-module`) | WS1 (merged), WS3, WS7; this file and D21/D23 |
 | `codex-ebook-companion-01` | Ebook/companion session | Ebook publishing and companion coordination (D22); no implementation workstream |
-| _not yet given_ | Calibration agent; planning session | Add a row here when you pick an ID |
 
 ## Working rules
 
@@ -39,7 +37,5 @@ Agents record acknowledgement by appending a row in the tracker's decisions log 
 | Agent | Acknowledged | Date |
 | --- | --- | --- |
 | Seed-registry session (WS1) | Authored; follows these rules | 2026-10-04 |
-| Calibration agent | _not yet recorded_ | |
-| Planning session | _not yet recorded_ | |
 | `claude-cloud-ws1-01` | Chose this ID; read `AGENTS.md`, this file and the tracker; follows D21 | 2026-10-04 |
 | codex-ebook-companion-01 | Read `AGENTS.md`, this file, and `docs/TRACKER.md`; follows D21 auto-merge, ownership, and safety rules | 2026-10-04 |
