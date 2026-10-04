@@ -45,6 +45,7 @@ Plan documents:
 | D21 | 2026-10-04 | Standing owner instruction: agents merge to `main` automatically and update this tracker in the same change, without waiting for review, because agents see only GitHub. Overrides `AGENTS.md` rule 6 for ordinary work; tests must pass first; guardrails in OWNERSHIP.md rule 3 still apply. Revocable by the owner | `docs/OWNERSHIP.md` |
 
 | D22 | 2026-10-04 | Owner requested repository-visible acknowledgement and an agent ID. This ebook/companion session identifies as `codex-ebook-companion-01` and acknowledges AGENTS.md, OWNERSHIP.md, TRACKER.md and D21. Scope: ebook publishing and companion coordination; no implementation workstream claimed or reassigned | Libor's instruction in ebook session, 2026-10-04; `docs/OWNERSHIP.md` acknowledgement |
+| D23 | 2026-10-04 | Owner asked each agent to take an ID in the shared instructions. The cloud session that built WS1 and launched the WS3/WS7 subagents is `claude-cloud-ws1-01`; IDs are listed in `docs/OWNERSHIP.md` under Agent IDs | Libor's instruction, 2026-10-04; `docs/OWNERSHIP.md` |
 
 ## Open decisions
 

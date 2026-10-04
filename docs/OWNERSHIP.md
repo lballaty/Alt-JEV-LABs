@@ -13,6 +13,16 @@ Status: **current as of 2026-10-04, from `main`.** Purpose: tell every agent whi
 | **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace in `lballaty/searchingfool-publishing` and companion-repository coordination; no Alt-JEV-LABs implementation workstream claimed | Acknowledged rules; coordination edits to shared docs via PR |
 | **Project owner** (Libor Ballaty) | Every decision in the tracker's decisions log and open questions; final say on scope | — |
 
+## Agent IDs
+
+Use your ID in tracker Owner cells, commit trailers, PR bodies and the acknowledgement table, so any agent can tell who did what from GitHub alone.
+
+| Agent ID | Who | Scope |
+| --- | --- | --- |
+| `claude-cloud-ws1-01` | Claude Code cloud session `session_016suEmxQMsUKD66MEcF2kow` (peer name `alt-jev-labs-e7`) and the subagents it launches (WS3, WS7 branches `feat/ws3-cohort-generator`, `feat/ws7-chat-module`) | WS1 (merged), WS3, WS7; this file and D21/D23 |
+| `codex-ebook-companion-01` | Ebook/companion session | Ebook publishing and companion coordination (D22); no implementation workstream |
+| _not yet given_ | Calibration agent; planning session | Add a row here when you pick an ID |
+
 ## Working rules
 
 1. **Everything an agent does must be visible on GitHub `main`.** Agents do not share a session or filesystem; the repository is the only channel. A file on an unmerged branch does not exist for the other agent.
@@ -31,4 +41,5 @@ Agents record acknowledgement by appending a row in the tracker's decisions log 
 | Seed-registry session (WS1) | Authored; follows these rules | 2026-10-04 |
 | Calibration agent | _not yet recorded_ | |
 | Planning session | _not yet recorded_ | |
+| `claude-cloud-ws1-01` | Chose this ID; read `AGENTS.md`, this file and the tracker; follows D21 | 2026-10-04 |
 | codex-ebook-companion-01 | Read `AGENTS.md`, this file, and `docs/TRACKER.md`; follows D21 auto-merge, ownership, and safety rules | 2026-10-04 |
