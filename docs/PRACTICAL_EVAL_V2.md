@@ -24,7 +24,7 @@ That decision has three operational outputs. Each output maps to something an op
 | Cohort B: authorization *text inside the log* ("Authorized by CR-1234", "do not page SOC") | ⚠️ | In practice, authorization lives in the change calendar/CMDB, not in the payload. Payload text claiming authorization is an attack pattern | Move legitimate authorization into a structured **context block** (see §3). Keep text-in-payload claims only as the B′ spoof suite, labeled as not authorized |
 | Cohort C: Slack/Teams jargon | ✅ (decided 2026-09-30: chat ingestion in scope, modular) | Chat is a separate input source with its own failure modes (PII, sarcasm, stale threads, human-written injection) | Split: jargon inside log/alert fields stays in S1; standalone chat becomes the optional **S9 chat module** (§3a), reported separately |
 | Cohort D: noul target p = 0.50 | ❌ | No real label is "0.5". An operator decides page / don't page / needs a human | Label as `needs_human` (adjudicated). Measure whether the model *abstains or routes to a human* on these cases (selective accuracy) |
-| Balanced cohorts (40/25/20/15) | ⚠️ | Real streams are overwhelmingly routine; balanced sets overstate precision and hide alert fatigue | Keep the balanced set for per-cohort diagnosis. **Add a replay stream at realistic prevalence** (§4 S6) |
+| Balanced cohorts (40/25/20/15) | ⚠️ | Balanced test cohorts do not establish deployment prevalence; different mixtures can change precision and alert burden | Keep the balanced set for per-cohort diagnosis. **Add replay streams at explicitly configured, assumed prevalence** (§4 S6) |
 | ECE per cohort, paired-inversion accuracy as a headline, "O(1)", "deterministic", 255 options | ❌ for selection | Unstable at n≈11–30, or not something a buyer can act on | Demote to appendix diagnostics; pooled calibration only |
 | `service_outage` missing from v2 routes | ❌ | Outages are most real SRE pages | **Decided: added as sixth route** (DATASET_PLAN_V2 §2) |
 
@@ -99,7 +99,7 @@ What makes the chat suite practical:
 | S3 Spoof / injection (B′) | Payload text claiming authorization or saying "ignore / don't page" | Can an attacker talk it out of paging? | Must-page recall under spoof (**hard gate**) |
 | S4 Format shift | Leave one source out: train without e.g. HDFS + Falco, test on them | What happens when a new log source arrives? | Accuracy drop vs S1 |
 | S5 Ambiguous → human | Adjudicated `needs_human` cases | Does it know when to defer? | Selective accuracy vs coverage; abstention rate |
-| S6 Stream replay | 10k-event stream at configured prevalence (e.g. ~90% heartbeat/info, ≤1% must-page) | Alert fatigue and throughput in a real shift | Pages per 1k events, missed must-page, sustained events/sec, p95 |
+| S6 Stream replay | 10k-event stream across assumed prevalence profiles (e.g. ~90% heartbeat/info, ≤1% must-page; not measured production rates) | Simulated alert burden and throughput; target-stream validation remains separate | Pages per 1k events, missed must-page, sustained events/sec, p95 |
 | S7 Label budget | Train/fit with 0 / 25 / 100 / 350 labeled examples | How much labeling does it cost us? | S1 metric vs label count (learning curve) |
 | S8 Own data (decisive) | 200–300 de-identified events from our environment, two independent labelers | Does it work on *our* traffic? | Same as S1–S3; labeler agreement as ceiling |
 | S10 Rare high-impact set | Explicitly identified serious cases (real where available, else synthetic, labeled as such). Real alert samples may contain too few serious incidents | Does it catch the few events that matter most? | Must-page recall and improper-suppression count, with n |
@@ -186,3 +186,7 @@ Output per candidate: one row with gate results (pass/fail and the measured valu
 
 - Can we get 200–300 de-identified real events for S8? Without them, the evaluation can rank candidates on synthetic gates but can't justify a deployment.
 - Set the cost matrix and latency/memory budgets for the target hardware.
+
+## Realism evidence and profile provenance
+
+[REALISM_RESEARCH.md](REALISM_RESEARCH.md) distinguishes rule counts, log-line anomalies, alerts, incidents, pages and responder interruptions. [REALISM_DATASETS.md](REALISM_DATASETS.md) records candidate sources and import gates. S6 example rates are scenario assumptions, not observed operational base rates. Report each profile's unit, value/range, evidence level, source/version, scope and transformation. Keep balanced cohort diagnostics separate from prevalence-weighted stream results; do not infer deployment precision from the balanced pilot. No benchmark result is added by this research update.

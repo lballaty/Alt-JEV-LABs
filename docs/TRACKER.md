@@ -1,6 +1,6 @@
 # v2 evaluation tracker
 
-Last updated: 2026-10-04 (D25 planning handover; WS7 readiness and tests preserved; implementation stays with Claude). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
+Last updated: 2026-10-04 (WS10 primary-source and dataset audit; WS9 bundle verified; Mac and target-stream validation still pending). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
 
 ## Intent
 
@@ -52,7 +52,7 @@ Plan documents:
 
 ## Open decisions
 
-All open owner decisions are consolidated under **Open questions** at the end of this file (Q1–Q7). The former O3 is now Q7 and O4 is now Q4/Q5.
+All open owner decisions are consolidated under **Open questions** at the end of this file. The former O3 is now Q7 and O4 is now Q4/Q5.
 
 ## Workstreams
 
@@ -68,15 +68,15 @@ All open owner decisions are consolidated under **Open questions** at the end of
 | WS6 | S8 own-data protocol: de-identification, labeling guide, two-labeler agreement | Unassigned | — | Planned | Q7 (real data source) | Must include an adjudication log (disagreements recorded, uncertain cases never silently made gold) and a separate rare high-impact set (S10) |
 | WS7 | Chat module: `ingest/chat.py`, thread schema, chat de-identification, synthetic threads, S9 | `claude-cloud-ws1-01` (cloud session `session_016suEmxQMsUKD66MEcF2kow`) | `feat/ws7-chat-module` | Ready for review (merged under D21 once tests pass) | — (WS2 frozen) | Off by default (`configs/chat_module.json`). Added `ingest/__init__.py`, `ingest/chat.py`, `tests/test_chat_ingest.py` (30 tests), `docs/CHAT_MODULE.md`; no existing code touched. Verified on Linux: full suite 105 passed (75 + 30), synthetic sentinels fully removed by de-identification, deterministic output. **Not verified:** de-identification recall on real chat (none used), any S9 model result, S9 runner registration (WS4). Chat claims are flagged, never authorization (D4). Review flags in `docs/CHAT_MODULE.md` |
 | WS8 | Manager boundary: `status --json` preflight + provenance, `generative_managed` adapter (prompt-JSON / grammar / logprob modes), encoder local-path manifest | Unassigned (free to claim by `claude-cloud-ws1-01`) | — | Planned | Mac for final verification | Encoders are not served by the manager |
-| WS9 | llamaCPPManager improvements for testing: M0 (pin mcp<2), M1 manifest, M2 local_artifacts, M3 wait/exclusive, M4 memory sampling, M5 offline, M6 test lock, M7 lifecycle-mark, M8/M11 system snapshot; UI U1–U5 deferred | codex-ebook-companion-01 | manager branch `feat/benchmark-support` (not pushed: no push access; delivered as patch/bundle) | Done on Linux; pending apply + verification on Mac | Push access or manual apply; Mac checklist in the manager's `docs/BENCHMARK-SUPPORT-TRACKER.md` | Manager suite: 181 passed / 6 failed on Linux (same 6 macOS-only failures as baseline) |
-| WS10 | Realism grounding: make the synthetic tests match published evidence on real alert streams. Research sources (industry SOC/SRE surveys, public incident reports and postmortems, academic log/alert datasets) for class mix and base rates, alert volumes and false-positive rates, burst and correlation patterns, message formats and noise. Set generator parameters from them with citations. Add a realism check: compare generated distributions with the cited figures, and have a practitioner rate a blind sample of generated vs real-looking cases | codex-ebook-companion-01 | `docs/realism-research` | In progress: first pass done; **more research needed** | This cloud environment's network policy allows only GitHub; huggingface.co, arxiv.org, usenix.org, zenodo.org, kaggle.com and scholarly APIs are refused by the proxy (403, verified 2026-09-30). Fix: widen the environment's network access (environment settings → Edit → Network access), or continue on the Mac | First pass in `docs/REALISM_RESEARCH.md`: verified figures from public GitHub repos; survey and paper figures are unverified leads. Still to do: (1) read the primary sources behind the leads; (2) survey public alert and log datasets on Hugging Face, Kaggle, Zenodo and academic repositories for base rates, class mix and realistic formats; (3) find Windows and cloud audit seeds; (4) turn assumed generator parameters into cited ones |
+| WS9 | llamaCPPManager improvements for testing: M0 (pin mcp<2), M1 manifest, M2 local_artifacts, M3 wait/exclusive, M4 memory sampling, M5 offline, M6 test lock, M7 lifecycle-mark, M8/M11 system snapshot; UI U1–U5 deferred | codex-ebook-companion-01 | archived delivery on manager main; application pending | Blocked (Mac application/validation; delivery verified) | Mac host, manager file claims and H2–H5 | 2026-10-04: archive SHA-256, member inventory, bundle tip/prerequisite and patch headers verified. No applied benchmark branch/tracker found. Historical Linux results retained; live CLI/MLX/GUI checks not run. See MANAGER_HANDOFF.md. |
+| WS10 | Realism grounding: make the synthetic tests match published evidence on real alert streams. Research sources (industry SOC/SRE surveys, public incident reports and postmortems, academic log/alert datasets) for class mix and base rates, alert volumes and false-positive rates, burst and correlation patterns, message formats and noise. Set generator parameters from them with citations. Add a realism check: compare generated distributions with the cited figures, and have a practitioner rate a blind sample of generated vs real-looking cases | codex-ebook-companion-01 | this PR → main | In progress (source audit complete; validation open) | Artifact license clarification, independent count reproduction, practitioner assessment and target-stream evidence | 2026-10-04: read Microsoft/Omdia summary, USENIX paper, Zhao bank study and PagerDuty primary report; corrected denominator/prevalence claims. Pinned four dataset candidates and flagged license conflicts; no imports. REALISM_RESEARCH.md / REALISM_DATASETS.md. Web retrieval works here; shell/model egress not established. |
 
 ## Planning successor queue
 
 Owner: `codex-ebook-companion-01` (D25).
 
 - Reconcile open PR #17 before overlapping project-intent/tracker edits; preserve its work.
-- Inventory the existing realism branch and manager bundle before continuing WS9 handoff coordination and WS10 research.
+- Realism branch inventoried: behind main, no unique commits/content requiring import. Manager bundle inventoried and checksum verified; Mac application/validation remains open.
 - Coordinate with Claude's WS3/WS7 work through GitHub; calibration/code/WS4 and blueprint/rubric remain Claude's scope.
 - No new measurement, implementation completion or Mac verification is implied by this handover.
 
@@ -102,7 +102,7 @@ Owner: `codex-ebook-companion-01` (D25).
 | Pilot test split too small for stable rankings | Report n and CIs; S8 real data before any deployment claim |
 | MLX servers can download on HF cache miss; manager query defaults to temperature 0.7 | `HF_HUB_OFFLINE=1` on benchmark models; benchmark sets temperature/seed explicitly (WS8) |
 | Synthetic tests unlike real alert streams (wrong base rates, too clean, too balanced), so rankings don't transfer | WS10 research-grounded parameters with citations; realism check; S6 stream at realistic prevalence; S8 real data remains the decisive check |
-| Realism research incomplete because this environment can only reach GitHub | Keep 'assumed' parameters labeled as such; finish WS10 with network access widened or on the Mac before generating the sealed test split |
+| Public evidence has incompatible denominators and does not establish target-stream prevalence | Use source-backed case designs and explicitly assumed sensitivity profiles; obtain independent labels and practitioner validation before deployment claims |
 | Parallel agents editing the same files | WS1–WS3, WS7 add new files only; WS4 waits for the other branch to merge |
 
 ## Handoff: continue on the M4 Mac
