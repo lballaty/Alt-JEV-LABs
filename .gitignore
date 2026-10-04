@@ -10,3 +10,6 @@ data/raw/*
 !data/raw/.gitkeep
 .DS_Store
 .coverage
+
+# Claude Code subagent worktrees (full repo copies; never commit)
+.claude/worktrees/
