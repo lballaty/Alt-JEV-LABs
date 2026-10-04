@@ -33,7 +33,8 @@ from evaluation.scorecard import ScorecardConfigError, load_config
 from models.base import ModelUnavailable
 from evaluation.v2_data import STATE_RENDER_VERSION, DatasetIntegrityError, load_v2_dataset, to_decision_cases
 from evaluation.v2_report import build_report, write_report
-from evaluation.v2_runner import CandidateRun, CandidateSpec, collect_environment, fit_calibrated_arm, run_candidate
+from evaluation.v2_runner import (OPERATIONAL_KEYS, CandidateRun, CandidateSpec, collect_environment, fit_calibrated_arm,
+                                  run_candidate)
 
 KNOWN = ("lexical", "laya", "mps", "generative", "generative_finite")
 DEFAULT_V1_CONFIG = Path("configs/benchmark_config.yaml")
@@ -95,6 +96,26 @@ def build_specs(names: list[str], dataset_dir: Path, include_signal: bool,
     return specs
 
 
+def apply_candidate_info(specs: list[CandidateSpec], info: dict) -> None:
+    """Merge caller-supplied provenance and gate inputs into the specs, by candidate name.
+
+    ``info`` is ``{"laya": {"provenance": {...}, "operational": {...}}, ...}``. The caller (for example the
+    Mac session) is the only party that knows the real revision, precision and measured memory; nothing is
+    guessed. An unknown candidate name or operational key raises ``ValueError`` instead of being ignored.
+    """
+    by_name = {s.name: s for s in specs}
+    for name, entry in info.items():
+        if name not in by_name:
+            raise ValueError(f"--candidate-info names {name!r}, which is not in --models {sorted(by_name)}")
+        if set(entry) - {"provenance", "operational"}:
+            raise ValueError(f"--candidate-info[{name!r}] may only hold provenance and operational")
+        unknown = set(entry.get("operational", {})) - set(OPERATIONAL_KEYS)
+        if unknown:
+            raise ValueError(f"--candidate-info[{name!r}] has unknown operational keys {sorted(unknown)}")
+        by_name[name].provenance.update(entry.get("provenance", {}))
+        by_name[name].operational.update(entry.get("operational", {}))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data-dir", type=Path, default=Path("artifacts/cohort_v2"))
@@ -109,6 +130,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--bootstrap", type=int, default=2000)
     parser.add_argument("--purpose", choices=("plumbing_check", "measurement"), default="plumbing_check")
     parser.add_argument("--hide-event-signal", action="store_true", help="omit event.signal from the model input")
+    parser.add_argument("--candidate-info", type=Path, default=None,
+                        help="JSON {name: {provenance: {...}, operational: {...}}} with real revisions, precision, "
+                             "measured memory and attested offline/licence status")
     parser.add_argument("--chat-results", type=Path, default=None,
                         help="optional S9 results JSON (reported separately, never pooled)")
     parser.add_argument("--report", type=Path, default=Path("artifacts/v2_report.md"))
@@ -123,7 +147,9 @@ def main(argv: list[str] | None = None) -> int:
         cfg = load_config(args.config)
         dataset = load_v2_dataset(args.data_dir, splits=("val", "test"))      # verify before loading any model
         specs = build_specs(names, args.data_dir, include_signal, args.v1_config)
-    except (DatasetIntegrityError, ScorecardConfigError) as exc:
+        if args.candidate_info:
+            apply_candidate_info(specs, json.loads(args.candidate_info.read_text(encoding="utf-8")))
+    except (DatasetIntegrityError, ScorecardConfigError, ValueError, OSError) as exc:
         print(f"refusing to run: {exc}", file=sys.stderr)
         return 2
     chat = json.loads(args.chat_results.read_text(encoding="utf-8")) if args.chat_results else None

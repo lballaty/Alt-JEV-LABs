@@ -15,7 +15,7 @@ Owner: `claude-cloud-ws1-01`. Design sources: `docs/PRACTICAL_EVAL_V2.md` sectio
 | `evaluation/v2_report.py` | Markdown and JSON report with full provenance |
 | `evaluation/v2_cli.py` | `python -m evaluation.v2_cli` |
 | `configs/selection_scorecard.yaml` | Placeholder thresholds, weights and cost matrix (D13); `p95_ms_max: null` |
-| `tests/test_v2_*.py`, `tests/conftest.py`, `tests/v2_fixtures.py` | 113 new tests; stubs live in `tests/v2_fixtures.py` |
+| `tests/test_v2_*.py`, `tests/conftest.py`, `tests/v2_fixtures.py` | 114 new tests; stubs live in `tests/v2_fixtures.py` |
 
 ```bash
 uv run python -m data.generator_v2 --output artifacts/cohort_v2 --seed 42
@@ -105,11 +105,24 @@ The runner drives the unchanged adapters. `--models laya,mps,generative,generati
 * **Generative (prompt and finite):** options and question are in the prompt, so six types work in principle; the page-now number is a `generated_claim` (calibration N/A); finite mode quantizes to 101 values. WS8's served-endpoint adapter (D10) replaces local `mlx_lm` loading; pin temperature and seed.
 * **Contract additions to consider (edit `models/base.py`, WS8):** an optional abstain output (needed for cohort D and S5), an optional `provenance()` returning model id, revision and precision, and `v2_supported_tasks` on each adapter.
 
+## Running it on the Mac (not done yet)
+
+Per `docs/HANDOFF_MAC.md` (20 untimed calls, 100 timed calls, batch size 1). Real revisions, precision and the measured gate inputs come from the Mac session through `--candidate-info`; anything omitted stays "not recorded" or "not evaluated".
+
+```bash
+uv run python -m data.generator_v2 --output artifacts/cohort_v2 --seed 42
+uv run python -m evaluation.v2_cli --data-dir artifacts/cohort_v2 --models lexical,laya \
+  --v1-config <local config naming local checkpoints> --warmup 20 --iterations 100 --seed 42 \
+  --purpose measurement --candidate-info artifacts/candidate_info.json
+```
+
+`candidate_info.json` holds `{"laya": {"provenance": {"model_id": ..., "revision": ..., "precision": ..., "prompt_template": ..., "seed": ...}, "operational": {"offline_verified": true, "license_ok": true, "peak_memory_gb": ..., "baseline_other_gb": ..., "memory_pressure_normal": true, "swap_grew": false}}}`. The memory numbers must be sampled by the Mac session (method open, D11/D12). Set `hard_gates.p95_ms_max` in a copy of the scorecard config once the owner answers Q4; until then the p95 gate stays "not evaluated". `evaluation/v2_runner.py` imports `training.calibrate.fit_temperature` (read-only); if the Mac agent moves it while retargeting `training/*`, update that one import.
+
 ## Verified on this Linux host / not verified
 
 | Item | Status |
 | --- | --- |
-| 113 new tests pass; full suite 264 passed (151 existing + 113 new), v1 tests unchanged | Verified |
+| 114 new tests pass; full suite 265 passed (151 existing + 114 new), v1 tests unchanged | Verified |
 | Statement coverage of new modules (`--cov-branch`): `v2_data` 100%, `v2_report` 100%, `v2_runner` 100%, `scorecard` 99%, `v2_metrics` 99%, `v2_cli` 98% (the miss is the `__main__` guard) | Verified |
 | Metric, CI, N/A, unset-gate, memory-formula, tamper, provenance and citation behaviour, against hand-computed values and stubs | Verified |
 | Plumbing run of the lexical BM25 control on the generated cases (CLI, `--iterations` small) | Run only to prove the pipeline; its numbers are not recorded anywhere and are not evidence |

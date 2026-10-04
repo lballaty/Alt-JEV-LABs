@@ -273,6 +273,33 @@ def test_v1_adapter_specs_force_offline_and_report_load_failures(tmp_path, monke
     assert missing.model is None and missing.unavailable_reason.startswith("load error: FileNotFoundError")
 
 
+def test_candidate_info_merges_real_provenance_and_rejects_typos(v2_dir, tmp_path, capsys):
+    spec = r.CandidateSpec("lexical", "raw", StubKeyword(), {"model_id": "m"})
+    v2_cli.apply_candidate_info([spec], {"lexical": {"provenance": {"revision": "abc123"},
+                                                      "operational": {"peak_memory_gb": 12.5}}})
+    assert spec.provenance == {"model_id": "m", "revision": "abc123"} and spec.operational == {"peak_memory_gb": 12.5}
+    for bad, message in (({"nope": {}}, "not in --models"),
+                         ({"lexical": {"operational": {"peak_mem": 1}}}, "unknown operational keys"),
+                         ({"lexical": {"notes": {}}}, "may only hold")):
+        with pytest.raises(ValueError, match=message):
+            v2_cli.apply_candidate_info([spec], bad)
+    info = tmp_path / "info.json"
+    info.write_text(json.dumps({"lexical": {"provenance": {"revision": "rev-from-caller"},
+                                             "operational": {"offline_verified": True}}}))
+    code = v2_cli.main(["--data-dir", str(v2_dir), "--candidate-info", str(info), "--bootstrap", "20",
+                        "--report", str(tmp_path / "i.md"), "--raw", str(tmp_path / "i.json")])
+    report = json.loads((tmp_path / "i.json").read_text())
+    lex = next(c for c in report["candidates"] if c["key"] == "lexical/raw")
+    assert code == 0 and lex["provenance"]["revision"] == "rev-from-caller"
+    assert lex["operational_inputs"]["offline_verified"] is True
+    info.write_text(json.dumps({"ghost": {}}))
+    assert v2_cli.main(["--data-dir", str(v2_dir), "--candidate-info", str(info),
+                        "--report", str(tmp_path / "j.md"), "--raw", str(tmp_path / "j.json")]) == 2
+    assert "refusing to run" in capsys.readouterr().err
+    assert v2_cli.main(["--data-dir", str(v2_dir), "--candidate-info", str(tmp_path / "missing.json"),
+                        "--report", str(tmp_path / "k.md"), "--raw", str(tmp_path / "k.json")]) == 2
+
+
 def test_cli_hide_signal_and_chat_results(v2_dir, tmp_path):
     chat = tmp_path / "chat.json"
     chat.write_text(json.dumps({"dataset_kind": "synthetic", "rows": {}}))
