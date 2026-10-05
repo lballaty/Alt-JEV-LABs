@@ -1,6 +1,6 @@
 # Status review: intent, evidence, implications and open decisions
 
-Living review. Written 2026-10-05 by `claude-cloud-ws1-01` at the owner's request. It reviews the lab against the owner's intent and the companion ebook. Anything marked **suggestion** is not adopted until the owner confirms it (D31). Facts about Jev come from `docs/JEV_SOURCES.md`; pins and hashes are in `docs/references/jev_sources.json`.
+Living review. The structured plan derived from it is `docs/PLAN.md`. Written 2026-10-05 by `claude-cloud-ws1-01` at the owner's request. It reviews the lab against the owner's intent and the companion ebook. Anything marked **suggestion** is not adopted until the owner confirms it (D31). Facts about Jev come from `docs/JEV_SOURCES.md`; pins and hashes are in `docs/references/jev_sources.json`.
 
 ## 1. Intent (owner statement, D33)
 
@@ -71,7 +71,9 @@ Compared 2026-10-05: this repo's `README.md` and `docs/PROJECT_INTENT.md`, and t
 | Ebook focus | How to set up and use Jev or alternatives | Proposed outline: an evaluation method (Requirements, Evidence, Judgment) for choosing between them | **Main divergence**: no chapter on calling Jev, installing a local alternative or building the example |
 | Ebook and results | Not about results | Outline includes a comparative scorecard and a chapter reproducing the evaluation | Divergent |
 | Example code | Working triage example with code | Earlier companion plan: evaluation adapters and checklists; gateway location open | Resolved in location by D34 (starter repo); content still to be specified |
-| Plain English | Required | Not stated in the brief or outline | Gap |
+| Plain English | Required **for the ebook**, so readers without technical background reach real understanding (owner, 2026-10-05) | Not stated in the brief or outline | Gap |
+
+**The starter conflict, precisely:** the starter's own README and tracker plan a working example (Jev client, local alternative, policy layer, tests), matching D33. The ebook's chapter-to-companion map, written for the replaced `deterministic-edge` repo, assigns that companion mostly evaluation-method files (claim audit, decision contract, evidence plan, human acceptance, scripts reproducing the lab evaluation) and no example code. The starter's tracker says it will align with D33 "and approved ebook outline", so if the outline is approved as written it would pull the starter toward evaluation material. The owner's proposed four-part ebook shape (`docs/PLAN.md` section 4) resolves this once confirmed.
 
 The ebook outline and its method name are marked in the publishing workspace as proposals awaiting owner approval, so these are draft divergences, not approved decisions.
 
