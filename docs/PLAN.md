@@ -85,7 +85,7 @@ flowchart LR
 | B3 Draft results-interpretation and worked-example chapters | Not started | P1 report; example release |
 | B4 Release with pinned example-repository and lab versions | Not started | B3; publishing checks |
 
-## 4. Proposed ebook shape (owner's direction 2026-10-05; to confirm as D35)
+## 4. Proposed ebook shape (owner's direction 2026-10-05; to be recorded as a decision when confirmed)
 
 | Part | Content | Detail lives in |
 | --- | --- | --- |
@@ -111,7 +111,7 @@ Plain English throughout (D33): each technical term explained on first use; jarg
 | 2 | Latency budget, memory cap (Q4) | Scorecard |
 | 3 | Page-now threshold method | Fair scoring |
 | 4 | Which published Jev figures to cite (Q10) | Report |
-| 5 | Ebook shape (section 4, D35) | B1, example spec |
+| 5 | Ebook shape (section 4) | B1, example spec |
 | 6 | Example repository implementation owner | G3 |
 | 7 | Test the example's Jev path (key, spend) or mark it unverified | G3 |
 | 8 | Hosted Jev arm in P2 | P2 |

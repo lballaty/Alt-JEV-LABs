@@ -35,6 +35,7 @@ Libor requested takeover of prior calibration/planning work only where it does n
 4. **Decisions are the owner's.** An agent may propose in the tracker's open questions but may not record a decision as made unless the owner stated it. Record it as the next `D<n>` row with its date and source.
 5. **Start from current `main`.** Fetch before writing; stale checkouts caused wrong conclusions on 2026-10-04.
 6. **Edit a file another owner holds only through a PR** that says so, and update the tracker.
+7. **Private information stays out of this public repository (D35).** Nothing about the private repositories goes into this public repository: no repository names, URLs, file paths, commit hashes, unpublished titles or summaries of their content. This applies to files, commit messages, PR titles and descriptions, and comments. Refer to them only as "the ebook workspace" and "the example repository", at a high level. Mapping detail lives in the private repositories (their LAB-MAPPING files). Earlier leaks stay in history (owner chose not to rewrite it). Before every commit and PR, check the text for private names, paths and content.
 
 ## Acknowledgement
 

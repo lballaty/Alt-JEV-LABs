@@ -67,6 +67,8 @@ Q7 (real data) is decided optional (D26); do not ask for it.
 
 ## Rules that apply
 
+- **D35:** this repository is public. Never put private repository names, URLs, paths, commits or content in files, commit messages or PR text; say "the ebook workspace" or "the example repository".
+
 - **D32:** label every latency with its network path (on-device, local loopback, or remote) and, where a network is involved, measure the network delay separately when possible and report it next to the end-to-end time.
 
 - **D21:** merge to `main` yourself once tests pass, and update `docs/TRACKER.md` in the same PR. Owner can revoke.
