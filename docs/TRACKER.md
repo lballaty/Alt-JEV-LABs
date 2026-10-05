@@ -16,6 +16,7 @@ Plan documents:
 | `docs/DATASET_PLAN_V2.md` | `main` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
 | `docs/PROJECT_INTENT.md` | `main` (PR #17) | Reusable comparison framework, reference triage use case, implementation boundary |
+| `docs/STATUS_REVIEW.md` | `main` | Living review: intent (D33), evidence, implications, Jev cost estimate, ebook alignment, open decisions |
 | `docs/OWNERSHIP.md` | `main` | Who owns which files/workstreams; working rules incl. auto-merge (D21) |
 | `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
 | `docs/MANAGER_IMPROVEMENTS.md` | `main` | Proposed llamaCPPManager API/CLI (M1–M10) and UI (U1–U5) changes to support testing |
@@ -59,6 +60,7 @@ Plan documents:
 | D30 | 2026-10-05 | Source library for the Jev work: pins and hashes in `docs/references/jev_sources.json`, our-words facts in `docs/JEV_SOURCES.md`, including a recipe to re-verify each source later. No third-party text, code or prompts are copied into the repo (arXiv license unverified; the artifact repo has no license file). The cloud container is ephemeral, so durable records live in the repo | Libor's instruction, 2026-10-05 |
 | D31 | 2026-10-05 | **Phase 1 does not test Jev ourselves; Jev is represented by its published figures, including published latency.** Agents must not change plans without the owner's confirmation; agent ideas are recorded as suggestions only. Supersedes the 'in principle' hosted-arm wording of D29 for phase 1 | Libor's instruction, 2026-10-05 |
 | D32 | 2026-10-05 | Every latency we report states its network path: on-device (in-process), local loopback (for example a model served by llamaCPPManager on the same Mac), or remote over the internet (for example any hosted model). Where a network is involved, measure the network delay separately when possible and report it next to the end-to-end figure. Published third-party latencies are labeled with their network conditions as recorded in `docs/JEV_SOURCES.md`. Does not by itself approve a hosted Jev arm (D31 still applies) | Libor's instruction, 2026-10-05 |
+| D33 | 2026-10-05 | Intent restated by the owner: Alt-JEV-LABs tests alternatives to Jev and shows the results; in parallel, the ebook explains in plain English (not jargon) how to set up and use Jev or the alternatives in the selected use case, including potential implementations, with example code in the companion repository. The ebook is not about the results. Research stops here; the review is in `docs/STATUS_REVIEW.md` | Libor's statement, 2026-10-05 |
 
 ## Open decisions
 

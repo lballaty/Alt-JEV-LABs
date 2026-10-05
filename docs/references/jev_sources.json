@@ -109,7 +109,7 @@
       "url": "https://github.com/jyatesdotdev/jev-logtriage",
       "commit": "516087b26ed1142a24f91940c9a51def195522ca",
       "license": "MIT (LICENSE at pinned commit)",
-      "status": "read: README head. Independent, not an official TypeSafe project"
+      "status": "read in full (code, docs, tests) 2026-10-05"
     },
     {
       "id": "typesafe-docs-quickstart",
@@ -197,6 +197,148 @@
       "kind": "vendor docs",
       "url": "https://docs.typesafe.ai/models",
       "status": "NOT read; URL cited in the jev-benchmarking config"
+    },
+    {
+      "id": "typesafe-sdk-python",
+      "title": "Official TypeSafe Python SDK (v0.7.2)",
+      "kind": "github (official, primary)",
+      "url": "https://github.com/typesafe-ai/typesafe-sdk-python",
+      "commit": "f078f1e208a0d885154dc758344ae4fce77ac168",
+      "license": "MIT (copyright line left as a template)",
+      "status": "read: constants, schemas, errors, retry, README"
+    },
+    {
+      "id": "typesafe-sdk-js",
+      "title": "Official TypeSafe JavaScript SDK (v0.6.0)",
+      "kind": "github (official, primary)",
+      "url": "https://github.com/typesafe-ai/typesafe-sdk-js",
+      "commit": "66880ccded6cb642dc1809620c2b108c33730214",
+      "license": "MIT",
+      "status": "read: client, errors, retry, env"
+    },
+    {
+      "id": "typesafe-skills",
+      "title": "Official TypeSafe agent skill (question-writing and uncertainty guidance)",
+      "kind": "github (official, primary)",
+      "url": "https://github.com/typesafe-ai/skills",
+      "commit": "65a39f393687675ce170e6094757de20370365b9",
+      "license": "MIT",
+      "status": "read: skills/typesafe-ai/SKILL.md"
+    },
+    {
+      "id": "typesafe-openapi",
+      "title": "TypeSafe OpenAPI schema",
+      "kind": "vendor API schema",
+      "url": "https://api.typesafe.ai/openapi.json",
+      "status": "NOT fetched (blocked here); named in the Python SDK as the source of its generated schemas"
+    },
+    {
+      "id": "allebee-jevgrep",
+      "title": "jevgrep: semantic log search with one Noul per line, small benchmark incl. spoof lines",
+      "kind": "github (independent)",
+      "url": "https://github.com/allebee/jevgrep",
+      "commit_short": "5cebf4c",
+      "license": "MIT",
+      "status": "read: README (and key code for jevmlx/simple-jev endpoint) 2026-10-05; claims not reproduced"
+    },
+    {
+      "id": "gaurav-gosain-jev-sec-bench",
+      "title": "jev-sec-bench: prompt-injection and vulnerable-code evaluation of Jev",
+      "kind": "github (independent)",
+      "url": "https://github.com/Gaurav-Gosain/jev-sec-bench",
+      "commit_short": "fdb16b9",
+      "license": "MIT",
+      "status": "read: README (and key code for jevmlx/simple-jev endpoint) 2026-10-05; claims not reproduced"
+    },
+    {
+      "id": "riskaversetech-toolgate",
+      "title": "toolgate: tool-call firewall, static rules then Jev risk questions, fail to human",
+      "kind": "github (independent)",
+      "url": "https://github.com/RiskAverseTech/toolgate",
+      "commit_short": "31e8a2a",
+      "license": "MIT",
+      "status": "read: README (and key code for jevmlx/simple-jev endpoint) 2026-10-05; claims not reproduced"
+    },
+    {
+      "id": "robokrunch-jev-physical-ai",
+      "title": "jev-physical-ai: simulated fleet incident triage with a local ModernBERT comparison",
+      "kind": "github (independent)",
+      "url": "https://github.com/robokrunch/jev-physical-ai",
+      "commit_short": "310fd57",
+      "license": "MIT",
+      "status": "read: README (and key code for jevmlx/simple-jev endpoint) 2026-10-05; claims not reproduced"
+    },
+    {
+      "id": "bnsd55-jevmlx",
+      "title": "jevmlx: local Apple Silicon (MLX) logit scoring with a Jev-compatible /v1/systemone endpoint",
+      "kind": "github (independent)",
+      "url": "https://github.com/bnsd55/jevmlx",
+      "commit_short": "7e0d746",
+      "license": "MIT",
+      "status": "read: README (and key code for jevmlx/simple-jev endpoint) 2026-10-05; claims not reproduced"
+    },
+    {
+      "id": "featherless-simple-jev",
+      "title": "Simple Jev: local server scoring Jev question types from open-model logits, /v1/systemone alias",
+      "kind": "github (independent)",
+      "url": "https://github.com/featherless-ai/simple-jev",
+      "commit_short": "9c11582",
+      "license": "Apache-2.0",
+      "status": "read: README (and key code for jevmlx/simple-jev endpoint) 2026-10-05; claims not reproduced"
+    },
+    {
+      "id": "mizorewww-laya-mlx",
+      "title": "Laya-MLX: MLX runtime for Laya weights (our blueprint's Laya route)",
+      "kind": "github (alternative candidate)",
+      "url": "https://github.com/mizorewww/laya-mlx",
+      "commit_short": "ca5940a",
+      "license": "Apache-2.0",
+      "status": "read: README, key code 2026-10-05; numbers are the repo's own claims; nothing run"
+    },
+    {
+      "id": "nandhakishorm-laya",
+      "title": "Laya upstream: model, SDK and Jev-compatible server (laya-serve)",
+      "kind": "github (alternative candidate)",
+      "url": "https://github.com/NandhaKishorM/laya",
+      "commit_short": "8a6e132",
+      "license": "Apache-2.0",
+      "status": "read: README, key code 2026-10-05; numbers are the repo's own claims; nothing run"
+    },
+    {
+      "id": "wfzyx-von",
+      "title": "Von: ModernBERT-based typed decisions, SDK and server",
+      "kind": "github (alternative candidate)",
+      "url": "https://github.com/wfzyx/von",
+      "commit_short": "7d0ff64",
+      "license": "Apache-2.0",
+      "status": "read: README, key code 2026-10-05; numbers are the repo's own claims; nothing run"
+    },
+    {
+      "id": "knowledgator-gliclass",
+      "title": "GLiClass: zero-shot classification library and models",
+      "kind": "github (alternative candidate)",
+      "url": "https://github.com/Knowledgator/GLiClass",
+      "commit_short": "68132de",
+      "license": "Apache-2.0",
+      "status": "read: README, key code 2026-10-05; numbers are the repo's own claims; nothing run"
+    },
+    {
+      "id": "theoleecj-semif",
+      "title": "SemIf (formerly OpenJev): option-logit readout over frozen LLMs",
+      "kind": "github (alternative candidate)",
+      "url": "https://github.com/TheoLeeCJ/SemIf-OpenJev",
+      "commit_short": "23cf1f3",
+      "license": "MIT (weights keep upstream licenses)",
+      "status": "read: README, key code 2026-10-05; numbers are the repo's own claims; nothing run"
+    },
+    {
+      "id": "mapika-decider",
+      "title": "Decider: fine-tuned LLM decision models, SDK and Jev-compatible server",
+      "kind": "github (alternative candidate)",
+      "url": "https://github.com/Mapika/decider",
+      "commit_short": "4502408",
+      "license": "Apache-2.0",
+      "status": "read: README, key code 2026-10-05; numbers are the repo's own claims; nothing run"
     }
   ],
   "verification_recipe": {
