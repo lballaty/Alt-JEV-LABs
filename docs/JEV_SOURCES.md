@@ -33,6 +33,19 @@ These are what that study ran, not a decision about what we run. Confirm each on
 
 R-Judge, WAInjectBench (no general redistribution grant at the pinned trees) and AgentHarm (MIT plus an AI-safety-use restriction). The artifact does not mirror their text. We do not use them.
 
+### From the InfoQ release article (pasted by the owner 2026-10-05; secondary, original page not opened)
+
+Recorded in our own words. Each item is **reported**, not verified against TypeSafe's documentation.
+
+- **Interface:** a caller sends a state (string or structured data) plus typed questions; Jev answers all questions in one parallel pass with Choice, Score and Noul results, each with a probability distribution and a confidence value, so code can act above a threshold and escalate below it.
+- **Vendor figures:** input priced at USD 0.042 per million tokens, output free; 32,000-token context window; end-to-end latency quoted at 70-500 ms; trained with a method TypeSafe calls Reinforcement Learning for Calibrated Decisions.
+- **Independent measurements cited by the article:** a safety classifier 5-18x faster than the LLM it replaced (Vercel engineer); an email-classification test where Gemini was slightly more accurate but 10-20x more expensive, with Jev valued for returning a real probability; an analysis of 12,759 launch posts putting user-reported speedups at a median of 7x against a 193.6x headline, cost savings at a median of 30x, and latency at a median of 76 ms (upper quartile 270 ms). This agrees in direction with the `jev-aita` author's finding that the headline speed multiples were not reproduced.
+- **Documented weaknesses (the "jev-1.13 jaggedness" page):** unreliable counting, arithmetic and date comparison, and accuracy loss on large noisy state; keep maths in code. This corroborates our planned date, counting and long-input controls.
+- **Version pinning advice:** pin an explicit version such as `jev-1.13.0`, not the moving `jev-latest` or `jev-preview` aliases. `jev-ood-calibration` independently saw `jev-latest` fail on one gateway.
+- **A vendor "System One adapter"** is said to run existing models against the same schema when benchmarking. This could help comparability, but we have not seen its documentation; find and read it before relying on it.
+- **Developer comment worth keeping:** Jev cannot return an invalid type but can return a wrong valid value. Our harness already counts schema failures and wrong answers separately.
+- **Context:** TypeSafe AI is described as a San Francisco lab founded by Diogo Almeida, Erik Gafni and Sasha Sheng. Hosted by Vercel AI Gateway, Netlify and a LangChain integration, per the article.
+
 ### From the other GitHub sources (read at the pins in the manifest; all MIT unless noted)
 
 - **`scienthoon/jev-ood-calibration`** (independent, 2026-09-19, about USD 0.06 of calls): Jev reached through the Vercel AI Gateway as model id `typesafe-ai/jev` (the `typesafe-ai/jev-latest` id from the AI SDK docs returned "Model not found" there). On three public benchmarks accuracy was 86-94% with small calibration error (ECE 0.024-0.032), but those sets are probably in Jev's training data. On 900 rule-generated support tickets: queue choice 89.0%, "customer angry" 91.7%, and an organisation-specific priority rule only 44.7% with mean stated probability 0.74 (ECE 0.325, 4.4x its noise floor for the pooled set). The author later corrected the temperature-fit figures: Jev's probabilities are quantised to 0.01 and often use exact 0 or 1, so the result depends on how exact zeros are floored in log-loss. **Lesson for us:** a model can be fluent and well calibrated on familiar tasks and confidently wrong on a rule it cannot know; our held-out wrapper families and B' cases target the same risk. Record how exact 0/1 probabilities are floored in NLL.
@@ -47,5 +60,7 @@ R-Judge, WAInjectBench (no general redistribution grant at the pinned trees) and
 4. Anything changed upstream after the pinned commit is not evidence for the pinned claim; re-pin and re-read before updating a figure.
 
 ## Not read (still open)
+
+(The InfoQ article was read from owner-pasted text only.)
 
 arXiv 2609.37647 (37 datasets), the vendor announcement and docs (blocked here), the full `jev-aita` study and the rest of the READMEs and code of the three repositories above, the LiteLLM benchmark. Close these by owner-supplied PDFs/pastes, a widened network allowlist (`arxiv.org`, `typesafe.ai`), or the Mac agent.
