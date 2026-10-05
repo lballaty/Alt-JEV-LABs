@@ -135,6 +135,33 @@
       "url": "https://www.infoq.com/news/2026/10/typesafe-ai-jev-released/",
       "local_copy": "Text pasted by the project owner on 2026-10-05 (not committed; copyright). The original page was not opened (infoq.com is blocked in the cloud environment); the authenticity of the pasted text was not independently verified.",
       "status": "read (pasted text). Reports vendor claims, third-party measurements and developer comments; none verified against primary sources"
+    },
+    {
+      "id": "arxiv-2609.28940",
+      "title": "Calibrated Decision Models for Autonomous Penetration-Testing Harnesses: JEV and Laya as System One Decision Layers for LLM-Driven Pentest Agents",
+      "kind": "paper (preprint; single independent author)",
+      "url": "https://arxiv.org/abs/2609.28940",
+      "local_copy": "PDF supplied by the project owner (not committed; license not verified)",
+      "pdf_sha256": "29ce3919eb9d43f41c2a4091fd7c896462f00999449bd1cf4a90b5285873c10f",
+      "pages": 21,
+      "status": "read (key sections: primitives, case study, landscape, limitations). The case study is one run per condition and the author states it is not a controlled experiment"
+    },
+    {
+      "id": "arxiv-2610.01079",
+      "title": "Jev-IDS: A System One Model for Network Intrusion Detection in Label-Scarce and Zero-Day Scenarios",
+      "kind": "paper (preprint, cs.CR, submitted 2026-10-01)",
+      "url": "https://arxiv.org/abs/2610.01079",
+      "local_copy": "PDF supplied by the project owner (not committed; license not verified)",
+      "pdf_sha256": "0f12a08bb625de48e650170e95d6e630b56d9d091227b250a2de904668c129ad",
+      "pages": 12,
+      "status": "read (abstract, methodology, results, discussion). Abstract and body disagree on the comparison model and sample size; see docs/JEV_SOURCES.md"
+    },
+    {
+      "id": "jev-ids-artifact",
+      "title": "Jev-IDS artifact repository (as named in arXiv 2610.01079)",
+      "kind": "github",
+      "url": "https://github.com/jev-ids/jev-ids",
+      "status": "NOT read; name taken from the paper, not confirmed to exist"
     }
   ],
   "verification_recipe": {

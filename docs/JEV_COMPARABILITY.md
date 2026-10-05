@@ -89,3 +89,14 @@ Findings that bear on our tests (this paper's tasks are agent security, not aler
 Where our plan already matches: grouped splits, paired comparisons, label-free inputs, identical context, per-cohort results, raw-vs-calibrated arms, no deployment claims.
 
 New items for WS11 from this paper: confirmation partition or a documented reason not to split further, coverage-under-error-budget with an escalate band, AUROC/AP and Brier-vs-constant baseline, ECE bin sensitivity, option-name ablation, unsupported-not-truncated rule check in the runner.
+
+## 8. What arXiv 2609.28940 and 2610.01079 add
+
+Neither is strong evidence (a one-run case study and a preprint whose abstract and body disagree on the comparison model and sample size), but both sharpen our design:
+
+1. **Published latency for Jev varies widely** (vendor 70-500 ms; 236-276 ms p50 in one paper; 310-335 ms mean in another; user-reported median 76 ms). It depends on location, payload size and measurement method. We measure our own and never use published figures as thresholds.
+2. **Context caps.** The English Laya checkpoint is reported at 512 tokens. The runner must classify over-length inputs as unsupported (not truncate) and report coverage; check our case lengths against each candidate's cap before the Mac run.
+3. **Fail-open versus strict.** One paper counts no-output calls as benign. Keep our strict forms and report the lenient form separately only if needed.
+4. **Label-budget arm.** A few-shot (k examples per class) arm for generative candidates, next to Jev's no-training mode and Laya's trained heads, is a fair way to compare label needs. This is already planned as S7 and remains unbuilt.
+5. **Asymmetric failure.** A decision layer that suppresses real events can be worse than none. Keep must-page recall and B' escalation-kept as hard gates, and report disagreements with a baseline.
+6. **Data residency.** Jev is cloud-only; any hosted-arm use must respect the synthetic-data-only rule above.
