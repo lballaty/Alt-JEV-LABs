@@ -6,6 +6,8 @@ Intent reminder (`docs/PROJECT_INTENT.md`): we choose the best solution for a co
 
 Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/references/jev_sources.json`.
 
+> **Owner decision D31 (2026-10-05): phase 1 does not test Jev ourselves. Jev is represented by its published figures (including published latency).** Everything in sections 5-8 below that would change the plan (a hosted Jev arm, new test sets, new metrics, new partitions, measuring Jev latency) is a **suggestion only** and is not adopted unless the owner confirms it.
+
 ## 1. What "Jev" is
 
 - **Jev** (`jev-1.13.x`) is TypeSafe AI's hosted "System One" decision model, reportedly released 2026-09-15 (unverified, search summaries). It returns typed values instead of text: **Choice** (pick one of up to 255 options, with probabilities), **Score** (position on a 2-10 level rubric) and **Noul** (probability a yes/no statement is true). These are the same three primitives as our v1 harness.
@@ -36,12 +38,12 @@ Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/reference
 
 Published tests are mostly generic public benchmarks. Ours is domain-specific alert triage under a frozen rubric. Comparable numbers need the vendor's dataset list and splits, per-dataset templates, metric definitions (ECE bins, Brier weighting), comparator setup, model version, request settings and timing method. We hold **none** of these from a primary source.
 
-## 5. How we make the comparison valid instead
+## 5. Suggestions for a later phase (not adopted; owner confirmation required)
 
-- **Route B (primary): run Jev as a hosted arm on our own v2 cases.** Every candidate sees the same cases, context and contract. Comparability comes from our protocol, not theirs.
+- **Suggestion, route B: run Jev as a hosted arm on our own v2 cases (not in phase 1, per D31).** Every candidate sees the same cases, context and contract. Comparability comes from our protocol, not theirs.
 - **Route A (optional anchor): run alternatives on a few public datasets Jev's paper used, with its templates.** Only after the paper's protocol is read. A sanity check, not the goal.
 
-### Requirements for the hosted Jev arm (owner approval in principle, D29; details to confirm)
+### If a hosted Jev arm is ever approved, it would need (suggestion)
 
 - Mark it **hosted/remote** in every report; an explicit, labeled exception to the local-only rule (`AGENTS.md` rule 4).
 - Send **synthetic cases only**. Never real, de-identified or local-only-seed text (D26, D28).
@@ -53,7 +55,7 @@ Published tests are mostly generic public benchmarks. Ours is domain-specific al
 - **Pin an explicit model version** (for example `jev-1.13.0`); never the moving `jev-latest` or `jev-preview` aliases. Cost is low per the vendor (USD 0.042 per million input tokens, output free), so a full run on our synthetic cases should be cheap, but confirm pricing from the vendor page before the owner sets a spend limit.
 - Look for the vendor's **System One adapter** (said to run other models against the same schema); read its documentation before deciding how to normalise the other candidates.
 
-### Test-design changes this implies (not yet built)
+### Suggested test-design changes (not adopted; owner confirmation required)
 
 1. **Page-now threshold tuned on validation.** The WS4 scorecard currently assumes a fixed P >= 0.5. A circulated finding (paper summary, unverified) says binary probabilities rank well but sit badly against a fixed 0.5.
 2. **Negative-control sets:** date/interval reasoning (maintenance and change windows), counting (burst sizes) and long irrelevant input. These are vendor-listed weaknesses (unverified) and gaps in our cases.
@@ -88,13 +90,13 @@ Findings that bear on our tests (this paper's tasks are agent security, not aler
 
 Where our plan already matches: grouped splits, paired comparisons, label-free inputs, identical context, per-cohort results, raw-vs-calibrated arms, no deployment claims.
 
-New items for WS11 from this paper: confirmation partition or a documented reason not to split further, coverage-under-error-budget with an escalate band, AUROC/AP and Brier-vs-constant baseline, ECE bin sensitivity, option-name ablation, unsupported-not-truncated rule check in the runner.
+Suggestions from this paper (not adopted; owner confirmation required): confirmation partition or a documented reason not to split further, coverage-under-error-budget with an escalate band, AUROC/AP and Brier-vs-constant baseline, ECE bin sensitivity, option-name ablation, unsupported-not-truncated rule check in the runner.
 
-## 8. What arXiv 2609.28940 and 2610.01079 add
+## 8. What arXiv 2609.28940 and 2610.01079 add (observations and suggestions only)
 
 Neither is strong evidence (a one-run case study and a preprint whose abstract and body disagree on the comparison model and sample size), but both sharpen our design:
 
-1. **Published latency for Jev varies widely** (vendor 70-500 ms; 236-276 ms p50 in one paper; 310-335 ms mean in another; user-reported median 76 ms). It depends on location, payload size and measurement method. We measure our own and never use published figures as thresholds.
+1. **Published latency for Jev varies widely** (vendor 70-500 ms; 236-276 ms p50 in one paper; 310-335 ms mean in another; user-reported median 76 ms), depending on location, payload and method. Phase 1 uses published figures (D31); **which published figure, or range, to cite is an open question for the owner (Q10)**.
 2. **Context caps.** The English Laya checkpoint is reported at 512 tokens. The runner must classify over-length inputs as unsupported (not truncate) and report coverage; check our case lengths against each candidate's cap before the Mac run.
 3. **Fail-open versus strict.** One paper counts no-output calls as benign. Keep our strict forms and report the lenient form separately only if needed.
 4. **Label-budget arm.** A few-shot (k examples per class) arm for generative candidates, next to Jev's no-training mode and Laya's trained heads, is a fair way to compare label needs. This is already planned as S7 and remains unbuilt.
