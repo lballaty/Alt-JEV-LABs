@@ -80,7 +80,7 @@ flowchart LR
 
 | Work item | Status | Blocked by |
 | --- | --- | --- |
-| B1 Outline to the agreed shape (proposed, section 4) | Current outline diverges (STATUS_REVIEW 5c) | Owner confirms shape |
+| B1 Outline to the agreed shape (proposed, section 4) | Realigned in the ebook workspace to setup and use (2026-10-05); awaiting owner approval | Owner approves outline |
 | B2 Draft setup and test-design chapters | Not started | B1 |
 | B3 Draft results-interpretation and worked-example chapters | Not started | P1 report; example release |
 | B4 Release with pinned example-repository and lab versions | Not started | B3; publishing checks |
