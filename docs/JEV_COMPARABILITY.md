@@ -4,6 +4,8 @@ Status: **draft, 2026-10-04, `claude-cloud-ws1-01`. Most items below are UNVERIF
 
 Intent reminder (`docs/PROJECT_INTENT.md`): we choose the best solution for a concrete decision workflow (alert triage). We do not set out to reproduce a vendor's benchmark, and a favorable synthetic score is not evidence of operational readiness (D26).
 
+Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/references/jev_sources.json`.
+
 ## 1. What "Jev" is
 
 - **Jev** (`jev-1.13.x`) is TypeSafe AI's hosted "System One" decision model, reportedly released 2026-09-15 (unverified, search summaries). It returns typed values instead of text: **Choice** (pick one of up to 255 options, with probabilities), **Score** (position on a 2-10 level rubric) and **Noul** (probability a yes/no statement is true). These are the same three primitives as our v1 harness.
@@ -27,7 +29,7 @@ Intent reminder (`docs/PROJECT_INTENT.md`): we choose the best solution for a co
 1. "Jev scores 197/231 (85.28%) and 80/111 (72.07%) on JevBench" is **wrong as stated**. Those are **Open-Jev-27B-v1.1** numbers. The same table lists Open-Jev-2B at 150/231 (64.94%) and 9B at 179/231 (77.49%).
 2. The command `cd open-jev/benchmarks && python run_jevbench.py --model typesafe:jev-1.13.0 --tasks public_231 --audit-replay` does **not exist**: that repo has no `benchmarks/` directory, no `run_jevbench.py`, no `--audit-replay` and no `public_231`. The pinned benchmark commit `f8ce71361165846101d02ebc83ad44e47ae44fc3` is real but belongs to `fstandhartinger/jevbench`; open-jev provides `scripts/run_jevbench_suite.py` and `scripts/run_jevbench_hosted.py`. Its README says the 231 tasks are the public subset of 534 and no full-534 score is claimed.
 3. Latency, ECE and accuracy "targets" circulated for Jev, local SLMs and hosted LLMs are **unsourced** and partly conflict (independent tests reported ECE around 0.16, circulated figure 0.071). **Never use them as pass thresholds** (`AGENTS.md` rule 1).
-4. The endpoint, request JSON and size limits (255 options, 10 levels, 32k/64k tokens) are **unverified**. Read the vendor docs before writing an adapter (`AGENTS.md` rule 8).
+4. The endpoint `api.typesafe.ai/v1/systemone` and the size limits (255 options, 10 levels, 32k/64k tokens) are **unverified**. The independent study in `arXiv 2609.33401` reached Jev through OpenRouter's decisions endpoint with model `typesafe/jev-1.13` (see `docs/JEV_SOURCES.md`). Read the vendor docs before writing an adapter (`AGENTS.md` rule 8).
 
 ## 4. Why published numbers cannot be compared with ours
 
