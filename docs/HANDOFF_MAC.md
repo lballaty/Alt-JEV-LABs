@@ -58,6 +58,13 @@ Q7 (real data) is decided optional (D26); do not ask for it.
 3. **Run the v2 test split** through the WS4 runner for each available candidate. Seed fixed, batch size 1, 20 untimed calls then 100 timed calls (BLUEPRINT_V2 timing protocol). Record peak unified memory including the model and harness; the gate is min(cap, 128 GB - measured baseline - reserve); mark a run invalid if memory pressure leaves normal or swap grows.
 4. **Report** with full provenance and the synthetic-data banner (WS4 output). Update the tracker with measured results, clearly separated from anything unmeasured.
 
+## Findings for WS8 (2026-10-05, see `docs/STATUS_REVIEW.md` 5b)
+
+- Pin the Laya revision: `configs/benchmark_config.yaml` and `models/laya_runner.py` load `aac6fef/laya-mlx` with no revision.
+- If Von is used: set `--noul-decision raw` and record whether chains are on; its default Noul is not a probability.
+- If GLiClass is used: pass a `torch.device("mps")`, not a string, or it runs on CPU.
+- Jev-compatible local servers exist (upstream Laya, Von, Decider); they may simplify adapters. Provision weights through the model manager; never download during a run.
+
 ## Rules that apply
 
 - **D32:** label every latency with its network path (on-device, local loopback, or remote) and, where a network is involved, measure the network delay separately when possible and report it next to the end-to-end time.
