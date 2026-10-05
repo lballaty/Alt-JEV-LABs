@@ -339,14 +339,6 @@
       "commit_short": "4502408",
       "license": "Apache-2.0",
       "status": "read: README, key code 2026-10-05; numbers are the repo's own claims; nothing run"
-    },
-    {
-      "id": "searchingfool-alt-jev-starter",
-      "title": "Alt-JEV-starter: companion repository for the ebook's gateway example (D34)",
-      "kind": "github (project companion)",
-      "url": "https://github.com/SearchingFool/alt-jev-starter",
-      "commit": "73cc4f6130c221c8bfc474264c9a706a95bad069",
-      "status": "read: README and docs/TRACKER.md; no code yet"
     }
   ],
   "verification_recipe": {
