@@ -83,6 +83,22 @@ Preprint by three authors (UNIPAMPA). Uses NSL-KDD, an old benchmark the authors
 - **`jyatesdotdev/jev-logtriage`** (independent, not an official TypeSafe project): the same use case as ours. Collapses repeated log lines, asks Jev six questions in one call, and maps the answers in code to suppress / watch / review / notify / page; low confidence never acts automatically. Vendor docs URLs it links: `https://docs.typesafe.ai/introduction/quickstart`, `https://docs.typesafe.ai/introduction`, API keys at `https://console.typesafe.ai/settings/keys` (none opened).
 - **`fstandhartinger/jevbench`** (Benchmark Heaven's benchmark, not affiliated with TypeSafe): the upstream of the `f8ce713` commit pinned by Open-Jev, which exists. Its README ranks Jev 1.13.0 fourth of 91 ranked systems with a blended JevBench Score of 63.29, in a leaderboard led by small open models (Imajev-4B 67.37). That score blends several axes and is **not** an accuracy percentage; do not compare it with our metrics.
 
+## Published Jev latencies and whether they include the network
+
+Collected 2026-10-05 for later comparison (D31: phase 1 cites published figures; how to compare is decided after our own testing). **Jev is a cloud-only service, so every published Jev latency was measured over a network; none was measured on the same device or next to the server.** No source reports the client-to-server round trip separately, so the network share cannot be subtracted.
+
+| Source | Reported figure | Includes network? | Where the client was | Notes |
+| --- | --- | --- | --- | --- |
+| Vendor, via InfoQ | 70-500 ms "end to end" | Yes, by wording | Not stated | Vendor claim; method not published |
+| arXiv 2609.37647 | 0.36 s mean per request | **Yes, stated** ("client-side and includes network time") | One machine, location not stated (authors in Bonn, Germany) | 32 concurrent requests; rate-limited client |
+| arXiv 2610.01079 | 310-335 ms mean per successful request | **Yes, stated** ("network and provider-side overhead ... end-to-end request latency rather than intrinsic model execution time") | Not stated (authors in Brazil) | Mean, not median |
+| `dchristopoulos/jev-aita` | 0.39 s median per call | **Yes, stated**: one laptop in UTC+3 via OpenRouter; Jev "served from the US West Coast, so its times include a long network trip" | UTC+3, via OpenRouter | One evening |
+| arXiv 2609.28940 | 236-276 ms p50 | Not stated | Not stated | Cites the vendor docs [8], so probably a vendor figure, not a measurement |
+| Launch-post analysis, via InfoQ | 76 ms median, 270 ms upper quartile, user-reported | Unknown | Mixed | Self-reported by users; weakest source |
+| arXiv 2609.33401 | Not reported | - | - | - |
+
+Implications to keep in mind (observations, not plan changes): our local candidates run on-device with no network, while every Jev figure includes a network trip of unknown size, so a direct latency comparison favours local models by that unknown amount. Gateways (OpenRouter, Vercel) add a hop. Server location is reported only once (US West Coast, by `jev-aita`).
+
 ## How to verify each source later
 
 1. GitHub repos: use the recipe in `jev_sources.json` (`verification_recipe.github`). Compare the commit, confirm the license file, and re-read the passages cited above.
