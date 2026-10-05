@@ -12,7 +12,7 @@ Status: **current as of 2026-10-04, from `main`.** Purpose: tell every agent whi
 | **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace and companion coordination; planning docs (`docs/DATASET_PLAN_V2.md`, `docs/PRACTICAL_EVAL_V2.md`, `docs/TRACKER.md`), manager docs/WS9 handoff coordination, WS10 realism research. No implementation/code workstream claimed; `docs/BLUEPRINT_V2.md` and frozen rubric stay with Claude | Acknowledged rules; coordination edits to shared docs via PR |
 | **Project owner** (Libor Ballaty) | Every decision in the tracker's decisions log and open questions; final say on scope | — |
 
-Related repositories: the ebook's example code lives in `SearchingFool/Alt-JEV-starter` (D34); its book-facing coordination is `codex-ebook-companion-01`'s. Implementation ownership there is not yet assigned.
+Related repositories: the ebook text and its example code live in two private repositories (D34); their addresses are not recorded here, and each maps back to this repository. Book-facing coordination is `codex-ebook-companion-01`'s; implementation ownership of the example code is not yet assigned.
 
 ## Agent IDs
 

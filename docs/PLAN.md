@@ -2,13 +2,15 @@
 
 **Status: draft for owner approval (2026-10-05, `claude-cloud-ws1-01`).** This file organises decisions already made and maps them to the detailed trackers. It decides nothing new. Rows marked **proposed** are not adopted until the owner confirms (D31). Live status stays in the trackers linked below; this file holds the structure.
 
+> **Private companion repositories.** The ebook text and the ebook's example code live in two private repositories, called here **the ebook workspace** and **the example repository**. Their addresses are deliberately not recorded in this public repository (owner instruction, 2026-10-05). Each of them records the mapping back to this repository's decisions and documents.
+
 Detailed trackers:
 
 | Repository | Tracker | Holds |
 | --- | --- | --- |
 | `lballaty/Alt-JEV-LABs` (this repo) | `docs/TRACKER.md`, `docs/STATUS_REVIEW.md` | Testing alternatives to Jev and reporting results |
-| `SearchingFool/Alt-JEV-starter` | `docs/TRACKER.md` there | The ebook's example code (D34) |
-| `lballaty/searchingfool-publishing` (private) | `books/the-deterministic-edge/HANDOFF.md` | The ebook text |
+| The example repository (private) | Its own tracker | The ebook's example code (D34) |
+| The ebook workspace (private) | Its own handoff tracker | The ebook text |
 
 ## 1. Goals (owner intent, D33)
 
@@ -16,7 +18,7 @@ Detailed trackers:
 | --- | --- |
 | **G1. Test alternatives to Jev and show the results** | Local candidates measured on the M4 Max on the same synthetic alert-triage cases, with a report that labels data as synthetic, states each latency's network path (D32) and cites Jev's published figures as third-party (D31) |
 | **G2. Ebook in plain English** | A reader without technical background understands what to set up, how the testing works, how to read results, and how the example works; technical detail lives in the repos |
-| **G3. Working example** | A small alert-triage example in the starter repo that calls Jev or a local alternative and lets deterministic code decide the action, with tests and a tagged release the ebook can reference |
+| **G3. Working example** | A small alert-triage example in the example repository that calls Jev or a local alternative and lets deterministic code decide the action, with tests and a tagged release the ebook can reference |
 
 ## 2. How the pieces fit
 
@@ -27,7 +29,7 @@ flowchart LR
     M --> R[P1 Report<br/>synthetic, labelled]
     R -.optional.-> J[P2 Hosted Jev arm<br/>proposed]
   end
-  subgraph STARTER["Alt-JEV-starter (G3)"]
+  subgraph STARTER["Example repository (G3)"]
     S1[Example spec] --> S2[Build + test] --> S3[Tagged release]
   end
   subgraph BOOK["Ebook (G2)"]
@@ -62,7 +64,7 @@ flowchart LR
 | Optional | Realism research | WS10 | `codex-ebook-companion-01` | In progress | Network access |
 | Optional | Real-data tooling | WS6 | - | Not started (D26: optional) | - |
 
-### G3: starter example (`SearchingFool/Alt-JEV-starter`)
+### G3: example code (the example repository)
 
 | Work item | Status | Blocked by |
 | --- | --- | --- |
@@ -80,25 +82,25 @@ flowchart LR
 | --- | --- | --- |
 | B1 Outline to the agreed shape (proposed, section 4) | Current outline diverges (STATUS_REVIEW 5c) | Owner confirms shape |
 | B2 Draft setup and test-design chapters | Not started | B1 |
-| B3 Draft results-interpretation and worked-example chapters | Not started | P1 report; starter release |
-| B4 Release with pinned starter and lab versions | Not started | B3; publishing checks |
+| B3 Draft results-interpretation and worked-example chapters | Not started | P1 report; example release |
+| B4 Release with pinned example-repository and lab versions | Not started | B3; publishing checks |
 
 ## 4. Proposed ebook shape (owner's direction 2026-10-05; to confirm as D35)
 
 | Part | Content | Detail lives in |
 | --- | --- | --- |
-| Setup | Enough plain-English explanation to understand what you install and why | Starter repo |
+| Setup | Enough plain-English explanation to understand what you install and why | Example repository |
 | Test setup | What is tested, why it is fair, that the data is synthetic | Alt-JEV-LABs |
 | Reading results | How to interpret the numbers and their limits | Alt-JEV-LABs reports |
-| Worked example | The sample alert-triage implementation, step by step | Starter repo |
+| Worked example | The sample alert-triage implementation, step by step | Example repository |
 
 Plain English throughout (D33): each technical term explained on first use; jargon stays in the repos.
 
 ## 5. Critical path
 
-1. Owner answers Q1-Q4, Q8 and the threshold question, confirms the ebook shape, and assigns the starter's implementation owner.
-2. In parallel: Mac agent does WS8 and the run; starter example is specified and built; ebook drafts setup and test-design chapters.
-3. Report (P1) and starter release feed the results and worked-example chapters.
+1. Owner answers Q1-Q4, Q8 and the threshold question, confirms the ebook shape, and assigns the example repository's implementation owner.
+2. In parallel: Mac agent does WS8 and the run; the example is specified and built; ebook drafts setup and test-design chapters.
+3. Report (P1) and example release feed the results and worked-example chapters.
 4. Optional P2 hosted Jev arm if approved.
 
 ## 6. Open owner decisions (single list)
@@ -109,9 +111,9 @@ Plain English throughout (D33): each technical term explained on first use; jarg
 | 2 | Latency budget, memory cap (Q4) | Scorecard |
 | 3 | Page-now threshold method | Fair scoring |
 | 4 | Which published Jev figures to cite (Q10) | Report |
-| 5 | Ebook shape (section 4, D35) | B1, starter spec |
-| 6 | Starter implementation owner | G3 |
-| 7 | Test the starter's Jev path (key, spend) or mark it unverified | G3 |
+| 5 | Ebook shape (section 4, D35) | B1, example spec |
+| 6 | Example repository implementation owner | G3 |
+| 7 | Test the example's Jev path (key, spend) or mark it unverified | G3 |
 | 8 | Hosted Jev arm in P2 | P2 |
 | 9 | `AGENTS.md` rule 6 edit | Agent instructions |
 | 10 | Q11, Zenodo responses clause | Only if used |
