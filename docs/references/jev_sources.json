@@ -37,8 +37,9 @@
       "kind": "github",
       "url": "https://github.com/fstandhartinger/jevbench",
       "commit": "f8ce71361165846101d02ebc83ad44e47ae44fc3",
-      "license": "unknown",
-      "status": "NOT read; commit named in open-jev scripts"
+      "license": "MIT (LICENSE at HEAD)",
+      "status": "read: README head. Pinned commit f8ce713 exists in the repo. Benchmark Heaven's own benchmark, not affiliated with TypeSafe",
+      "head_seen": "bb05a335bc809e61b20c0f745d25499a82b326fc"
     },
     {
       "id": "dchristopoulos-jev-aita",
@@ -85,8 +86,52 @@
       "id": "typesafe-docs",
       "title": "TypeSafe documentation / API reference",
       "kind": "vendor docs",
-      "url": "https://typesafe.ai/",
-      "status": "NOT read; no verified docs URL"
+      "url": "https://docs.typesafe.ai/introduction",
+      "status": "NOT read; superseded by the typesafe-docs-* entries"
+    },
+    {
+      "id": "scienthoon-jev-ood-calibration",
+      "title": "Independent Jev calibration study (3 public benchmarks + 900 rule-generated support tickets)",
+      "kind": "github",
+      "url": "https://github.com/scienthoon/jev-ood-calibration",
+      "commit": "914d87ab16517f14e833cff63d73b51235b14bd6",
+      "license": "MIT (LICENSE at pinned commit)",
+      "status": "read: README results and correction note"
+    },
+    {
+      "id": "jyatesdotdev-jev-logtriage",
+      "title": "jev-logtriage: Jev log batch triage with code-owned thresholds",
+      "kind": "github",
+      "url": "https://github.com/jyatesdotdev/jev-logtriage",
+      "commit": "516087b26ed1142a24f91940c9a51def195522ca",
+      "license": "MIT (LICENSE at pinned commit)",
+      "status": "read: README head. Independent, not an official TypeSafe project"
+    },
+    {
+      "id": "typesafe-docs-quickstart",
+      "title": "TypeSafe docs: quickstart",
+      "kind": "vendor docs",
+      "url": "https://docs.typesafe.ai/introduction/quickstart",
+      "status": "NOT read (typesafe.ai blocked here); URL taken from the jev-logtriage README"
+    },
+    {
+      "id": "typesafe-docs-introduction",
+      "title": "TypeSafe docs: introduction",
+      "kind": "vendor docs",
+      "url": "https://docs.typesafe.ai/introduction",
+      "status": "NOT read; URL taken from the jev-logtriage README"
+    },
+    {
+      "id": "typesafe-console-keys",
+      "title": "TypeSafe API key console",
+      "kind": "vendor console",
+      "url": "https://console.typesafe.ai/settings/keys",
+      "status": "NOT visited; URL taken from the jev-logtriage README. Needed only if the owner approves the hosted arm"
     }
-  ]
+  ],
+  "verification_recipe": {
+    "github": "git clone --depth 1 <url>; git fetch --depth 1 origin <commit>; git cat-file -t <commit> must print 'commit'; read LICENSE at that commit before reuse.",
+    "arxiv_pdf": "sha256sum the PDF and compare pdf_sha256; confirm title and arXiv id on page 1.",
+    "vendor_pages": "Open each URL in a browser; record date, page title, and any model version string; none are verified yet."
+  }
 }
