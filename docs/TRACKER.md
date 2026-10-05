@@ -16,6 +16,7 @@ Plan documents:
 | `docs/DATASET_PLAN_V2.md` | `main` | Seed sources, license review, cohorts, split and leakage rules, workstreams |
 | `docs/PRACTICAL_EVAL_V2.md` | `main` | Selection-oriented suites S1–S9, event+context format, chat module, scorecard |
 | `docs/PROJECT_INTENT.md` | `main` (PR #17) | Reusable comparison framework, reference triage use case, implementation boundary |
+| `docs/PLAN.md` | `main` | Top-level plan (draft for owner approval): goals G1-G3, phases, work items mapped to trackers in all three repos, critical path, single list of open decisions |
 | `docs/STATUS_REVIEW.md` | `main` | Living review: intent (D33), evidence, implications, Jev cost estimate, ebook alignment, open decisions |
 | `docs/OWNERSHIP.md` | `main` | Who owns which files/workstreams; working rules incl. auto-merge (D21) |
 | `docs/MODEL_MANAGER_INTEGRATION.md` | `main` | Boundary with llamaCPPManager (arionrepo/llamacppmanager @ b7d27f9): preflight, served generative adapter, encoder manifest |
