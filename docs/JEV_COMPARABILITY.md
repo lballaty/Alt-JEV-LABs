@@ -22,7 +22,7 @@ Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/reference
 | `dchristopoulos/jev-aita` @ `35bc17e` README | Independent study: Jev vs Sonnet 5, GPT-5 nano and local models on 770 AITA posts; Brier, latency, cost; pins `jev-1.13-20260917`; open code | **Verified (read, README head only)** |
 | `AbdelStark/awesome-typesafe-jev` @ `af429b4` | Index of ecosystem projects, incl. `scienthoon/jev-ood-calibration` and `jyatesdotdev/jev-logtriage` | **Verified for the listing text only.** The linked studies themselves were not read |
 | arXiv 2609.33401 "Evaluating System One Models for Agent Security Decisions" (Y. Liu, TraceStone/NTU; preprint, 27 pages) | Independent study of Jev 1.13 (hosted), Laya, Decider, Nimble vs LLM judges and specialist classifiers on R-Judge, AgentHarm, WAInjectBench | **Verified (full text read from the PDF supplied by the owner, 2026-10-05).** Not peer reviewed; states OpenAI Codex assisted with design and code. Artifact repo named: `github.com/yxsec/system-one-security-eval` (not yet read) |
-| arXiv 2609.37647 "Evaluating and Benchmarking the System One Model Jev" (37 public datasets) | Third-party paper per its listing | **Unverified.** Only a search summary; not read |
+| arXiv 2609.37647 "Evaluating and Benchmarking the System One Model Jev" (37 public datasets) | Independent academic evaluation (Bonn / Lamarr / Fraunhofer IAIS), code and responses released | **Verified (read from owner-supplied PDF and its code repo, 2026-10-05).** See `docs/JEV_SOURCES.md` |
 | Vendor docs (known failure modes, calibration guidance, API contract) | TypeSafe documentation, probably `https://docs.typesafe.ai/introduction` | **Unverified.** URL seen in a third-party README; not opened. Only relayed by secondary articles |
 | InfoQ release article | News piece reporting vendor figures, third-party measurements and developer comments | **Read from owner-pasted text only; unverified.** Corroborates the 32k context window, version pinning, and the documented weaknesses |
 | LiteLLM `jev_classifier.py` | LiteLLM router integration | Path exists (**verified**). The published router benchmark figures were **not found** in a `cookbook/benchmarks/jev-benchmark` directory and are unverified |
@@ -102,3 +102,22 @@ Neither is strong evidence (a one-run case study and a preprint whose abstract a
 4. **Label-budget arm.** A few-shot (k examples per class) arm for generative candidates, next to Jev's no-training mode and Laya's trained heads, is a fair way to compare label needs. This is already planned as S7 and remains unbuilt.
 5. **Asymmetric failure.** A decision layer that suppresses real events can be worse than none. Keep must-page recall and B' escalation-kept as hard gates, and report disagreements with a baseline.
 6. **Data residency.** Jev is cloud-only; any hosted-arm use must respect the synthetic-data-only rule above.
+
+## 9. What arXiv 2609.37647 settles (observations; suggestions need owner confirmation per D31)
+
+Corrections to circulated claims, now checked against the paper:
+
+- Banking77: **79.7%** (circulated "74-77%"; the pentest paper quoted 0.870, both unsupported by this source).
+- AG News: **88.5%** (circulated "ceiling around 86%"; pentest paper 0.910).
+- ECE: pooled Choice ECE **0.028**; mean over 33 datasets **0.074**; per-dataset values range up to 0.279 (Emotion). The circulated "median 0.071" is close to the per-dataset mean, not a median; the pentest paper's 0.246 and blog figures of about 0.16 come from other task sets.
+- Published latency in this study: **0.36 s mean per request, client-side, 32 concurrent, including network**. Add this to the Q10 candidates.
+
+Observations relevant to phase 1 (published figures only):
+
+1. Published Jev numbers are for general public benchmarks, not alert triage, and some may be inflated by training exposure (the authors' own caution). Any report citing them should say so.
+2. The paper's binary-threshold finding (0.5 often a poor operating point; tuned thresholds help) and its multi-label over-prediction finding are the published facts most relevant to our page-now (Noul-like) question.
+
+Suggestions (not adopted):
+
+- If a later phase compares other candidates with Jev, the paper's method (identical requests; options as single-token codes; exact option probabilities from one forward pass; Jev-style confidence formula) is a ready, published way to make generative candidates comparable without text generation. The MIT-licensed harness could be studied for this.
+- Do not download or use the Zenodo Jev responses until the owner decides whether their "no competing product" clause affects this project.
