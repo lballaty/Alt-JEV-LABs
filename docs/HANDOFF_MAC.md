@@ -58,6 +58,10 @@ Q7 (real data) is decided optional (D26); do not ask for it.
 3. **Run the v2 test split** through the WS4 runner for each available candidate. Seed fixed, batch size 1, 20 untimed calls then 100 timed calls (BLUEPRINT_V2 timing protocol). Record peak unified memory including the model and harness; the gate is min(cap, 128 GB - measured baseline - reserve); mark a run invalid if memory pressure leaves normal or swap grows.
 4. **Report** with full provenance and the synthetic-data banner (WS4 output). Update the tracker with measured results, clearly separated from anything unmeasured.
 
+## Test scenarios (D36) — read before WS8
+
+`docs/TEST_SCENARIOS.md` defines S0 (alternatives on public datasets with the 37-dataset paper's templates, compared with its published Jev results), S1 (the primary result: our alert-triage cases asked through one canonical Jev-shaped request) and variations. For WS8 this means: adapters should accept the canonical S1 request (state plus typed questions with described criteria; a 4-level priority Score), and generative candidates should use the option-probability readout (one forward pass, no text generation) as the baseline, with JSON generation kept only as a variation. `claude-cloud-ws1-01` builds the S1 request builder and metrics; coordinate through the tracker (WS12) before changing shared interfaces. S0 needs a one-time dataset download on the Mac as a preparation step (never during a timed run, never committed).
+
 ## Findings for WS8 (2026-10-05, see `docs/STATUS_REVIEW.md` 5b)
 
 - Pin the Laya revision: `configs/benchmark_config.yaml` and `models/laya_runner.py` load `aac6fef/laya-mlx` with no revision.

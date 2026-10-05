@@ -118,6 +118,10 @@ The outline is marked as a proposal awaiting owner approval, so these are draft 
 | 9 | Q11: Zenodo Jev responses' non-compete clause | Only if those responses are ever used |
 | 10 | Add Decider to the candidate matrix; mark SemIf as Choice-only (suggestions, 5b) | Candidate list for Q3 |
 
+## 7a. Test scenarios (D36)
+
+Adopted 2026-10-05: S0 replication anchor, S1 primary baseline on our task, variations as follow-on (`docs/TEST_SCENARIOS.md`). This answers "how to align with how Jev was tested" (section 4 and `docs/JEV_COMPARABILITY.md`) while keeping our variations for expanded testing.
+
 ## 8. Research status
 
 Complete for now (owner instruction, 2026-10-05). All three read-only research tasks reported: official SDKs (section 3 item 8), alert-triage examples (5a), alternative models (5b). Remaining unread: TypeSafe's docs site and customer terms (blocked here), the Zenodo responses (not needed; Q11).

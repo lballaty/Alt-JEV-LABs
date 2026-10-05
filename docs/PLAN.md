@@ -55,7 +55,8 @@ flowchart LR
 | P1 Mac run | Choose candidates and storage | Q1-Q3, Q8 | Owner | Open | Owner |
 | P1 | Latency budget, memory cap | Q4, D12 | Owner | Open | Owner |
 | P1 | Page-now threshold: fixed 0.5 or tuned on validation | STATUS_REVIEW s7 | Owner | **Proposed** | Owner |
-| P1 | Adapters retargeted to six routes and P1-P4; pin Laya revision; set Von/GLiClass options | WS8 | Mac agent (not yet registered) | Not started | Q1-Q3, Q8 |
+| P1 | Test scenarios: S1 request builder, scenario files, metrics; then S0 (D36, `docs/TEST_SCENARIOS.md`) | WS12 | `claude-cloud-ws1-01` (+ Mac agent for S0 runs) | Designed; not started | S0 subset confirmation |
+| P1 | Adapters accept the canonical S1 request and retargeted to six routes and P1-P4; pin Laya revision; set Von/GLiClass options | WS8 | Mac agent (not yet registered) | Not started | Q1-Q3, Q8 |
 | P1 | Model manager changes applied on the Mac | WS9 | `codex-ebook-companion-01` coordinates | Blocked on Mac | Mac |
 | P1 | Network-path field and loopback timing in the runner | D32 | `claude-cloud-ws1-01` | Not built | Owner go-ahead |
 | P1 | Run candidates on the test split | HANDOFF_MAC | Mac agent | Not started | WS8, Q4 |
@@ -109,7 +110,7 @@ Plain English throughout (D33): each technical term explained on first use; jarg
 | --- | --- | --- |
 | 1 | Candidates and storage (Q1-Q3, Q8) | WS8, run |
 | 2 | Latency budget, memory cap (Q4) | Scorecard |
-| 3 | Page-now threshold method | Fair scoring |
+| 3 | Page-now threshold method (S1 uses fixed 0.5 as published; V-threshold tunes it) | Fair scoring |
 | 4 | Which published Jev figures to cite (Q10) | Report |
 | 5 | Ebook shape (section 4) | B1, example spec |
 | 6 | Example repository implementation owner | G3 |
@@ -117,3 +118,4 @@ Plain English throughout (D33): each technical term explained on first use; jarg
 | 8 | Hosted Jev arm in P2 | P2 |
 | 9 | `AGENTS.md` rule 6 edit | Agent instructions |
 | 10 | Q11, Zenodo responses clause | Only if used |
+| 11 | S0 dataset subset (`docs/TEST_SCENARIOS.md` section 2) | S0 |
