@@ -60,6 +60,8 @@ Q7 (real data) is decided optional (D26); do not ask for it.
 
 ## Rules that apply
 
+- **D32:** label every latency with its network path (on-device, local loopback, or remote) and, where a network is involved, measure the network delay separately when possible and report it next to the end-to-end time.
+
 - **D21:** merge to `main` yourself once tests pass, and update `docs/TRACKER.md` in the same PR. Owner can revoke.
 - Never commit weights, secrets, local-path manifests, vendor-licensed seed text, or generated datasets built from local-only seeds.
 - Never edit the frozen rubric. Never claim a result that was not run. No model output may authorize an action (`AGENTS.md` rule 5).
