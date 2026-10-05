@@ -54,10 +54,26 @@ Token estimate: about 1,000 tokens per case (no Jev tokenizer available; the 37-
 Owned by `codex-ebook-companion-01`. Findings, for the owner and that agent:
 
 1. **The proposed outline is mainly about evaluation method, not setup.** It proposes a "Requirements-Evidence-Judgment" method across ten chapters (decision contract, evidence, judgment, reproduction, extension, pilot). The owner's stated intent (D33) is a plain-English guide to **setting up and using Jev or the alternatives** in the triage example, with code. These overlap but differ in emphasis; the outline has no chapter on calling Jev or running a local alternative. **Suggestion:** owner to confirm which emphasis governs before chapters are drafted.
-2. **The companion repository does not exist yet.** The plan names `SearchingFool/deterministic-edge`; creation is pending. The example code (a triage service that calls Jev or a local model and applies deterministic rules) is not built anywhere; the brief calls this runtime `edge-triage-gateway` and leaves its location open. This repo does not build it (`docs/PROJECT_INTENT.md`).
+2. **The companion repository now exists: `SearchingFool/Alt-JEV-starter` (D34).** Read at `73cc4f6` (2026-10-05): a README and a tracker owned by `codex-ebook-companion-01`, whose stated purpose matches D33 ("plain-English setup and use of Jev or local alternatives in an operational-alert-triage example"). It holds no code yet; the Jev client, local alternative setup, deterministic policy boundary, worked example and tests are all "not built". This lab does not build it (`docs/PROJECT_INTENT.md`). Its tracker plans to "align scope with D33 and approved ebook outline", but the outline diverges from D33 (section 5c).
 3. **What this lab can supply to the ebook:** the decision contract (rubric 2.4.0), synthetic example cases, the evaluation method and harness, verified facts about Jev's API (official SDKs), and, once measured, versioned results with limits.
 4. **What the ebook still needs that nobody owns:** plain-English setup code for (a) calling Jev with the official SDK, (b) running a local alternative on a Mac, (c) the deterministic policy layer that decides actions, in one small runnable example. Section 5a shows a plausible shape: one client, swappable endpoint, gate table in code.
 5. **The ebook tracker lists "exact JEV comparison source unverified".** That is now resolved for API facts by the official SDKs in `docs/JEV_SOURCES.md`.
+
+## 5c. Written intent compared with the owner's statement (D33)
+
+Compared 2026-10-05: this repo's `README.md` and `docs/PROJECT_INTENT.md`, and the ebook's brief, outline and companion plan in the private publishing workspace (read only).
+
+| Item | Owner's intent (D33) | What is written | Divergence |
+| --- | --- | --- | --- |
+| Lab purpose | Test alternatives to Jev and show the results | A general framework for comparing solutions to a decision workflow, intended for several use cases; Jev named only in the repo name | Jev not stated as the reference (candidate matrix lacked it until D29/D31); broader scope (multi-use-case framework, proposed gateway product, chat module, real-data guidance) |
+| Use case | Alert triage | Alert triage | None |
+| Results against Jev | Shown | Phase 1 shows Jev only through published figures (D31) | Accuracy on our task cannot be compared without a hosted Jev run (section 4) |
+| Ebook focus | How to set up and use Jev or alternatives | Proposed outline: an evaluation method (Requirements, Evidence, Judgment) for choosing between them | **Main divergence**: no chapter on calling Jev, installing a local alternative or building the example |
+| Ebook and results | Not about results | Outline includes a comparative scorecard and a chapter reproducing the evaluation | Divergent |
+| Example code | Working triage example with code | Earlier companion plan: evaluation adapters and checklists; gateway location open | Resolved in location by D34 (starter repo); content still to be specified |
+| Plain English | Required | Not stated in the brief or outline | Gap |
+
+The ebook outline and its method name are marked in the publishing workspace as proposals awaiting owner approval, so these are draft divergences, not approved decisions.
 
 ## 5a. What the alert-triage examples add (from `docs/JEV_SOURCES.md`)
 
@@ -90,8 +106,8 @@ Owned by `codex-ebook-companion-01`. Findings, for the owner and that agent:
 | 3 | Page-now threshold: fixed 0.5 or tuned on validation (suggestion) | Fairness to probability models |
 | 4 | Q10: which published Jev figures to cite | Phase 1 reporting |
 | 5 | Phase 2 hosted Jev arm: yes or no (section 4) | Only route to an accuracy comparison on our task |
-| 6 | Ebook emphasis: setup guide (D33) versus evaluation method (current outline) | Before chapter drafting |
-| 7 | Who builds the ebook's example code, and where (companion repo) | Unowned today |
+| 6 | Ebook emphasis: setup guide (D33) versus evaluation method (current outline); see 5c | Before chapter drafting; the starter's scope follows it |
+| 7 | Who writes the code in `SearchingFool/Alt-JEV-starter` (location decided, D34) | No agent holds an implementation workstream there |
 | 8 | Edit `AGENTS.md` rule 6 to match D21 | Agent instructions conflict |
 | 9 | Q11: Zenodo Jev responses' non-compete clause | Only if those responses are ever used |
 | 10 | Add Decider to the candidate matrix; mark SemIf as Choice-only (suggestions, 5b) | Candidate list for Q3 |

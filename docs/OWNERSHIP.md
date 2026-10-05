@@ -12,6 +12,8 @@ Status: **current as of 2026-10-04, from `main`.** Purpose: tell every agent whi
 | **codex-ebook-companion-01** (this ebook/companion session) | The Deterministic Edge publishing workspace and companion coordination; planning docs (`docs/DATASET_PLAN_V2.md`, `docs/PRACTICAL_EVAL_V2.md`, `docs/TRACKER.md`), manager docs/WS9 handoff coordination, WS10 realism research. No implementation/code workstream claimed; `docs/BLUEPRINT_V2.md` and frozen rubric stay with Claude | Acknowledged rules; coordination edits to shared docs via PR |
 | **Project owner** (Libor Ballaty) | Every decision in the tracker's decisions log and open questions; final say on scope | — |
 
+Related repositories: the ebook's example code lives in `SearchingFool/Alt-JEV-starter` (D34); its book-facing coordination is `codex-ebook-companion-01`'s. Implementation ownership there is not yet assigned.
+
 ## Agent IDs
 
 Use your ID in tracker Owner cells, commit trailers, PR bodies and the acknowledgement table, so any agent can tell who did what from GitHub alone.
