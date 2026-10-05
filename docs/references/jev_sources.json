@@ -127,6 +127,14 @@
       "kind": "vendor console",
       "url": "https://console.typesafe.ai/settings/keys",
       "status": "NOT visited; URL taken from the jev-logtriage README. Needed only if the owner approves the hosted arm"
+    },
+    {
+      "id": "infoq-typesafe-jev-release",
+      "title": "TypeSafe AI Releases Jev: a Decision-Only Model That Returns Typed Probabilities Instead of Text (InfoQ news)",
+      "kind": "news article (secondary)",
+      "url": "https://www.infoq.com/news/2026/10/typesafe-ai-jev-released/",
+      "local_copy": "Text pasted by the project owner on 2026-10-05 (not committed; copyright). The original page was not opened (infoq.com is blocked in the cloud environment); the authenticity of the pasted text was not independently verified.",
+      "status": "read (pasted text). Reports vendor claims, third-party measurements and developer comments; none verified against primary sources"
     }
   ],
   "verification_recipe": {

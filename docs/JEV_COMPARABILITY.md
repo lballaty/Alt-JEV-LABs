@@ -22,6 +22,7 @@ Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/reference
 | arXiv 2609.33401 "Evaluating System One Models for Agent Security Decisions" (Y. Liu, TraceStone/NTU; preprint, 27 pages) | Independent study of Jev 1.13 (hosted), Laya, Decider, Nimble vs LLM judges and specialist classifiers on R-Judge, AgentHarm, WAInjectBench | **Verified (full text read from the PDF supplied by the owner, 2026-10-05).** Not peer reviewed; states OpenAI Codex assisted with design and code. Artifact repo named: `github.com/yxsec/system-one-security-eval` (not yet read) |
 | arXiv 2609.37647 "Evaluating and Benchmarking the System One Model Jev" (37 public datasets) | Third-party paper per its listing | **Unverified.** Only a search summary; not read |
 | Vendor docs (known failure modes, calibration guidance, API contract) | TypeSafe documentation, probably `https://docs.typesafe.ai/introduction` | **Unverified.** URL seen in a third-party README; not opened. Only relayed by secondary articles |
+| InfoQ release article | News piece reporting vendor figures, third-party measurements and developer comments | **Read from owner-pasted text only; unverified.** Corroborates the 32k context window, version pinning, and the documented weaknesses |
 | LiteLLM `jev_classifier.py` | LiteLLM router integration | Path exists (**verified**). The published router benchmark figures were **not found** in a `cookbook/benchmarks/jev-benchmark` directory and are unverified |
 
 ## 3. Corrections to circulated claims (checked 2026-10-04)
@@ -29,7 +30,7 @@ Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/reference
 1. "Jev scores 197/231 (85.28%) and 80/111 (72.07%) on JevBench" is **wrong as stated**. Those are **Open-Jev-27B-v1.1** numbers. The same table lists Open-Jev-2B at 150/231 (64.94%) and 9B at 179/231 (77.49%).
 2. The command `cd open-jev/benchmarks && python run_jevbench.py --model typesafe:jev-1.13.0 --tasks public_231 --audit-replay` does **not exist**: that repo has no `benchmarks/` directory, no `run_jevbench.py`, no `--audit-replay` and no `public_231`. The pinned benchmark commit `f8ce71361165846101d02ebc83ad44e47ae44fc3` is real but belongs to `fstandhartinger/jevbench`; open-jev provides `scripts/run_jevbench_suite.py` and `scripts/run_jevbench_hosted.py`. Its README says the 231 tasks are the public subset of 534 and no full-534 score is claimed.
 3. Latency, ECE and accuracy "targets" circulated for Jev, local SLMs and hosted LLMs are **unsourced** and partly conflict (independent tests reported ECE around 0.16, circulated figure 0.071). **Never use them as pass thresholds** (`AGENTS.md` rule 1).
-4. The endpoint `api.typesafe.ai/v1/systemone` and the size limits (255 options, 10 levels, 32k/64k tokens) are **unverified**. The independent study in `arXiv 2609.33401` reached Jev through OpenRouter's decisions endpoint with model `typesafe/jev-1.13` (see `docs/JEV_SOURCES.md`). Read the vendor docs before writing an adapter (`AGENTS.md` rule 8).
+4. The endpoint `api.typesafe.ai/v1/systemone` and the size limits (255 options, 10 levels, 64k tokens combined) are **unverified**. A 32,000-token context window is reported by the InfoQ article. The independent study in `arXiv 2609.33401` reached Jev through OpenRouter's decisions endpoint with model `typesafe/jev-1.13` (see `docs/JEV_SOURCES.md`). Read the vendor docs before writing an adapter (`AGENTS.md` rule 8).
 
 ## 4. Why published numbers cannot be compared with ours
 
@@ -48,6 +49,9 @@ Published tests are mostly generic public benchmarks. Ours is domain-specific al
 - Record the **exact model version string returned per response** (the gateway may drift; one independent study notes versions were not always exposed), request settings and timing method.
 - Count network errors and refusals separately from wrong answers (`AGENTS.md` rule 8).
 - Adapter written from the vendor's primary documentation, not from this file.
+
+- **Pin an explicit model version** (for example `jev-1.13.0`); never the moving `jev-latest` or `jev-preview` aliases. Cost is low per the vendor (USD 0.042 per million input tokens, output free), so a full run on our synthetic cases should be cheap, but confirm pricing from the vendor page before the owner sets a spend limit.
+- Look for the vendor's **System One adapter** (said to run other models against the same schema); read its documentation before deciding how to normalise the other candidates.
 
 ### Test-design changes this implies (not yet built)
 
