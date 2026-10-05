@@ -1,0 +1,92 @@
+{
+  "purpose": "Pinned index of external sources used for the Jev comparability work. Raw third-party content is NOT stored in this repository; re-fetch from the pins below and verify. Facts we need are recorded in our own words in docs/JEV_SOURCES.md.",
+  "recorded": "2026-10-05",
+  "recorded_by": "claude-cloud-ws1-01",
+  "sources": [
+    {
+      "id": "arxiv-2609.33401",
+      "title": "Evaluating System One Models for Agent Security Decisions: Reliability, Calibration, and Selective Automation",
+      "kind": "paper (preprint, cs.CR, submitted 2026-09-27)",
+      "url": "https://arxiv.org/abs/2609.33401",
+      "local_copy": "PDF supplied by the project owner (not committed; arXiv paper license not verified)",
+      "pdf_sha256": "29cdd94a1e22c7fa94c200dc89c1d0b989901da3104b55edb8004e7e8bd7d7b6",
+      "pdf_bytes": 1996012,
+      "status": "read in full (27 pages)"
+    },
+    {
+      "id": "yxsec-system-one-security-eval",
+      "title": "Artifact repository for arXiv 2609.33401",
+      "kind": "github",
+      "url": "https://github.com/yxsec/system-one-security-eval",
+      "commit": "78910f045e935e73829b4629baefc8efc7ae9879",
+      "license": "No LICENSE file at the pinned commit: treat as all rights reserved; do not copy code, prompts or predictions into this repo",
+      "status": "read: README, data/README, protocol/model_lock.json, protocol/models.json (Jev entry), src/security_eval/adapters.py (Jev adapter)"
+    },
+    {
+      "id": "zefan-cai-open-jev",
+      "title": "Open-Jev (independent open reproduction of the Jev interface; not TypeSafe Jev)",
+      "kind": "github",
+      "url": "https://github.com/zefan-cai/open-jev",
+      "commit": "88f2e205a314b3b96a1918534f9499e805c66d2e",
+      "license": "not yet read (check LICENSE and THIRD_PARTY_NOTICES.md before any reuse)",
+      "status": "read: README results table; confirmed no benchmarks/ directory and no run_jevbench.py"
+    },
+    {
+      "id": "fstandhartinger-jevbench",
+      "title": "JevBench upstream benchmark",
+      "kind": "github",
+      "url": "https://github.com/fstandhartinger/jevbench",
+      "commit": "f8ce71361165846101d02ebc83ad44e47ae44fc3",
+      "license": "unknown",
+      "status": "NOT read; commit named in open-jev scripts"
+    },
+    {
+      "id": "dchristopoulos-jev-aita",
+      "title": "Independent benchmark: Jev vs LLMs on AITA verdicts",
+      "kind": "github",
+      "url": "https://github.com/dchristopoulos/jev-aita",
+      "commit": "35bc17ea63accdba2485767af2fdd848ff745a07",
+      "license": "not yet read",
+      "status": "read: README head only"
+    },
+    {
+      "id": "abdelstark-awesome-typesafe-jev",
+      "title": "Index of Jev ecosystem projects and evaluations",
+      "kind": "github",
+      "url": "https://github.com/AbdelStark/awesome-typesafe-jev",
+      "commit": "af429b407cfabd0f6bd9086d12e14efcb0ce20c2",
+      "license": "not yet read",
+      "status": "read: project listing text only"
+    },
+    {
+      "id": "berriai-litellm",
+      "title": "LiteLLM (Jev classifier in the complexity router)",
+      "kind": "github (sparse)",
+      "url": "https://github.com/BerriAI/litellm",
+      "commit": "bb4f7211d71e0c757b6a3f16ba3885fc34376028",
+      "license": "not yet read",
+      "status": "checked tree only: jev_classifier.py exists; no cookbook/benchmarks/jev-benchmark found"
+    },
+    {
+      "id": "arxiv-2609.37647",
+      "title": "Evaluating and Benchmarking the System One Model Jev (37 datasets)",
+      "kind": "paper",
+      "url": "https://arxiv.org/abs/2609.37647",
+      "status": "NOT read (arxiv.org blocked in the cloud environment); owner may supply the PDF"
+    },
+    {
+      "id": "typesafe-announcement",
+      "title": "Introducing System One models and Jev (vendor)",
+      "kind": "vendor blog",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "status": "NOT read (typesafe.ai blocked in the cloud environment); link taken from the jev-aita README"
+    },
+    {
+      "id": "typesafe-docs",
+      "title": "TypeSafe documentation / API reference",
+      "kind": "vendor docs",
+      "url": "https://typesafe.ai/",
+      "status": "NOT read; no verified docs URL"
+    }
+  ]
+}
