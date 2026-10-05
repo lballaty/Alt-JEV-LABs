@@ -4,6 +4,17 @@
   "recorded_by": "claude-cloud-ws1-01",
   "sources": [
     {
+      "id": "arxiv-2609.37647",
+      "title": "Evaluating and Benchmarking the System One Model Jev (37 datasets)",
+      "kind": "paper (preprint, submitted 2026-09-29)",
+      "url": "https://arxiv.org/abs/2609.37647",
+      "status": "read (methodology, results, calibration, weak spots, cost, limitations). Most rigorous Jev source so far",
+      "authors": "Tobias Deusser, Lorenz Sparrenberg, Rafet Sifa (University of Bonn; Lamarr Institute; Fraunhofer IAIS)",
+      "local_copy": "PDF supplied by the project owner (not committed; license not verified)",
+      "pdf_sha256": "364866b9dd291eca746f8dbbbeaf2c2f6e65b2ae37ca7e674470bd138fae7ffd",
+      "pages": 18
+    },
+    {
       "id": "arxiv-2609.33401",
       "title": "Evaluating System One Models for Agent Security Decisions: Reliability, Calibration, and Selective Automation",
       "kind": "paper (preprint, cs.CR, submitted 2026-09-27)",
@@ -67,13 +78,6 @@
       "commit": "bb4f7211d71e0c757b6a3f16ba3885fc34376028",
       "license": "not yet read",
       "status": "checked tree only: jev_classifier.py exists; no cookbook/benchmarks/jev-benchmark found"
-    },
-    {
-      "id": "arxiv-2609.37647",
-      "title": "Evaluating and Benchmarking the System One Model Jev (37 datasets)",
-      "kind": "paper",
-      "url": "https://arxiv.org/abs/2609.37647",
-      "status": "NOT read (arxiv.org blocked in the cloud environment); owner may supply the PDF"
     },
     {
       "id": "typesafe-announcement",
@@ -162,6 +166,37 @@
       "kind": "github",
       "url": "https://github.com/jev-ids/jev-ids",
       "status": "NOT read; name taken from the paper, not confirmed to exist"
+    },
+    {
+      "id": "aml-jev-benchmarking",
+      "title": "jev-benchmarking: code for arXiv 2609.37647",
+      "kind": "github",
+      "url": "https://github.com/AppliedMachineLearning-Lab/jev-benchmarking",
+      "commit": "6bbdeb33474849b6de2f0cccc9f5e19756abd67e",
+      "license": "Code MIT. Released model responses: Jev responses under the 'Jev Responses License 1.0' (research and evaluation use; prohibits distillation and developing a similar or competing product); open-model responses Apache-2.0",
+      "status": "read: README, responses/LICENSE_RESPONSES.md, config.py, runner imports. Uses the official typesafe_sdk client; documented rate limit 1,200 requests/minute (per config comment)"
+    },
+    {
+      "id": "zenodo-23039006",
+      "title": "Raw responses for arXiv 2609.37647 (Jev, Qwen3.8-27B, Gemma-4-E4B)",
+      "kind": "dataset",
+      "url": "https://doi.org/10.5281/zenodo.23039006",
+      "license": "See aml-jev-benchmarking: Jev responses under Jev Responses License 1.0",
+      "status": "NOT downloaded (zenodo.org blocked here); not needed while phase 1 uses published figures"
+    },
+    {
+      "id": "typesafe-docs-jaggedness",
+      "title": "TypeSafe docs: model jaggedness page for jev-1.13",
+      "kind": "vendor docs",
+      "url": "https://docs.typesafe.ai/model-jaggedness/jev-1.13",
+      "status": "NOT read; URL cited in arXiv 2609.37647 (accessed by its authors 2026-09-29)"
+    },
+    {
+      "id": "typesafe-docs-models",
+      "title": "TypeSafe docs: models and pricing",
+      "kind": "vendor docs",
+      "url": "https://docs.typesafe.ai/models",
+      "status": "NOT read; URL cited in the jev-benchmarking config"
     }
   ],
   "verification_recipe": {
