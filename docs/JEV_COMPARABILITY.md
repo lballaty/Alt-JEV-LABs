@@ -17,6 +17,7 @@ Intent reminder (`docs/PROJECT_INTENT.md`): we choose the best solution for a co
 | `zefan-cai/open-jev` @ `88f2e20` README | Open-Jev-2B/9B/27B results, incl. JevBench public-231 and Hard-111 tables | **Verified (read).** These are Open-Jev model scores, not TypeSafe Jev |
 | `dchristopoulos/jev-aita` @ `35bc17e` README | Independent study: Jev vs Sonnet 5, GPT-5 nano and local models on 770 AITA posts; Brier, latency, cost; pins `jev-1.13-20260917`; open code | **Verified (read, README head only)** |
 | `AbdelStark/awesome-typesafe-jev` @ `af429b4` | Index of ecosystem projects, incl. `scienthoon/jev-ood-calibration` and `jyatesdotdev/jev-logtriage` | **Verified for the listing text only.** The linked studies themselves were not read |
+| arXiv 2609.33401 "Evaluating System One Models for Agent Security Decisions" (Y. Liu, TraceStone/NTU; preprint, 27 pages) | Independent study of Jev 1.13 (hosted), Laya, Decider, Nimble vs LLM judges and specialist classifiers on R-Judge, AgentHarm, WAInjectBench | **Verified (full text read from the PDF supplied by the owner, 2026-10-05).** Not peer reviewed; states OpenAI Codex assisted with design and code. Artifact repo named: `github.com/yxsec/system-one-security-eval` (not yet read) |
 | arXiv 2609.37647 "Evaluating and Benchmarking the System One Model Jev" (37 public datasets) | Third-party paper per its listing | **Unverified.** Only a search summary; not read |
 | Vendor docs (known failure modes, calibration guidance, API contract) | TypeSafe documentation | **Unverified.** Only relayed by secondary articles |
 | LiteLLM `jev_classifier.py` | LiteLLM router integration | Path exists (**verified**). The published router benchmark figures were **not found** in a `cookbook/benchmarks/jev-benchmark` directory and are unverified |
@@ -61,3 +62,22 @@ Published tests are mostly generic public benchmarks. Ours is domain-specific al
 - Read `jev-ood-calibration` (unseen priority rule, 900 synthetic tickets) and `jev-logtriage` (same use case) in full; both are on GitHub.
 - Confirm the LiteLLM benchmark location and figures, if they exist.
 - Resolve the `jev-1.13.0` versus `jev-1.13-20260917` naming.
+
+## 7. What arXiv 2609.33401 verifies (read in full)
+
+Setup it documents (useful as a design template, not as numbers to match): fixed partitions (development for recalibration, selection for thresholds, confirmation, test); groups of related inputs kept in one partition; original labels excluded from model inputs; identical task question and label definitions for every model; inputs over a model's context limit marked **unsupported, not truncated**; paired 95% cluster bootstrap (2,000 resamples) with Holm correction; Brier, NLL, ECE (10 equal-width bins, with 5 and 20 bins as sensitivity), AUROC, AP; Jev 1.13 via hosted API; Laya pinned English checkpoint on CPU/float32; temperature scaling fitted on development data only.
+
+Findings that bear on our tests (this paper's tasks are agent security, not alert triage; they may not transfer):
+
+1. **A high aggregate rank can hide a missed attack group.** Jev missed all 129 attack inputs without explicit instructions while flagging one benign input. We already report per cohort; keep it.
+2. **ECE can look good while separation is poor.** Laya's R-Judge ECE was lower than Jev's under some binnings, yet its AUROC was 0.487 vs 0.963 and its Brier was worse than a constant-probability baseline. Report AUROC and Brier against a base-rate baseline next to ECE, and ECE at 5/10/20 bins.
+3. **Strict miss limits leave little to automate.** At a 1% unsafe-miss limit, Jev automated 0% of WAInjectBench and 7.63% of R-Judge (17 blocks, 1 allowance). Two-threshold policies (allow / block / escalate) raised coverage mainly by blocking more. We have no coverage-under-error-budget measure; add one.
+4. **Thresholds that pass validation can fail on test.** Hence a separate confirmation partition. Our split has only train/val/test (83 val cases), so calibration and thresholds share one thin set.
+5. **Recalibration can hurt.** Development-fitted temperature scaling lowered Jev's WAInjectBench NLL (1.131 to 0.374) but raised its Brier and ECE; on AgentHarm (T=0.05) it raised NLL from 0.481 to 2.163. Always report raw and calibrated arms separately (we do).
+6. **The decision component itself can be attacked.** The paper cites work on injection that flips Jev's choices, and a finding that Jev, Laya and Open-Jev can follow option-name semantics instead of the definitions bound to them. Add an option-renaming ablation (swap or obscure option names while keeping definitions).
+7. **Hosted models drift:** the same model name need not reproduce the same results. Record the version string per response (already required above).
+8. **Small samples dominate.** A 1% miss limit needs zero misses among 74 unsafe selection inputs. Our 83-case test split has the same problem; keep reporting counts and intervals.
+
+Where our plan already matches: grouped splits, paired comparisons, label-free inputs, identical context, per-cohort results, raw-vs-calibrated arms, no deployment claims.
+
+New items for WS11 from this paper: confirmation partition or a documented reason not to split further, coverage-under-error-budget with an escalate band, AUROC/AP and Brier-vs-constant baseline, ECE bin sensitivity, option-name ablation, unsupported-not-truncated rule check in the runner.
