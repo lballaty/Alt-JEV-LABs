@@ -8,6 +8,8 @@ Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/reference
 
 > **Owner decision D31 (2026-10-05): phase 1 does not test Jev ourselves. Jev is represented by its published figures (including published latency).** Everything in sections 5-8 below that would change the plan (a hosted Jev arm, new test sets, new metrics, new partitions, measuring Jev latency) is a **suggestion only** and is not adopted unless the owner confirms it.
 
+> **Owner decision D32 (2026-10-05):** every latency we report states whether it was on-device, local loopback or remote, and network delay is measured separately where possible.
+
 ## 1. What "Jev" is
 
 - **Jev** (`jev-1.13.x`) is TypeSafe AI's hosted "System One" decision model, reportedly released 2026-09-15 (unverified, search summaries). It returns typed values instead of text: **Choice** (pick one of up to 255 options, with probabilities), **Score** (position on a 2-10 level rubric) and **Noul** (probability a yes/no statement is true). These are the same three primitives as our v1 harness.
