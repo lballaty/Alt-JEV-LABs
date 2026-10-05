@@ -21,7 +21,7 @@ Source pins, hashes and what was read: `docs/JEV_SOURCES.md` and `docs/reference
 | `AbdelStark/awesome-typesafe-jev` @ `af429b4` | Index of ecosystem projects, incl. `scienthoon/jev-ood-calibration` and `jyatesdotdev/jev-logtriage` | **Verified for the listing text only.** The linked studies themselves were not read |
 | arXiv 2609.33401 "Evaluating System One Models for Agent Security Decisions" (Y. Liu, TraceStone/NTU; preprint, 27 pages) | Independent study of Jev 1.13 (hosted), Laya, Decider, Nimble vs LLM judges and specialist classifiers on R-Judge, AgentHarm, WAInjectBench | **Verified (full text read from the PDF supplied by the owner, 2026-10-05).** Not peer reviewed; states OpenAI Codex assisted with design and code. Artifact repo named: `github.com/yxsec/system-one-security-eval` (not yet read) |
 | arXiv 2609.37647 "Evaluating and Benchmarking the System One Model Jev" (37 public datasets) | Third-party paper per its listing | **Unverified.** Only a search summary; not read |
-| Vendor docs (known failure modes, calibration guidance, API contract) | TypeSafe documentation | **Unverified.** Only relayed by secondary articles |
+| Vendor docs (known failure modes, calibration guidance, API contract) | TypeSafe documentation, probably `https://docs.typesafe.ai/introduction` | **Unverified.** URL seen in a third-party README; not opened. Only relayed by secondary articles |
 | LiteLLM `jev_classifier.py` | LiteLLM router integration | Path exists (**verified**). The published router benchmark figures were **not found** in a `cookbook/benchmarks/jev-benchmark` directory and are unverified |
 
 ## 3. Corrections to circulated claims (checked 2026-10-04)
@@ -78,6 +78,8 @@ Findings that bear on our tests (this paper's tasks are agent security, not aler
 5. **Recalibration can hurt.** Development-fitted temperature scaling lowered Jev's WAInjectBench NLL (1.131 to 0.374) but raised its Brier and ECE; on AgentHarm (T=0.05) it raised NLL from 0.481 to 2.163. Always report raw and calibrated arms separately (we do).
 6. **The decision component itself can be attacked.** The paper cites work on injection that flips Jev's choices, and a finding that Jev, Laya and Open-Jev can follow option-name semantics instead of the definitions bound to them. Add an option-renaming ablation (swap or obscure option names while keeping definitions).
 7. **Hosted models drift:** the same model name need not reproduce the same results. Record the version string per response (already required above).
+9. **Probabilities are quantised and use exact 0/1** (`jev-ood-calibration`): decide and record how exact zeros are floored in log-loss, since the choice can drive a temperature fit.
+10. **Familiar-task calibration does not transfer to unseen rules** (`jev-ood-calibration`: 44.7% accuracy with mean stated probability 0.74 on an organisation-specific priority rule). Keep held-out wrapper families and B' as hard gates.
 8. **Small samples dominate.** A 1% miss limit needs zero misses among 74 unsafe selection inputs. Our 83-case test split has the same problem; keep reporting counts and intervals.
 
 Where our plan already matches: grouped splits, paired comparisons, label-free inputs, identical context, per-cohort results, raw-vs-calibrated arms, no deployment claims.

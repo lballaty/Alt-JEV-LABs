@@ -33,6 +33,19 @@ These are what that study ran, not a decision about what we run. Confirm each on
 
 R-Judge, WAInjectBench (no general redistribution grant at the pinned trees) and AgentHarm (MIT plus an AI-safety-use restriction). The artifact does not mirror their text. We do not use them.
 
+### From the other GitHub sources (read at the pins in the manifest; all MIT unless noted)
+
+- **`scienthoon/jev-ood-calibration`** (independent, 2026-09-19, about USD 0.06 of calls): Jev reached through the Vercel AI Gateway as model id `typesafe-ai/jev` (the `typesafe-ai/jev-latest` id from the AI SDK docs returned "Model not found" there). On three public benchmarks accuracy was 86-94% with small calibration error (ECE 0.024-0.032), but those sets are probably in Jev's training data. On 900 rule-generated support tickets: queue choice 89.0%, "customer angry" 91.7%, and an organisation-specific priority rule only 44.7% with mean stated probability 0.74 (ECE 0.325, 4.4x its noise floor for the pooled set). The author later corrected the temperature-fit figures: Jev's probabilities are quantised to 0.01 and often use exact 0 or 1, so the result depends on how exact zeros are floored in log-loss. **Lesson for us:** a model can be fluent and well calibrated on familiar tasks and confidently wrong on a rule it cannot know; our held-out wrapper families and B' cases target the same risk. Record how exact 0/1 probabilities are floored in NLL.
+- **`jyatesdotdev/jev-logtriage`** (independent, not an official TypeSafe project): the same use case as ours. Collapses repeated log lines, asks Jev six questions in one call, and maps the answers in code to suppress / watch / review / notify / page; low confidence never acts automatically. Vendor docs URLs it links: `https://docs.typesafe.ai/introduction/quickstart`, `https://docs.typesafe.ai/introduction`, API keys at `https://console.typesafe.ai/settings/keys` (none opened).
+- **`fstandhartinger/jevbench`** (Benchmark Heaven's benchmark, not affiliated with TypeSafe): the upstream of the `f8ce713` commit pinned by Open-Jev, which exists. Its README ranks Jev 1.13.0 fourth of 91 ranked systems with a blended JevBench Score of 63.29, in a leaderboard led by small open models (Imajev-4B 67.37). That score blends several axes and is **not** an accuracy percentage; do not compare it with our metrics.
+
+## How to verify each source later
+
+1. GitHub repos: use the recipe in `jev_sources.json` (`verification_recipe.github`). Compare the commit, confirm the license file, and re-read the passages cited above.
+2. The arXiv PDF: compare its sha256 with the manifest, then confirm the title and arXiv id on page 1.
+3. Vendor pages and the 37-dataset paper: not read yet. When read, record the date, page title and any model version string in the manifest, and replace "NOT read" with the pin or hash.
+4. Anything changed upstream after the pinned commit is not evidence for the pinned claim; re-pin and re-read before updating a figure.
+
 ## Not read (still open)
 
-arXiv 2609.37647 (37 datasets), the vendor announcement and docs (blocked here), `fstandhartinger/jevbench`, the full `jev-aita` study, the `jev-ood-calibration` and `jev-logtriage` repositories, the LiteLLM benchmark. Close these by owner-supplied PDFs/pastes, a widened network allowlist (`arxiv.org`, `typesafe.ai`), or the Mac agent.
+arXiv 2609.37647 (37 datasets), the vendor announcement and docs (blocked here), the full `jev-aita` study and the rest of the READMEs and code of the three repositories above, the LiteLLM benchmark. Close these by owner-supplied PDFs/pastes, a widened network allowlist (`arxiv.org`, `typesafe.ai`), or the Mac agent.
