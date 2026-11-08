@@ -1,6 +1,6 @@
 # v2 evaluation tracker
 
-Last updated: 2026-10-15 (D37 optional neurosymbolic benchmark study recorded, not scheduled; earlier operational status from 2026-10-05: test scenarios D36 recorded; owner moving to the Mac; reference-only seed sources D28; WS4 v2 runner, report and scorecard implemented and tested on Linux with stubs, no model result, Mac gates open; PR #17 intent reconciled; WS3/WS7 implementation updates preserved; WS10 evidence audit; WS9 bundle verified; Mac/target-stream gates open). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
+Last updated: 2026-11-08 (D38 Liquid AI d1-2B candidate recorded via issue #56, not scheduled; D37 optional neurosymbolic benchmark study recorded, not scheduled; earlier operational status from 2026-10-05: test scenarios D36 recorded; owner moving to the Mac; reference-only seed sources D28; WS4 v2 runner, report and scorecard implemented and tested on Linux with stubs, no model result, Mac gates open; PR #17 intent reconciled; WS3/WS7 implementation updates preserved; WS10 evidence audit; WS9 bundle verified; Mac/target-stream gates open). **Update this file in every PR that changes plan, intent or status.** Nothing in the v2 plan has been measured yet. Status values: `Not started` · `Planned` · `In progress` · `Blocked` · `Ready for review` · `Merged`.
 
 ## Intent
 
@@ -68,6 +68,8 @@ Plan documents:
 | D35 | 2026-10-05 | **Privacy rule for this public repository.** Nothing about the private repositories goes into this public repository: no repository names, URLs, file paths, commit hashes, unpublished titles or summaries of their content. This applies to files, commit messages, PR titles and descriptions, and comments. Refer to them only as "the ebook workspace" and "the example repository", at a high level. Mapping detail lives in the private repositories (their LAB-MAPPING files). Earlier leaks stay in history (owner chose not to rewrite it). | Libor's instruction, 2026-10-05; `docs/OWNERSHIP.md` rule 7 |
 | D36 | 2026-10-05 | **Test scenarios adopted** (`docs/TEST_SCENARIOS.md`): S0 replication anchor (local alternatives on a subset of the 37-dataset paper's public datasets with its templates, compared with its published Jev results; no Jev calls), S1 Jev-method baseline on our alert-triage cases (canonical Jev-shaped request, described options, 4-level priority Score, all questions per request, published metrics) as **the primary result**, and variations as follow-on scenarios each changing one setting. S0 dataset subset remains a proposal pending owner confirmation | Libor's confirmation, 2026-10-05 |
 | D37 | 2026-10-15 | **Record neurosymbolic methods as possible future benchmark candidates only**, including a symbolic-only control, a neural + logic sequential hybrid, and optionally an integrated neurosymbolic approach. No candidate is selected, scheduled or implemented; the frozen rubric, approved S0/S1 protocols, existing workstreams, and independent action-authorization boundary are unchanged. | `docs/NEUROSYMBOLIC_CANDIDATE.md`; owner request 2026-10-15 (documentation by `gpt6-jev-neurosymbolic-docs-01`) |
+
+| D38 | 2026-11-08 | **Record Liquid AI d1-2B as an optional local decision-model benchmark candidate only.** Research its native Choice/Score/Noul semantics, GGUF/runtime availability, license, exact revision and Apple Silicon feasibility; compare fairly against current baselines only if subsequently scheduled. No adapter, model download, benchmarks, change to frozen rubric or S0/S1, or change to other workstream ownership is authorized by this record. | [Issue #56](https://github.com/lballaty/Alt-JEV-LABs/issues/56); owner request 2026-11-08 |
 
 ## Open decisions
 
@@ -152,3 +154,11 @@ See `docs/HANDOFF_MAC.md` (written 2026-10-04): current state, in-flight PRs, re
 | Q9 | Realism sources: internal or customer figures? | **Answered 2026-09-30: none available.** Realism rests on public evidence only (WS10) | — |
 | Q10 | Which published Jev figures to cite in phase 1 (published latency ranges differ: vendor 70-500 ms; papers 236-276 ms p50 and 310-335 ms mean; user-reported median 76 ms; 37-dataset paper 0.36 s mean client-side at 32 concurrent), and how to label them in reports as not measured by us? | Phase 1 relies on published figures (D31) | WS4 report, WS11 |
 | Q11 | The released Jev responses (Zenodo, arXiv 2609.37647) are licensed for research and benchmarking but prohibit use to develop a product similar to or competing with TypeSafe's. Does this project or the proposed triage gateway fall under that clause? Until answered, agents do not download or use those responses | License compliance | Any use of the Zenodo responses |
+
+## Newly identified candidate — Liquid AI d1-2B (2026-11-08)
+
+| Candidate | Tracking | Status | Owner | Follow-up gate |
+| --- | --- | --- | --- | --- |
+| Liquid AI d1-2B (typed Choice / Score / Noul) | [#56](https://github.com/lballaty/Alt-JEV-LABs/issues/56) | **Proposed / unscheduled; not implemented or measured** | Unassigned | Verify model card, license, current native API, output comparability to frozen rubric, local manager support and M4 feasibility; obtain owner scheduling/coordination before adapter or benchmark work |
+
+This record is a candidate inventory addition only, not a new tested v2 arm. Preserve D31, D36, D37, existing candidate protocols and the deterministic policy boundary. Vendor benchmark numbers are not local evaluation evidence. See issue #56 for acceptance checklist and primary source links.
